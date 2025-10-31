@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7d92df2c-db94-40a1-8d5f-3a1248ec43b7" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../.cproject" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.cproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.idea/wheel_leg_cube.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/wheel_leg_cube.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.project" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Core/Src/syscalls.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Core/Src/syscalls.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Core/Src/sysmem.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Core/Src/sysmem.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Core/Src/system_stm32f4xx.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Core/Src/system_stm32f4xx.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Core/Startup/startup_stm32f407ighx.s" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Core/Startup/startup_stm32f407ighx.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../STM32F407IGHX_FLASH.ld" beforeDir="false" afterPath="$PROJECT_DIR$/../../../STM32F407IGHX_FLASH.ld" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../STM32F407IGHX_RAM.ld" beforeDir="false" afterPath="$PROJECT_DIR$/../../../STM32F407IGHX_RAM.ld" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/QuaternionEKF/QuaternionEKF.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/QuaternionEKF/QuaternionEKF.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/QuaternionEKF/QuaternionEKF.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/QuaternionEKF/QuaternionEKF.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/filter/kalman_filter/kalman_filter.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/filter/kalman_filter/kalman_filter.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/filter/kalman_filter/kalman_filter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/filter/kalman_filter/kalman_filter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/filter/low_pass_filter/low_pass_filter.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/filter/low_pass_filter/low_pass_filter.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/filter/low_pass_filter/low_pass_filter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/filter/low_pass_filter/low_pass_filter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/filter/vx_kalman_filter/vx_kalman_filter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/filter/vx_kalman_filter/vx_kalman_filter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/pid/pid.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/pid/pid.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/pid/pid.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/pid/pid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/vmc/vmc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/vmc/vmc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Algorithm/vmc/vmc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Algorithm/vmc/vmc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Board_Communication_Task/board_communication_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Board_Communication_Task/board_communication_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Board_Communication_Task/board_communication_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Board_Communication_Task/board_communication_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chassis_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/chassis_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chassis_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/chassis_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../INS_Task/ins_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../INS_Task/ins_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../INS_Task/ins_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../INS_Task/ins_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/can/bsp_can.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/can/bsp_can.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/can/bsp_can.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/can/bsp_can.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/delay/bsp_delay.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/delay/bsp_delay.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/delay/bsp_delay.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/delay/bsp_delay.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/dwt/bsp_dwt.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/dwt/bsp_dwt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/dwt/bsp_dwt.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/dwt/bsp_dwt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/flash/bsp_flash.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/flash/bsp_flash.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/flash/bsp_flash.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/flash/bsp_flash.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/pwm/bsp_pwm.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/pwm/bsp_pwm.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bsp/pwm/bsp_pwm.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bsp/pwm/bsp_pwm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/bmi088/BMI088Middleware.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/bmi088/BMI088Middleware.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/bmi088/BMI088Middleware.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/bmi088/BMI088Middleware.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/bmi088/BMI088driver.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/bmi088/BMI088driver.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/bmi088/BMI088driver.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/bmi088/BMI088driver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/bmi088/BMI088reg.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/bmi088/BMI088reg.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/buzzer/buzzer.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/buzzer/buzzer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/buzzer/buzzer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/buzzer/buzzer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/can_device/can_device.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/can_device/can_device.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/ist8310/ist8310driver.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/ist8310/ist8310driver.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/ist8310/ist8310driver.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/ist8310/ist8310driver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/key_board/key_board.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/key_board/key_board.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/key_board/key_board.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/key_board/key_board.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/led/led.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/led/led.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/led/led.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/led/led.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/joint/DM8009/dm_8009.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/joint/DM8009/dm_8009.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/joint/DM8009/dm_8009.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/joint/DM8009/dm_8009.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/joint/joint.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/joint/joint.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/joint/joint.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/joint/joint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/wheel/LK9025/lk9025.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/wheel/LK9025/lk9025.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/wheel/LK9025/lk9025.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/wheel/LK9025/lk9025.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/wheel/wheel.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/wheel/wheel.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/motor/wheel/wheel.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/motor/wheel/wheel.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/remote/Calibrate.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/remote/Calibrate.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/remote/Calibrate.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/remote/Calibrate.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/remote/error.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/remote/error.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/remote/error.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/remote/error.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/remote/remote.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/remote/remote.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Device/remote/remote.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Device/remote/remote.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Document/Communication design.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Document/Communication design.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Document/Instructions on controls.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Document/Instructions on controls.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Document/调参.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Document/调参.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Document/问题及改进方案.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Document/问题及改进方案.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/d_phi0.m" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/d_phi0.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/get_k.m" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/get_k.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/get_k_length.prj" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/get_k_length.prj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/slprj/accel/blance_leg/tmwinternal/simulink_cache.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/slprj/accel/blance_leg/tmwinternal/simulink_cache.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/slprj/sim/varcache/Wheel_Legged/tmwinternal/simulink_cache.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/slprj/sim/varcache/Wheel_Legged/tmwinternal/simulink_cache.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/slprj/sim/varcache/blance_leg/simulink_cache.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/slprj/sim/varcache/blance_leg/simulink_cache.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/slprj/sim/varcache/blance_leg/tmwinternal/simulink_cache.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/slprj/sim/varcache/blance_leg/tmwinternal/simulink_cache.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Matlab/slprj/sl_proj.tmw" beforeDir="false" afterPath="$PROJECT_DIR$/../../Matlab/slprj/sl_proj.tmw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Robot_def/robot_def.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Robot_def/robot_def.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../daplink.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../../../daplink.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.cproject" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.cproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.idea/wheel_leg_cube.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.idea/wheel_leg_cube.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.mxproject" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.mxproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/.project" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/CMakeLists_template.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/CMakeLists_template.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/FreeRTOSConfig.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/FreeRTOSConfig.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/adc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/adc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/can.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/can.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/crc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/crc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/dma.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/dma.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/gpio.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/gpio.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/i2c.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/i2c.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/main.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/main.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/rng.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/rng.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/spi.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/spi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/stm32f4xx_hal_conf.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/stm32f4xx_hal_conf.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/stm32f4xx_it.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/stm32f4xx_it.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/tim.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/tim.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/usart.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Inc/usart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/adc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/adc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/can.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/can.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/crc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/crc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/dma.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/dma.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/freertos.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/freertos.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/gpio.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/gpio.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/i2c.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/i2c.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/rng.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/rng.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/spi.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/spi.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/stm32f4xx_hal_msp.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/stm32f4xx_hal_msp.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/stm32f4xx_hal_timebase_tim.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/stm32f4xx_hal_timebase_tim.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/stm32f4xx_it.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/stm32f4xx_it.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/syscalls.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/syscalls.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/sysmem.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/sysmem.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/system_stm32f4xx.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/system_stm32f4xx.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/tim.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/tim.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/usart.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Src/usart.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Core/Startup/startup_stm32f407ighx.s" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Core/Startup/startup_stm32f407ighx.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Device/ST/STM32F4xx/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cachel1_armv7.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cachel1_armv7.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_armcc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_armcc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_armclang.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_armclang.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_armclang_ltm.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_armclang_ltm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_gcc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_gcc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_iccarm.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_iccarm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_version.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/cmsis_version.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_armv81mml.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_armv81mml.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_armv8mbl.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_armv8mbl.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_armv8mml.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_armv8mml.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm0.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm0.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm0plus.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm0plus.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm1.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm23.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm23.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm3.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm33.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm33.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm35p.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm35p.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm4.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm4.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm55.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm55.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm7.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm7.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm85.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_cm85.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_sc000.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_sc000.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_sc300.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_sc300.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_starmc1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/core_starmc1.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/mpu_armv7.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/mpu_armv7.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/mpu_armv8.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/mpu_armv8.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/pac_armv81.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/pac_armv81.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/pmu_armv8.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/pmu_armv8.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/tz_context.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/Include/tz_context.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/CMSIS/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rng.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rng.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_cortex.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_cortex.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_crc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_crc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_i2c.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_i2c.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rng.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rng.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_spi.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_spi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_tim.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_tim.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usart.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_utils.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/ARM/DSP/Inc/arm_math.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/ARM/DSP/Inc/arm_math.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/ST/STM32_USB_Device_Library/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/croutine.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/croutine.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/event_groups.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/event_groups.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/StackMacros.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/StackMacros.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/atomic.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/atomic.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/croutine.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/croutine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/list.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/list.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/message_buffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/message_buffer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_prototypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_prototypes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/portable.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/portable.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/stack_macros.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/stack_macros.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/stream_buffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/stream_buffer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/timers.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/include/timers.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/list.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/list.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/queue.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/queue.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/tasks.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/tasks.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/timers.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/Middlewares/Third_Party/FreeRTOS/Source/timers.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/STM32F407IGHX_FLASH.ld" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/STM32F407IGHX_FLASH.ld" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/STM32F407IGHX_RAM.ld" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/STM32F407IGHX_RAM.ld" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_device.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_device.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_device.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_device.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usb_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_cdc_if.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_cdc_if.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_cdc_if.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_cdc_if.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_desc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_desc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_desc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/App/usbd_desc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/Target/usbd_conf.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/Target/usbd_conf.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/Target/usbd_conf.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/USB_DEVICE/Target/usbd_conf.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS_MiddleWare.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS_MiddleWare.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS_MiddleWare.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/AHRS/AHRS_MiddleWare.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/CRC8_CRC16/CRC8_CRC16.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/CRC8_CRC16/CRC8_CRC16.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/CRC8_CRC16/CRC8_CRC16.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/CRC8_CRC16/CRC8_CRC16.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/QuaternionEKF/QuaternionEKF.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/QuaternionEKF/QuaternionEKF.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/QuaternionEKF/QuaternionEKF.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/QuaternionEKF/QuaternionEKF.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/SMC/SMC.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/SMC/SMC.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/SMC/SMC.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/SMC/SMC.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/filter.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/filter.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/filter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/filter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/kalman_filter/kalman_filter.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/kalman_filter/kalman_filter.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/kalman_filter/kalman_filter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/filter/kalman_filter/kalman_filter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/pid/pid.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/pid/pid.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/pid/pid.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/pid/pid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/ramp/ramp.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/ramp/ramp.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/ramp/ramp.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/ramp/ramp.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/user_lib/user_lib.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/user_lib/user_lib.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/user_lib/user_lib.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Algorithm/user_lib/user_lib.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Board_Communication_Task/board_communication_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Board_Communication_Task/board_communication_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Board_Communication_Task/board_communication_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Board_Communication_Task/board_communication_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Calibrate_Task/calibrate_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Calibrate_Task/calibrate_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Calibrate_Task/calibrate_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Calibrate_Task/calibrate_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Detect_Task/detect_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Detect_Task/detect_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Detect_Task/detect_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Detect_Task/detect_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/gimbal_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/gimbal_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/gimbal_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/gimbal_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/launcher.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/launcher.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/launcher.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Gimbal_Task/launcher.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/INS_Task/ins_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/INS_Task/ins_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/INS_Task/ins_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/INS_Task/ins_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Referee_Task/referee_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Referee_Task/referee_task.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/App/Referee_Task/referee_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/App/Referee_Task/referee_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Balance/protocol_Balance.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Balance/protocol_Balance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/adc/bsp_adc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/adc/bsp_adc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/adc/bsp_adc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/adc/bsp_adc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/buzzer/bsp_buzzer.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/buzzer/bsp_buzzer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/buzzer/bsp_buzzer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/buzzer/bsp_buzzer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/can/bsp_can.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/can/bsp_can.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/can/bsp_can.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/can/bsp_can.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/delay/bsp_delay.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/delay/bsp_delay.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/delay/bsp_delay.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/delay/bsp_delay.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/flash/bsp_flash.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/flash/bsp_flash.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/flash/bsp_flash.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/flash/bsp_flash.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/imu_pwm/bsp_imu_pwm.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/imu_pwm/bsp_imu_pwm.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/imu_pwm/bsp_imu_pwm.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/imu_pwm/bsp_imu_pwm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/led/bsp_led.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/led/bsp_led.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/led/bsp_led.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/led/bsp_led.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/rc/bsp_rc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/rc/bsp_rc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/rc/bsp_rc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/rc/bsp_rc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/spi/bsp_spi.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/spi/bsp_spi.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/spi/bsp_spi.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/spi/bsp_spi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/usart/bsp_usart.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/usart/bsp_usart.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/usart/bsp_usart.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Bsp/usart/bsp_usart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Component/decode/decode.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Component/decode/decode.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Component/decode/decode.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Component/decode/decode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Component/fifo/fifo.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Component/fifo/fifo.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Component/fifo/fifo.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Component/fifo/fifo.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Component/packet/packet.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Component/packet/packet.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Component/packet/packet.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Component/packet/packet.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088Middleware.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088Middleware.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088Middleware.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088Middleware.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088driver.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088driver.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088driver.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088driver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088reg.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/bmi088/BMI088reg.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/buzzer/buzzer.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/buzzer/buzzer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/buzzer/buzzer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/buzzer/buzzer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/ist8310/ist8310driver.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/ist8310/ist8310driver.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/ist8310/ist8310driver.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/ist8310/ist8310driver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/key_board/key_board.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/key_board/key_board.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/key_board/key_board.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/key_board/key_board.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/motor/DJI_Motor/DJI_Motor.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/motor/DJI_Motor/DJI_Motor.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/motor/DJI_Motor/DJI_Motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/motor/DJI_Motor/DJI_Motor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/remote/remote.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/remote/remote.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Device/remote/remote.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Device/remote/remote.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Robot_def/robot_def.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Robot_def/robot_def.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Robot_def/robot_def.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Robot_def/robot_def.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/User/Robot_def/struct_typedef.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/User/Robot_def/struct_typedef.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/stlink.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/stlink.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Gimbal/wheel_leg.ioc" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Gimbal/wheel_leg.ioc" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../.." />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2024" />
+    <option name="minorVersion" value="2.2" />
+    <option name="productBranch" value="Classic" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="34phftwyMOcmpsaP3HG1WN0XANK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "istic111",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="7d92df2c-db94-40a1-8d5f-3a1248ec43b7" name="更改" comment="" />
+      <created>1761916526513</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761916526513</updated>
+      <workItem from="1761916527646" duration="1000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

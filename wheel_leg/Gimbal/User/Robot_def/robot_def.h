@@ -25,7 +25,7 @@
 
 /* 云台回中编码值 */
 #define PITCH_OFFSET_ECD 0
-#define YAW_OFFSET_ECD 3488
+#define YAW_OFFSET_ECD 3420
 
 
 /** PID参数 **/

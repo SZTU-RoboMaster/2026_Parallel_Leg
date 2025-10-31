@@ -34,6 +34,9 @@
 // 腿摆角
 #define LEG_NORMAL_RAD 30.0f * DEGREE_TO_RAD
 
+// //LK9025最大转速
+// #define LK9025_MAX_SPEED 490
+
 /** 遥控器路径 **/
 // x : 2-左手 ; 0-右手
 // y : 3-左手 ; 1-右手
@@ -61,11 +64,23 @@
 /** Wheel **/
 
 // 转向PID
-#define CHASSIS_TURN_POS_PID_P 5.0f
+// #define CHASSIS_TURN_POS_PID_P 5.0f
+// #define CHASSIS_TURN_POS_PID_I 0.0f
+// #define CHASSIS_TURN_POS_PID_D 0.0f
+// #define CHASSIS_TURN_POS_PID_IOUT_LIMIT 0.0f
+// #define CHASSIS_TURN_POS_PID_OUT_LIMIT 3.0f
+//
+// #define CHASSIS_TURN_SPEED_PID_P 10.0f
+// #define CHASSIS_TURN_SPEED_PID_I 0.0f
+// #define CHASSIS_TURN_SPEED_PID_D 0.0f
+// #define CHASSIS_TURN_SPEED_PID_IOUT_LIMIT 0.0f
+// #define CHASSIS_TURN_SPEED_PID_OUT_LIMIT 4.0f
+
+#define CHASSIS_TURN_POS_PID_P 16.0f
 #define CHASSIS_TURN_POS_PID_I 0.0f
-#define CHASSIS_TURN_POS_PID_D 0.0f
+#define CHASSIS_TURN_POS_PID_D 23.0f
 #define CHASSIS_TURN_POS_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_TURN_POS_PID_OUT_LIMIT 3.0f
+#define CHASSIS_TURN_POS_PID_OUT_LIMIT 7.0f
 
 #define CHASSIS_TURN_SPEED_PID_P 10.0f
 #define CHASSIS_TURN_SPEED_PID_I 0.0f
@@ -73,17 +88,38 @@
 #define CHASSIS_TURN_SPEED_PID_IOUT_LIMIT 0.0f
 #define CHASSIS_TURN_SPEED_PID_OUT_LIMIT 4.0f
 
+
 /** Joint **/
 
 // 防劈叉PID
-#define CHASSIS_LEG_COORDINATION_PID_P 50.0f // 20.0f 30.0f
+// #define CHASSIS_LEG_COORDINATION_PID_P 50.0f // 20.0f 30.0f
+// #define CHASSIS_LEG_COORDINATION_PID_I 0.0f
+// #define CHASSIS_LEG_COORDINATION_PID_D 5.0f // 1.0f 5.0f
+// #define CHASSIS_LEG_COORDINATION_PID_IOUT_LIMIT 0.0f
+// #define CHASSIS_LEG_COORDINATION_PID_OUT_LIMIT 10.0f
+
+#define CHASSIS_LEG_COORDINATION_PID_P 15.0f // 20.0f 30.0f
 #define CHASSIS_LEG_COORDINATION_PID_I 0.0f
 #define CHASSIS_LEG_COORDINATION_PID_D 5.0f // 1.0f 5.0f
 #define CHASSIS_LEG_COORDINATION_PID_IOUT_LIMIT 0.0f
 #define CHASSIS_LEG_COORDINATION_PID_OUT_LIMIT 10.0f
 
+// // 腿长位置环PID
+// #define CHASSIS_LEG_L0_POS_PID_P 15.0f
+// #define CHASSIS_LEG_L0_POS_PID_I 0.0f
+// #define CHASSIS_LEG_L0_POS_PID_D 15.0f
+// #define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT 0.0f
+// #define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT 2.0f
+//
+// // 腿长速度环PID
+// #define CHASSIS_LEG_L0_SPEED_PID_P 30.0f // 50.0f
+// #define CHASSIS_LEG_L0_SPEED_PID_I 0.0f
+// #define CHASSIS_LEG_L0_SPEED_PID_D 0.0f
+// #define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT 0.0f
+// #define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT 60.0f
+
 // 腿长位置环PID
-#define CHASSIS_LEG_L0_POS_PID_P 15.0f
+#define CHASSIS_LEG_L0_POS_PID_P 10.0f
 #define CHASSIS_LEG_L0_POS_PID_I 0.0f
 #define CHASSIS_LEG_L0_POS_PID_D 15.0f
 #define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT 0.0f
@@ -103,14 +139,25 @@
 #define CHASSIS_OFFGROUND_L0_PID_IOUT_LIMIT 0.0f
 #define CHASSIS_OFFGROUND_L0_PID_OUT_LIMIT 0.0f
 
-// Roll补偿PID
-#define CHASSIS_ROLL_PID_P 500.0f
+// Roll补偿PID pid_calc
+// #define CHASSIS_ROLL_PID_P 500.0f
+// #define CHASSIS_ROLL_PID_I 0.0f
+// #define CHASSIS_ROLL_PID_D 0.0f
+// #define CHASSIS_ROLL_PID_IOUT_LIMIT 0.0f
+// #define CHASSIS_ROLL_PID_OUT_LIMIT 50.0f
+
+// #define CHASSIS_ROLL_PID_P 1500.0f
+// #define CHASSIS_ROLL_PID_I 0.0f
+// #define CHASSIS_ROLL_PID_D 0.0f
+// #define CHASSIS_ROLL_PID_IOUT_LIMIT 0.0f
+// #define CHASSIS_ROLL_PID_OUT_LIMIT 50.0f
+
+// Roll补偿PID 公式+
+#define CHASSIS_ROLL_PID_P 1500.0f
 #define CHASSIS_ROLL_PID_I 0.0f
-#define CHASSIS_ROLL_PID_D 0.0f
+#define CHASSIS_ROLL_PID_D 20.0f
 #define CHASSIS_ROLL_PID_IOUT_LIMIT 0.0f
 #define CHASSIS_ROLL_PID_OUT_LIMIT 50.0f
-
-
 
 /** 底盘物理参数结构体 **/
 typedef struct{
@@ -417,7 +464,12 @@ typedef struct{
     float steer_compensatory_torque;  // 防劈叉力矩
 
     // Roll补偿PID
+    float roll_error;
+    float last_roll_error;
+    float d_roll_error;
     Pid chassis_roll_pid;
+    float roll_f;
+
 
     // 机体状态
     ChassisBodyState chassis_body_state;

@@ -154,6 +154,10 @@ static void forward_kinematics(Leg* leg_L, Leg* leg_R, ChassisPhysicalConfig *ph
     chassis.phi0_error = leg_L->vmc.forward_kinematics.fk_phi.phi0 - leg_R->vmc.forward_kinematics.fk_phi.phi0;
     chassis.d_phi0_error = (chassis.phi0_error - chassis.last_phi0_error) / (CHASSIS_PERIOD * 0.001f);
 
+    /** roll **/
+    chassis.last_roll_error = chassis.roll_error;
+    chassis.roll_error = chassis.imu_reference.roll_rad;
+    chassis.d_roll_error = (chassis.roll_error - chassis.last_roll_error) / (CHASSIS_PERIOD * 0.001f);
 }
 
 // vmc正动力学解算
@@ -262,7 +266,7 @@ static void fn_cal(Leg *leg, float body_az, ChassisPhysicalConfig *chassis_physi
     }
 
     // 用逆解算的数据计算
-    float P = leg->vmc.inverse_kinematics.Fxy_fdb.E.Fy_fdb * cosf(leg->state_variable_feedback.theta) // 没准有个负号
+    float P = leg->vmc.inverse_kinematics.Fxy_fdb.E.Fy_fdb * cosf(leg->state_variable_feedback.theta)
               + leg->vmc.inverse_kinematics.Fxy_fdb.E.Tp_fdb * sinf(leg->state_variable_feedback.theta) / leg->vmc.forward_kinematics.fk_L0.L0;
 
     float wheel_az = body_az - leg->vmc.inverse_kinematics.V_fdb.E.dd_L0_fdb * cosf(leg->state_variable_feedback.theta)
