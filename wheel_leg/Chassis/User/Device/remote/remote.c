@@ -297,7 +297,7 @@ static void set_chassis_ctrl_info() {
     rc_ctrl.rc.ch[CHASSIS_VX_CHANNEL] = gimbal_unpack_data.vx_channel.value;
 
     float vel_temp = (float) (rc_ctrl.rc.ch[CHASSIS_VX_CHANNEL]) * RC_TO_VX;
-    slope_following(&vel_temp,&chassis.chassis_ctrl_info.v_m_per_s,0.05f);
+    slope_following(&vel_temp,&chassis.chassis_ctrl_info.v_m_per_s,0.02f); // 0.05f
 
 
     /** 期望腿长 **/

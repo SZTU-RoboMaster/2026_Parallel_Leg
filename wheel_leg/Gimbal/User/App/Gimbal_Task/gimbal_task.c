@@ -63,10 +63,6 @@ static void Gimbal_Init(void) {
     gimbal.yaw.motor_measure.offset_ecd = YAW_OFFSET_ECD;
     gimbal.pitch.motor_measure.offset_ecd = PITCH_OFFSET_ECD;
 
-    /** 将PID状态变量误差置0（期望 = 误差），防止电机疯转 **/
-    gimbal.yaw.absolute_angle_set = gimbal.pitch.absolute_angle_get;
-    gimbal.pitch.absolute_angle_set = gimbal.pitch.absolute_angle_get;
-
     /** 低通滤波初始化 **/
     // 鼠标输入滤波
     first_order_filter_init(&gimbal.mouse_in_x, 1, 40);
@@ -80,6 +76,9 @@ static void Gimbal_Init(void) {
     first_order_filter_init(&gimbal.auto_pitch, 1, 15);
     first_order_filter_init(&gimbal.auto_yaw[0], 1, 15);
     first_order_filter_init(&gimbal.auto_yaw[1], 1, 15);
+
+    /** 发射机构初始化 **/
+    Launcher_Init();
 
 }
 
@@ -125,7 +124,7 @@ static void Gimbal_Send_Chassis_Data(void) {
 }
 
 /** 云台控制器计算 **/
-static void Gimbal_Controller_Calc(void)
+static void Gimbal_Control(void)
 {
     float yaw_gyro_set;
     float pitch_gyro_set;
@@ -137,11 +136,11 @@ static void Gimbal_Controller_Calc(void)
                             180,
                             -180);
 
-    // 期望角速度滤波
+    // 反馈角速度滤波
     first_order_filter_cali(&gimbal.yaw_gyro_filter, gimbal.yaw.gyro);
 
     gimbal.yaw.target_current = (int16_t)pid_calc(&gimbal.yaw.speed_pid,
-                                                  gimbal.yaw_gyro_filter.out,//gimbal.yaw.motor_measure->speed_rpm,
+                                                  gimbal.yaw_gyro_filter.out,
                                                   yaw_gyro_set);
 
     /** Pitch **/
@@ -149,7 +148,7 @@ static void Gimbal_Controller_Calc(void)
                         gimbal.pitch.absolute_angle_get,
                         gimbal.pitch.absolute_angle_set);
 
-    // 期望角速度滤波
+    // 反馈角速度滤波
     first_order_filter_cali(&gimbal.pitch_gyro_filter,gimbal.pitch.gyro);
 
     gimbal.pitch.target_current = -(int16_t)pid_calc(&gimbal.pitch.speed_pid,
@@ -163,18 +162,29 @@ static void Gimbal_Controller_Calc(void)
 
 static void Gimbal_Disable_Task(void)
 {
+    /** 云台电流置零 **/
     gimbal.pitch.target_current = 0;
     gimbal.yaw.target_current = 0;
+
+    /** 初始化云台模式 **/
+    gimbal.gimbal_ctrl_mode = gimbal.gimbal_last_ctrl_mode = GIMBAL_DISABLE;
 
     /** 避免PID误差过大，电机疯转 **/
     gimbal.pitch.absolute_angle_set = gimbal.pitch.absolute_angle_get;
     gimbal.yaw.absolute_angle_set = gimbal.yaw.absolute_angle_get;
 
+    /** 发射机构失能子任务 **/
+    Launcher_Disable();
+
 }
 
 static void Gimbal_Enable_Task(void)
 {
-    Gimbal_Controller_Calc();
+    /** Pitch、Yaw控制 **/
+    Gimbal_Control();
+
+    /** 发射机构控制 **/
+    Launcher_Control();
 }
 
 void Gimbal_task(void const*pvParameters) {
@@ -187,7 +197,7 @@ void Gimbal_task(void const*pvParameters) {
 
     while(1) {
 
-        // 根据遥控器设置模式、控制信息
+        // 根据遥控器设置云台、发射机构的模式、控制信息
         Gimbal_Remote_Cmd();
 
         // 更新云台角度
@@ -201,6 +211,7 @@ void Gimbal_task(void const*pvParameters) {
             case GIMBAL_DISABLE:
             {
                 Gimbal_Disable_Task();
+
                 break;
             }
 
@@ -219,11 +230,19 @@ void Gimbal_task(void const*pvParameters) {
         // 发射机构
         DJI_Send_Motor_Mapping(CAN_1,
                                CAN_DJI_MOTOR_0x200_ID,
-                               0,    //201 左摩擦轮
-                               0,    //202 右摩擦轮
-                               0,    //203 拨盘
+                               launcher.fire_l.target_current,    //201 左摩擦轮
+                               launcher.fire_r.target_current,    //202 右摩擦轮
+                               launcher.trigger.target_current,    //203 拨盘
                                0     // 204 无
         );
+
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x200_ID,
+//                               0,    //201 左摩擦轮
+//                               0,    //202 右摩擦轮
+//                               launcher.trigger.target_current,    //203 拨盘
+//                               0     // 204 无
+//        );
 
         // 云台
         DJI_Send_Motor_Mapping(CAN_1,
@@ -233,6 +252,25 @@ void Gimbal_task(void const*pvParameters) {
                                0,     //207 无
                                0      //208 无
         );
+
+//        // 发射机构
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x200_ID,
+//                               0,    //201 左摩擦轮
+//                               0,    //202 右摩擦轮
+//                               0,    //203 拨盘
+//                               0     // 204 无
+//        );
+//
+//        // 云台
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x1FF_ID,
+//                               0,     //205 无
+//                               0,     //206 pitch
+//                               0,     //207 无
+//                               0      //208 无
+//        );
+
 
 
 

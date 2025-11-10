@@ -18,6 +18,7 @@
 #include "remote.h"
 #include "key_board.h"
 #include "robot_def.h"
+#include "launcher.h"
 
 #define RC_CHANNAL_ERROR_VALUE 700
 
@@ -241,11 +242,13 @@ void USART3_IRQHandler(void)
 /** 云台根据遥控器设置模式 **/
 static void Gimbal_Mode_Set(void)
 {
-    if (switch_is_down(rc_ctrl.rc.s[RC_s_R])) { // 失能
+    if (switch_is_down(rc_ctrl.rc.s[RC_s_R])) // 失能
+    {
             gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
             gimbal.gimbal_ctrl_mode = GIMBAL_DISABLE;
     }
-    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R])) { // 使能
+    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R])) // 使能
+    {
         gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
         gimbal.gimbal_ctrl_mode = GIMBAL_ENABLE;
     }
@@ -284,6 +287,9 @@ void Gimbal_Remote_Cmd(void)
 {
     /** 云台根据遥控器设置模式 **/
     Gimbal_Mode_Set();
+
+    /** 发射根据遥控器设置模式 **/
+    Launcher_Mode_Set();
 
     /** 云台接收遥控器信息 **/
     Gimbal_Ctrl_Info_Set();

@@ -6,9 +6,14 @@
 #include "PID.h"
 #include "SMC.h"
 
-extern void Launcher_Init(void);
-extern void Launcher_Mode_Set(void);
-extern void Launcher_Control(void);
-extern void Launcher_Disable(void);
+#define CONTINUES_BLOCK_JUDGE() (HAL_GetTick() - launcher.block_check.inversing_start_time > 500)
+
+void Launcher_Init(void);
+
+void Launcher_Mode_Set(void);
+
+void Launcher_Control(void);
+
+void Launcher_Disable(void);
 
 #endif

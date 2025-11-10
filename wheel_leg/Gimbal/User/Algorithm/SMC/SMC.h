@@ -1,6 +1,3 @@
-//
-// Created by laiyo on 25-3-31.
-//
 #ifndef _SMC_H_
 #define _SMC_H_
 
@@ -34,5 +31,7 @@ double smc_controller(SystemState state, SMC_Params params);
 
 // 摩擦轮系统状态更新
 SystemState update_system(fp32 speed, int16_t speed_rpm, double dt, SystemState prev_state);
+
+extern SMC_Params params;
 
 #endif

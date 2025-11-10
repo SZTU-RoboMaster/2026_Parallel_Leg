@@ -232,6 +232,7 @@ static void get_IMU_info(void) {
 
     /** 机体竖直方向加速度 **/
     chassis.imu_reference.robot_az = INS.MotionAccel_n[Z];
+
 }
 
 /** 更新底盘变量 **/
@@ -562,24 +563,24 @@ void chassis_task(void)
             break;
         }
     }
+//
+//        send_torque_task(-chassis.leg_L.joint_F_torque,
+//                     -chassis.leg_L.joint_B_torque,
+//                     chassis.leg_R.joint_F_torque,
+//                     chassis.leg_R.joint_B_torque,
+//                     -chassis.leg_L.wheel_torque,
+//                     -chassis.leg_R.wheel_torque,
+//                     vel,
+//                     Kd);
 
-        send_torque_task(-chassis.leg_L.joint_F_torque,
-                     -chassis.leg_L.joint_B_torque,
-                     chassis.leg_R.joint_F_torque,
-                     chassis.leg_R.joint_B_torque,
-                     -chassis.leg_L.wheel_torque,
-                     -chassis.leg_R.wheel_torque,
-                     vel,
-                     Kd);
-
-//    send_torque_task(0,
-//                     0,
-//                     0,
-//                     0,
-//                     0,
-//                     0,
-//                     0,
-//                     0);
+    send_torque_task(0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0);
 
 
 }

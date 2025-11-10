@@ -7,7 +7,6 @@
 #include "moving_filter.h"
 #include "can_device.h"
 #include "user_lib.h"
-#include "DJI_motor.h"
 #include "board_communication_task.h"
 #include "low_pass_filter.h"
 

@@ -4,29 +4,26 @@
 #include "stdint-gcc.h"
 #include "can_device.h"
 
-/********************  一拖四相关参数  *****************************/
-/** 力矩常数(1A对应的力矩 单位 Nm) **/
-#define DM8009_TORQUE_CONSTANT 1.261575f
+/********************   电机参数限制   *****************************/
 
-/** 最大电流 单位：A **/
-#define DM8009_IMAX 41.044777f
-
-/** 1A对应的控制数据值 **/
-#define DM8009_CURRENT_2_DATA 16384.0f / DM8009_IMAX
-
-/** 转一圈的编码器值 **/
-#define ENCODER_PER_ROUND 8192.0f
-
-/** rpm(rad per min) to (rad per second) **/
-#define RPM_TO_RAD_PER_S (2 * PI) / 60.0f
+#define DM8009_P_MIN -12.5f
+#define DM8009_P_MAX 12.5f
+#define DM8009_V_MIN -45.0f
+#define DM8009_V_MAX 45.0f
+#define DM8009_KP_MIN 0.0f
+#define DM8009_KP_MAX 500.0f
+#define DM8009_KD_MIN 0.0f
+#define DM8009_KD_MAX 5.0f
+#define DM8009_T_MIN -50.0f
+#define DM8009_T_MAX 50.0f
 
 
 typedef struct{
     uint32_t id;
-    /** 绝对位置(0 ~ pi/2)  (-pi/2 ~ 0) **/
+    /** 绝对位置 **/
     float pos_r;
 
-    /** 关节电机角速度 rad/s 吗? **/
+    /** 关节电机角速度 **/
     float angular_vel;
 
     /** 关节电机反馈力矩 **/

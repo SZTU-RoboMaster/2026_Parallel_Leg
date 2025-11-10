@@ -1,5 +1,13 @@
 #include "SMC.h"
 
+SMC_Params params =
+        {
+                .c = 5,             // 滑模面系数（决定收敛速度）
+                .rho = 2.0,         // 切换增益（需大于扰动幅度）
+                .epsilon = 1,       // 边界层厚度（抑制抖振）
+                .max_i = 10000      // 控制输入限幅
+        };
+
 
 // 滑模控制函数
 double smc_controller(SystemState state, SMC_Params params) {
