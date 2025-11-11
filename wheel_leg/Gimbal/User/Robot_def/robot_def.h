@@ -74,10 +74,10 @@ typedef struct {
 
     int16_t target_current; // 期望电流值
 
-    float absolute_angle_get; // ° IMU角度值
-    float relative_angle_get; // ° 与电机上电复位位置的角度差值
+    fp32 absolute_angle_get; // ° IMU角度值
+    fp32 relative_angle_get; // ° 与电机上电复位位置的角度差值
 
-    float absolute_angle_set; // °
+    fp32 absolute_angle_set; // °
 
 }Motor_Gimbal_t;
 
@@ -120,16 +120,19 @@ extern gimbal_t gimbal;
 #define BLOCK_TRI_MAXTIME 1000    // 一次单发任务、反转任务最大执行时间 1s
 #define BLOCK_TRI_MAXSPEED 100    // 堵转转速阈值 rpm
 
+#define CONTINUE_BLOCK_TRI_MAXTIME 100 // 连发堵转阈值 ms
+
 // 摩擦轮转速
 #define FIRE_SPEED  4700
 
 // 拨盘转速
-#define TRIGGER_SPEED -1000 // 正转：从弹仓后往正方向看，拨盘顺时针转动
+#define TRIGGER_SPEED -2000 // 正转：从弹仓后往正方向看，拨盘顺时针转动
 
 // 2006编码器端转一圈编码值加8192，减速比为1:36，则输出端转一圈（2π）的总编码器值为36×8192
 #define DEGREE_45_TO_ENCODER  (36 * 8192) / 8 // (pi/4)
 
 /** PID参数 **/
+// 拨盘
 #define TRIGGER_ANGLE_PID_KP        0.5f
 #define TRIGGER_ANGLE_PID_KI        0.0f
 #define TRIGGER_ANGLE_PID_KD        0.0f
@@ -141,6 +144,14 @@ extern gimbal_t gimbal;
 #define TRIGGER_SPEED_PID_KD        0.0f
 #define TRIGGER_SPEED_PID_MAX_IOUT  0.0f
 #define TRIGGER_SPEED_PID_MAX_OUT   10000.0f
+
+// 摩擦轮
+#define FIR_WHEEL_SPEED_PID_KP        50.0f
+#define FIR_WHEEL_SPEED_PID_KI        0.0f
+#define FIR_WHEEL_SPEED_PID_KD        0.0f
+#define FIR_WHEEL_SPEED_PID_MAX_IOUT  0.0f
+#define FIR_WHEEL_SPEED_PID_MAX_OUT   10000.0f
+
 
 /** 摩擦轮状态 **/
 typedef enum{

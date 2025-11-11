@@ -48,7 +48,7 @@
   *             {
   *                 uint16_t xxx;
   *                 uint16_t yyy;
-  *                 float zzz;
+  *                 fp32 zzz;
   *             } xxx_cali_t; //size: 8 bytes, must be 4, 8, 12, 16...
   *             3.in "FLASH_WRITE_BUF_LENGHT", add "sizeof(xxx_cali_t)", and implement new function.
   *             bool_t cali_xxx_hook(uint32_t *cali, bool_t cmd), and add the name in "cali_name[CALI_LIST_LENGHT][3]"
@@ -83,7 +83,7 @@
   *             {
   *                 uint16_t xxx;
   *                 uint16_t yyy;
-  *                 float zzz;
+  *                 fp32 zzz;
   *             } xxx_cali_t; //长度:8字节 8 bytes, 必须是 4, 8, 12, 16...
   *             3.在 "FLASH_WRITE_BUF_LENGHT",添加"sizeof(xxx_cali_t)", 和实现新函数
   *             bool_t cali_xxx_hook(uint32_t *cali, bool_t cmd), 添加新名字在 "cali_name[CALI_LIST_LENGHT][3]"
@@ -193,21 +193,21 @@ typedef struct {
     //'temperature' and 'latitude' should not be in the head_cali, because don't want to create a new sensor
     //'temperature' and 'latitude'不应该在head_cali,因为不想创建一个新的设备就放这了
     int8_t temperature;         // imu control temperature
-    float latitude;              // latitude
+    fp32 latitude;              // latitude
 } head_cali_t;
 //gimbal device
 typedef struct {
     uint16_t yaw_offset;
     uint16_t pitch_offset;
-    float yaw_max_angle;
-    float yaw_min_angle;
-    float pitch_max_angle;
-    float pitch_min_angle;
+    fp32 yaw_max_angle;
+    fp32 yaw_min_angle;
+    fp32 pitch_max_angle;
+    fp32 pitch_min_angle;
 } gimbal_cali_t;
 //gyro, accel, mag device
 typedef struct {
-    float offset[3]; //x,y,z
-    float scale[3];  //x,y,z
+    fp32 offset[3]; //x,y,z
+    fp32 scale[3];  //x,y,z
 } imu_cali_t;
 
 
@@ -236,12 +236,12 @@ extern int8_t get_control_temperature(void);
 
 /**
   * @brief          get latitude, default 22.0f
-  * @param[out]     latitude: the point to float
+  * @param[out]     latitude: the point to fp32
   * @retval         none
   */
 /**
   * @brief          获取纬度,默认22.0f
-  * @param[out]     latitude:float指针
+  * @param[out]     latitude:fp32指针
   * @retval         none
   */
 extern void get_flash_latitude(float *latitude);

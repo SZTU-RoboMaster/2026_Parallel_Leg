@@ -263,7 +263,7 @@ static void Gimbal_Ctrl_Info_Set(void)
     gimbal.pitch.absolute_angle_set += (float)rc_ctrl.rc.ch[GIMBAL_PITCH_CHANNEL] * RC_TO_PITCH + (float)gimbal.mouse_in_y.out * MOUSE_Y_RADIO;  // rc_ctrl.mouse.y
 
     //限幅
-    gimbal.pitch.absolute_angle_set = float_constrain(gimbal.pitch.absolute_angle_set,
+    gimbal.pitch.absolute_angle_set = fp32_constrain(gimbal.pitch.absolute_angle_set,
                                                      MIN_ABS_ANGLE,
                                                      MAX_ABS_ANGLE);
 

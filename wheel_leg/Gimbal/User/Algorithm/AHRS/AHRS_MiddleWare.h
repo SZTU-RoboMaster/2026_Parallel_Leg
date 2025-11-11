@@ -1,6 +1,10 @@
-#ifndef _AHRS_MIDDLEWARE_H
-#define _AHRS_MIDDLEWARE_H
+//
+// Created by xhuanc on 2021/11/14.
+//
 
+#ifndef DEMO1_AHRS_MIDDLEWARE_H
+#define DEMO1_AHRS_MIDDLEWARE_H
+#include "struct_typedef.h"
 //∂®“Â NULL
 #ifndef NULL
 #define NULL 0
@@ -21,13 +25,13 @@
 #define RAD_TO_ANGLE 57.295779513082320876798154814105f
 #endif
 
-extern void AHRS_get_height(float *high);
-extern void AHRS_get_latitude(float *latitude);
-extern float AHRS_invSqrt(float num);
-extern float AHRS_sinf(float angle);
-extern float AHRS_cosf(float angle);
-extern float AHRS_tanf(float angle);
-extern float AHRS_asinf(float sin);
-extern float AHRS_acosf(float cos);
-extern float AHRS_atan2f(float y, float x);
-#endif
+extern void AHRS_get_height(fp32 *high);
+extern void AHRS_get_latitude(fp32 *latitude);
+extern fp32 AHRS_invSqrt(fp32 num);
+extern fp32 AHRS_sinf(fp32 angle);
+extern fp32 AHRS_cosf(fp32 angle);
+extern fp32 AHRS_tanf(fp32 angle);
+extern fp32 AHRS_asinf(fp32 sin);
+extern fp32 AHRS_acosf(fp32 cos);
+extern fp32 AHRS_atan2f(fp32 y, fp32 x);
+#endif //DEMO1_AHRS_MIDDLEWARE_H

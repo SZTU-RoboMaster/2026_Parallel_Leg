@@ -4,7 +4,7 @@
 
 #include "ramp.h"
 
-void ramp_init(ramp_function_source_t *ramp_source_type, float frame_period, float max, float min)
+void ramp_init(ramp_function_source_t *ramp_source_type, fp32 frame_period, fp32 max, fp32 min)
 {
     ramp_source_type->frame_period = frame_period;
     ramp_source_type->max_value = max;
@@ -13,7 +13,7 @@ void ramp_init(ramp_function_source_t *ramp_source_type, float frame_period, flo
     ramp_source_type->out = 0.0f;
 }
 
-void ramp_calc(ramp_function_source_t *ramp_source_type, float input)
+void ramp_calc(ramp_function_source_t *ramp_source_type, fp32 input)
 {
     ramp_source_type->input = input;
     ramp_source_type->out += ramp_source_type->input * ramp_source_type->frame_period;

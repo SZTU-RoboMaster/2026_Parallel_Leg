@@ -236,6 +236,14 @@ void Gimbal_task(void const*pvParameters) {
                                0     // 204 ÎÞ
         );
 
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x200_ID,
+//                               0,    //201 ×óÄ¦²ÁÂÖ
+//                               0,    //202 ÓÒÄ¦²ÁÂÖ
+//                               launcher.trigger.target_current,    //203 ²¦ÅÌ
+//                               0     // 204 ÎÞ
+//        );
+
         // ÔÆÌ¨
         DJI_Send_Motor_Mapping(CAN_1,
                                CAN_DJI_MOTOR_0x1FF_ID,

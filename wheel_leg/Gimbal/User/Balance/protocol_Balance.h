@@ -64,21 +64,21 @@ typedef struct
 {
     uint16_t id;        //
     uint16_t mode;      // auto mode 0x21
-    float pitch;         // 陀螺仪的pitch
-    float yaw;           // 陀螺仪的yaw
-    float roll;          // 陀螺仪的roll，英雄没有用到
-    float quaternion[4]; // 四元数
-    float shoot_speed;   // 发射速度
+    fp32 pitch;         // 陀螺仪的pitch
+    fp32 yaw;           // 陀螺仪的yaw
+    fp32 roll;          // 陀螺仪的roll，英雄没有用到
+    fp32 quaternion[4]; // 四元数
+    fp32 shoot_speed;   // 发射速度
 } vision_t;
 
 //机器人控制数据
 typedef struct
 {
-    float vx;
-    float vy;
-    float vw;
-    float yaw;
-    float pitch;
+    fp32 vx;
+    fp32 vy;
+    fp32 vw;
+    fp32 yaw;
+    fp32 pitch;
     int8_t target_lock;
     int8_t fire_command;
 //    int8_t aim_id;

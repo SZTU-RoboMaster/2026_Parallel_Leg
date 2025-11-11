@@ -9,11 +9,11 @@
 /**
  * @brief          用于获取当前高度
  * @author         RM
- * @param[in]      高度的指针，float
+ * @param[in]      高度的指针，fp32
  * @retval         返回空
  */
 
-void AHRS_get_height(float* high)
+void AHRS_get_height(fp32* high)
 {
     if (high != NULL)
     {
@@ -24,11 +24,11 @@ void AHRS_get_height(float* high)
 /**
  * @brief          用于获取当前纬度
  * @author         RM
- * @param[in]      纬度的指针，float
+ * @param[in]      纬度的指针，fp32
  * @retval         返回空
  */
 
-void AHRS_get_latitude(float* latitude)
+void AHRS_get_latitude(fp32* latitude)
 {
     if (latitude != NULL)
     {
@@ -39,19 +39,19 @@ void AHRS_get_latitude(float* latitude)
 /**
  * @brief          快速开方函数，
  * @author         RM
- * @param[in]      输入需要开方的浮点数，float
+ * @param[in]      输入需要开方的浮点数，fp32
  * @retval         返回1/sqrt 开方后的倒数
  */
 
-float AHRS_invSqrt(float num)
+fp32 AHRS_invSqrt(fp32 num)
 {
     return 1/sqrtf(num);
 
-//    float halfnum = 0.5f * num;
-//    float y = num;
+//    fp32 halfnum = 0.5f * num;
+//    fp32 y = num;
 //    long i = *(long*)&y;
 //    i = 0x5f3759df - (i >> 1);
-//    y = *(float*)&i;
+//    y = *(fp32*)&i;
 //    y = y * (1.5f - (halfnum * y * y));
 //    y = y * (1.5f - (halfnum * y * y));
 //    return y;
@@ -64,7 +64,7 @@ float AHRS_invSqrt(float num)
  * @retval         返回对应角度的sin值
  */
 
-float AHRS_sinf(float angle)
+fp32 AHRS_sinf(fp32 angle)
 {
     return arm_sin_f32(angle);
 }
@@ -75,7 +75,7 @@ float AHRS_sinf(float angle)
  * @retval         返回对应角度的cos值
  */
 
-float AHRS_cosf(float angle)
+fp32 AHRS_cosf(fp32 angle)
 {
     return arm_cos_f32(angle);
 }
@@ -87,7 +87,7 @@ float AHRS_cosf(float angle)
  * @retval         返回对应角度的tan值
  */
 
-float AHRS_tanf(float angle)
+fp32 AHRS_tanf(fp32 angle)
 {
     return tanf(angle);
 }
@@ -98,7 +98,7 @@ float AHRS_tanf(float angle)
  * @retval         返回角度 单位弧度
  */
 
-float AHRS_asinf(float sin)
+fp32 AHRS_asinf(fp32 sin)
 {
 
     return asinf(sin);
@@ -111,7 +111,7 @@ float AHRS_asinf(float sin)
  * @retval         返回对应的角度 单位弧度
  */
 
-float AHRS_acosf(float cos)
+fp32 AHRS_acosf(fp32 cos)
 {
 
     return acosf(cos);
@@ -125,7 +125,7 @@ float AHRS_acosf(float cos)
  * @retval         返回对应的角度 单位弧度
  */
 
-float AHRS_atan2f(float y, float x)
+fp32 AHRS_atan2f(fp32 y, fp32 x)
 {
     return atan2f(y, x);
 }
