@@ -1,7 +1,6 @@
-#ifndef DHSENTRY_CHASSIS_DJI_MOTOR_H
-#define DHSENTRY_CHASSIS_DJI_MOTOR_H
+#ifndef _DJI_MOTOR_H
+#define _DJI_MOTOR_H
 
-#include "struct_typedef.h"
 #include "bsp_can.h"
 
 typedef enum {
@@ -18,18 +17,14 @@ typedef enum {
 
 // DJI电机的CAN_ID
 typedef enum {
-    /* 底盘电机接收模块 */
-    CAN_CHASSIS_MOTOR_RF=0x201,     //2     前右
-    CAN_CHASSIS_MOTOR_LF=0x202,     //2     前左
-    CAN_CHASSIS_MOTOR_LB=0x203,     //2     后左
-    CAN_CHASSIS_MOTOR_RB=0x204,     //2     后右
 
     /* 云台和发射机构电机接收模块 */
-    CAN_LAUNCHER_FIRE_L=0X201,     //2     右摩擦轮
-    CAN_LAUNCHER_FIRE_R=0X202,     //2     左摩擦轮
-    CAN_LAUNCHER_TRIGGER=0X203,    //2     拨盘
-    CAN_GIMBAL_YAW=0x205,          //2     yaw轴
-    CAN_GIMBAL_PITCH=0x206,        //2     pitch轴
+    CAN_LAUNCHER_FIRE_L=0X201,  //右摩擦轮
+    CAN_LAUNCHER_FIRE_R=0X202,  //左摩擦轮
+    CAN_LAUNCHER_TRIGGER=0X203, //拨盘
+    CAN_GIMBAL_YAW=0x205,       //yaw
+    CAN_GIMBAL_PITCH=0x206,     //pitch
+
 }DJI_CAN_ID_e;
 
 //电机的数据
@@ -49,10 +44,10 @@ typedef struct {
 
 void DJI_Motor_Decode(DJI_Motor_t *motor, uint8_t *data);
 void DJI_Round_Count(DJI_Motor_t *motor);
-fp32 DJI_Encoder_Limit(int16_t ecd);
+float DJI_Encoder_Limit(int16_t ecd);
 void DJI_Send_Motor_Mapping(CAN_TYPE hcan, uint32_t can_id, int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4);
-fp32 Motor_Ecd_To_Angle_Change(uint16_t ecd, uint16_t offset_ecd);
+float Motor_Ecd_To_Angle_Change(uint16_t ecd, uint16_t offset_ecd);
 
 
-#endif //DHSENTRY_CHASSIS_DJI_MOTOR_H
+#endif
 

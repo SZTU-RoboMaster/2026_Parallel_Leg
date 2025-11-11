@@ -6,7 +6,6 @@
 #include "user_lib.h"
 #include "filter.h"
 #include "protocol_Balance.h"
-#include "SMC.h"
 
 /* 云台任务初始化时间 */
 #define GIMBAL_TASK_INIT_TIME 800
@@ -75,10 +74,10 @@ typedef struct {
 
     int16_t target_current; // 期望电流值
 
-    fp32 absolute_angle_get; // ° IMU角度值
-    fp32 relative_angle_get; // ° 与电机上电复位位置的角度差值
+    float absolute_angle_get; // ° IMU角度值
+    float relative_angle_get; // ° 与电机上电复位位置的角度差值
 
-    fp32 absolute_angle_set; // °
+    float absolute_angle_set; // °
 
 }Motor_Gimbal_t;
 
@@ -121,13 +120,11 @@ extern gimbal_t gimbal;
 #define BLOCK_TRI_MAXTIME 1000    // 一次单发任务、反转任务最大执行时间 1s
 #define BLOCK_TRI_MAXSPEED 100    // 堵转转速阈值 rpm
 
-#define CONTINUE_BLOCK_TRI_MAXTIME 100 // 连发堵转阈值 ms
-
 // 摩擦轮转速
 #define FIRE_SPEED  4700
 
 // 拨盘转速
-#define TRIGGER_SPEED -2000 // 正转：从弹仓后往正方向看，拨盘顺时针转动
+#define TRIGGER_SPEED -1000 // 正转：从弹仓后往正方向看，拨盘顺时针转动
 
 // 2006编码器端转一圈编码值加8192，减速比为1:36，则输出端转一圈（2π）的总编码器值为36×8192
 #define DEGREE_45_TO_ENCODER  (36 * 8192) / 8 // (pi/4)
@@ -214,8 +211,6 @@ typedef struct {
     Pid speed_pid;                // 速度环 pid
 
     int16_t target_current;       // 期望电流值
-
-    SystemState state;            // 摩擦轮电机-滑膜控制器
 
 }Motor_Launcher_t;
 

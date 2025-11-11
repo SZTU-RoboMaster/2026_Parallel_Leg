@@ -69,7 +69,6 @@ include_directories(Core/Inc
         User/Algorithm/pid
         User/Algorithm/QuaternionEKF
         User/Algorithm/ramp
-        User/Algorithm/SMC
         User/Algorithm/user_lib
 
         User/App/Board_Communication_Task

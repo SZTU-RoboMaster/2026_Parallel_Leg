@@ -69,15 +69,14 @@ include_directories(Core/Inc
         User/Algorithm/pid
         User/Algorithm/QuaternionEKF
         User/Algorithm/ramp
-        User/Algorithm/SMC
         User/Algorithm/user_lib
 
-        User/App/Atti
         User/App/Board_Communication_Task
+        User/App/Calibrate_Task
+        User/App/Detect_Task
         User/App/Gimbal_Task
-        User/App/Referee_Task/Calibrate
-        User/App/Referee_Task/Detection
-        User/App/Referee_Task/Referee
+        User/App/INS_Task
+        User/App/Referee_Task
 
         User/Balance
 

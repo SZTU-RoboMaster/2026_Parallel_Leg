@@ -8,14 +8,14 @@
 
 typedef  struct
 {
-    fp32 input;        //输入数据
-    fp32 out;          //输出数据
-    fp32 min_value;    //限幅最小值
-    fp32 max_value;    //限幅最大值
-    fp32 frame_period; //时间间隔
+    float input;        //输入数据
+    float out;          //输出数据
+    float min_value;    //限幅最小值
+    float max_value;    //限幅最大值
+    float frame_period; //时间间隔
 }__packed ramp_function_source_t;
 
-void ramp_init(ramp_function_source_t *ramp_source_type, fp32 frame_period, fp32 max, fp32 min);
-void ramp_calc(ramp_function_source_t *ramp_source_type, fp32 input);
+void ramp_init(ramp_function_source_t *ramp_source_type, float frame_period, float max, float min);
+void ramp_calc(ramp_function_source_t *ramp_source_type, float input);
 
 #endif //DEMO1_RAMP_H

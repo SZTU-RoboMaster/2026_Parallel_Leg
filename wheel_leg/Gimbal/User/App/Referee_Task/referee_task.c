@@ -39,7 +39,7 @@ static bool_t Referee_read_data(uint8_t *ReadFromUsart);
 static void ui_static_draw();
 /*裁判系统主任务*/
 
-extern fp32 INS_angle[3];
+extern float INS_angle[3];
 
 void USART1_IRQHandler(void)
 {
