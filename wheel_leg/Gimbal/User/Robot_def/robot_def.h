@@ -121,11 +121,13 @@ extern gimbal_t gimbal;
 #define BLOCK_TRI_MAXTIME 1000    // 一次单发任务、反转任务最大执行时间 1s
 #define BLOCK_TRI_MAXSPEED 100    // 堵转转速阈值 rpm
 
+#define CONTINUE_BLOCK_TRI_MAXTIME 100 // 连发堵转阈值 ms
+
 // 摩擦轮转速
 #define FIRE_SPEED  4700
 
 // 拨盘转速
-#define TRIGGER_SPEED -1000 // 正转：从弹仓后往正方向看，拨盘顺时针转动
+#define TRIGGER_SPEED -2000 // 正转：从弹仓后往正方向看，拨盘顺时针转动
 
 // 2006编码器端转一圈编码值加8192，减速比为1:36，则输出端转一圈（2π）的总编码器值为36×8192
 #define DEGREE_45_TO_ENCODER  (36 * 8192) / 8 // (pi/4)

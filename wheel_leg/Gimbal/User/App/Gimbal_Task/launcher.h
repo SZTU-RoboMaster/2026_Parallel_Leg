@@ -12,8 +12,8 @@ void Launcher_Init(void);
 
 void Launcher_Mode_Set(void);
 
-void Launcher_Control(void);
-
 void Launcher_Disable(void);
+
+void Launcher_Control(void);
 
 #endif

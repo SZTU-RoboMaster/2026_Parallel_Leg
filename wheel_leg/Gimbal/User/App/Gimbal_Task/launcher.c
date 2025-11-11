@@ -8,9 +8,8 @@
 *                                              内部变量                                                   *
 *********************************************************************************************************/
 extern robot_ctrl_info_t robot_ctrl;    // 上位机数据
-static uint32_t trigger_time = 0;       // 拨盘电机每次转动时间
 static uint8_t rc_last_sw_L;            // 拨杆上一时刻的状态值记录
-static uint8_t rc_last_sw_R;            // 拨杆上一时刻的状态值记录
+
 
 /*************************************************************************************************
  *                                        Function                                               *
@@ -35,7 +34,31 @@ static void launcher_pid_init(void)
              TRIGGER_SPEED_PID_KD);
 }
 
+/** 发射机构初始化 **/
+void Launcher_Init(void) {
 
+    /** 发射机构电流置零 **/
+    launcher.fire_l.target_current = 0;
+    launcher.fire_r.target_current = 0;
+    launcher.trigger.target_current = 0;
+
+    /** 初始化发射机构模式 **/
+    // 摩擦轮
+    launcher.fir_wheel_mode = launcher.fir_wheel_last_mode = Fire_OFF;
+    // 拨盘
+    launcher.trigger_mode = launcher.trigger_last_mode = TRIGGER_CLOSE;
+
+    /** 发射机构PID初始化 **/
+    launcher_pid_init();
+
+    /** 初始化堵转检测 **/
+    launcher.shoot_state = SHOOT_OVER_STATE;
+    launcher.block_check.continue_time = 0;
+
+    /** 滤波器 **/
+    first_order_filter_init(&launcher.filter_fire,0.05f, 0.5f);
+    first_order_filter_init(&launcher.filter_trigger,1,1);
+}
 
 /** 摩擦轮模式设置 **/
 static void fir_wheel_mode_set(void)
@@ -63,54 +86,53 @@ static void trigger_mode_set(void) {
     {
         if (switch_is_down(rc_last_sw_L) || (KeyBoard.Mouse_l.status == KEY_PRESS))
         {
-//            // 1.「堵转-反转」模式
-//            if((launcher.shoot_state == SHOOT_BLOCK_STATE)  // 避免反转模式下再次进入预反转模式
-//               && (launcher.trigger_mode != TRIGGER_INVERSE))
-//            {
-//                // 进入预反转模式
-//                launcher.trigger_mode = TRIGGER_READY_TO_INVERSE;
-//
-//                // 记录反转开始时间
-//                launcher.block_check.inversing_start_time = HAL_GetTick();
-//            }
-//
-//            // 切换为反转模式
-//            if((launcher.trigger_mode == TRIGGER_READY_TO_INVERSE) || (launcher.shoot_state == SHOOT_INVERSING))
-//            {
-//                launcher.trigger_mode = TRIGGER_INVERSE;
-//            }
-//
-//
-//            // 2.「视觉-单发」模式
-//            else if ((gimbal.gimbal_ctrl_mode == GIMBAL_AUTO) && (robot_ctrl.fire_command == 1)) // 自瞄模式
-//            {
-//                // 2.1 预单发模式
-//                if((launcher.trigger_mode != TRIGGER_SINGLE) // 避免执行单发任务中再次进入预单发模式
-//                && (launcher.shoot_state != SHOOT_SINGLING_STATE))
-//                {
-//                    launcher.trigger_last_mode = launcher.trigger_mode;
-//                    launcher.trigger_mode = TRIGGER_READY_TO_SINGLE;
-//
-//                    launcher.block_check.single_shoot_time = HAL_GetTick();
-//                }
-//
-//                // 切换为单发模式
-//                if((launcher.trigger_mode == TRIGGER_READY_TO_SINGLE) || (launcher.shoot_state == SHOOT_SINGLING_STATE))
-//                {
-//                    launcher.trigger_last_mode = launcher.trigger_mode;
-//                    launcher.trigger_mode = TRIGGER_SINGLE;
-//                }
-//            }
-//
-//            // 3.「连发」模式（优先级最低）
-//            else
-//            {
-//                launcher.trigger_last_mode = launcher.trigger_mode;
-//                launcher.trigger_mode = TRIGGER_CONTINUE;
-//            }
+            // 1.「堵转-反转」模式
+            if((launcher.shoot_state == SHOOT_BLOCK_STATE)  // 避免反转模式下再次进入预反转模式
+               && (launcher.trigger_mode != TRIGGER_INVERSE))
+            {
+                // 进入预反转模式
+                launcher.trigger_mode = TRIGGER_READY_TO_INVERSE;
 
+                // 记录反转开始时间
+                launcher.block_check.inversing_start_time = HAL_GetTick();
+            }
 
-            launcher.trigger_mode = TRIGGER_SINGLE;
+            // 切换为反转模式
+            if((launcher.trigger_mode == TRIGGER_READY_TO_INVERSE) || (launcher.shoot_state == SHOOT_INVERSING))
+            {
+                launcher.trigger_mode = TRIGGER_INVERSE;
+            }
+
+/** 需要有判断一次单发任务Over的函数，否则一直都是单发模式，不会复位 **/
+
+            // 2.「视觉-单发」模式
+            else if ((gimbal.gimbal_ctrl_mode == GIMBAL_AUTO) && (robot_ctrl.fire_command == 1)) // 自瞄模式
+            {
+                // 2.1 预单发模式
+                if((launcher.trigger_mode != TRIGGER_SINGLE) // 避免执行单发任务中再次进入预单发模式
+                || (launcher.shoot_state != SHOOT_SINGLING_STATE))
+                {
+                    launcher.trigger_last_mode = launcher.trigger_mode;
+                    launcher.trigger_mode = TRIGGER_READY_TO_SINGLE;
+
+                    launcher.block_check.single_shoot_time = HAL_GetTick();
+                }
+
+                // 切换为单发模式
+                if((launcher.trigger_mode == TRIGGER_READY_TO_SINGLE) || (launcher.shoot_state == SHOOT_SINGLING_STATE))
+                {
+                    launcher.trigger_last_mode = launcher.trigger_mode;
+                    launcher.trigger_mode = TRIGGER_SINGLE;
+                }
+            }
+
+            // 3.「连发」模式（优先级最低）
+            else
+            {
+                launcher.trigger_last_mode = launcher.trigger_mode;
+                launcher.trigger_mode = TRIGGER_CONTINUE;
+            }
+
         }
 
     }
@@ -118,6 +140,20 @@ static void trigger_mode_set(void) {
     {
         launcher.trigger_mode = TRIGGER_CLOSE;
     }
+
+}
+
+/** 发射机构模式设置 **/
+void Launcher_Mode_Set(void) {
+
+    /** 摩擦轮模式判断 **/
+    fir_wheel_mode_set();
+
+    /** 拨盘模式判断 ***/
+    trigger_mode_set();
+
+    /** 更新上一次的左拨杆值 **/
+    rc_last_sw_L = rc_ctrl.rc.s[RC_s_L];
 
 }
 
@@ -139,6 +175,7 @@ static void block_check(void)
         {
             if(launcher.block_check.single_shoot_total_time > BLOCK_TRI_MAXTIME)// 单发任务超时，且仍未完成单发任务，判定为单发堵转
             {
+                // 更新射击状态
                 launcher.shoot_state = SHOOT_BLOCK_STATE;
             }
 
@@ -147,6 +184,7 @@ static void block_check(void)
         }
         else if(launcher.block_check.total_ecd_error < BLOCK_TRI_MINECD) // 单发任务执行完毕
         {
+            // 更新射击状态
             launcher.shoot_state = SHOOT_OVER_STATE;
         }
     }
@@ -154,7 +192,7 @@ static void block_check(void)
     /** 2 连发堵转判定 **/
     else if(launcher.trigger_mode == TRIGGER_CONTINUE)
     {
-        // 记录反馈转速小于堵转速度阈值的时间
+        // 记录「反馈转速小于堵转速度阈值」的时间
         if(ABS(launcher.trigger.motor_measure.speed_rpm) < BLOCK_TRI_MAXSPEED)
         {
             launcher.block_check.continue_time ++;
@@ -165,8 +203,9 @@ static void block_check(void)
         }
 
         // 堵转判定
-        if(launcher.block_check.continue_time > 200) // 200ms
+        if(launcher.block_check.continue_time > CONTINUE_BLOCK_TRI_MAXTIME)
         {
+            // 更新射击状态
             launcher.shoot_state = SHOOT_BLOCK_STATE;
         }
 
@@ -176,21 +215,11 @@ static void block_check(void)
 
 }
 
-/** 堵转处理 **/
-static void block_handle(void)
+/** 判断堵转是否被成功解决 **/
+static void block_handle_judge(void)
 {
     if(launcher.trigger_mode == TRIGGER_INVERSE)
     {
-        // 更新射击状态
-        launcher.shoot_state = SHOOT_INVERSING;
-
-        // 反转
-        launcher.trigger.target_speed = -TRIGGER_SPEED;
-
-        // 计算反转总时间
-        launcher.block_check.inversing_total_time = HAL_GetTick() - launcher.block_check.inversing_start_time;
-
-
         // 若反转总时间未超过规定时间，则继续执行当前任务
         if(launcher.block_check.inversing_total_time < BLOCK_TRI_MAXTIME)
         {
@@ -222,25 +251,12 @@ static void trigger_control(void)
         // 更新发射状态
         launcher.shoot_state = SHOOT_SINGLING_STATE;
 
-        /*************************   test   **************************/
-        if ((!switch_is_up(rc_last_sw_R)) && switch_is_up(rc_ctrl.rc.s[RC_s_R]))
-        {
-            launcher.trigger.target_total_ecd -=  DEGREE_45_TO_ENCODER;
-        }
+        // 单发
+        launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
 
         launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
                                                  launcher.trigger.motor_measure.total_ecd,
                                                  launcher.trigger.target_total_ecd);
-
-        rc_last_sw_R = rc_ctrl.rc.s[RC_s_R];
-
-        /************************************************************/
-
-//        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd - DEGREE_45_TO_ENCODER;
-//
-//        launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
-//                                                 launcher.trigger.motor_measure.total_ecd,
-//                                                 launcher.trigger.target_total_ecd);
 
 
     }
@@ -256,6 +272,19 @@ static void trigger_control(void)
 
         launcher.trigger.target_speed = TRIGGER_SPEED;
 
+    }
+
+    // 反转
+    else if(launcher.trigger_mode == TRIGGER_INVERSE)
+    {
+        // 更新射击状态
+        launcher.shoot_state = SHOOT_INVERSING;
+
+        // 反转
+        launcher.trigger.target_speed = -TRIGGER_SPEED;
+
+        // 计算反转总时间
+        launcher.block_check.inversing_total_time = HAL_GetTick() - launcher.block_check.inversing_start_time;
     }
 
     // 失能
@@ -304,53 +333,7 @@ static void fir_wheel_control(void)
 
 }
 
-/** 发射机构初始化 **/
-void Launcher_Init(void) {
 
-    /** 发射机构电流置零 **/
-    launcher.fire_l.target_current = 0;
-    launcher.fire_r.target_current = 0;
-    launcher.trigger.target_current = 0;
-
-    /** 初始化发射机构模式 **/
-    // 摩擦轮
-    launcher.fir_wheel_mode = launcher.fir_wheel_last_mode = Fire_OFF;
-    // 拨盘
-    launcher.trigger_mode = launcher.trigger_last_mode = TRIGGER_CLOSE;
-
-    /** 发射机构PID初始化 **/
-    launcher_pid_init();
-
-    /** 初始化堵转检测 **/
-    launcher.shoot_state = SHOOT_OVER_STATE;
-    launcher.block_check.continue_time = 0;
-
-    /** 滤波器 **/
-    first_order_filter_init(&launcher.filter_fire,0.05f, 0.5f);
-    first_order_filter_init(&launcher.filter_trigger,1,1);
-}
-
-/** 发射机构模式设置 **/
-void Launcher_Mode_Set(void) {
-
-    /** 摩擦轮模式判断 **/
-    fir_wheel_mode_set();
-
-    /** 拨盘模式判断 ***/
-    trigger_mode_set();
-
-    /** 更新上一次的左拨杆值 **/
-    rc_last_sw_L = rc_ctrl.rc.s[RC_s_L];
-
-}
-
-/** 发射机构控制 **/
-void Launcher_Control(void)
-{
-    trigger_control();
-
-    fir_wheel_control();
-}
 
 
 /*************************************************************************************************
@@ -375,4 +358,20 @@ void Launcher_Disable(void) {
     launcher.trigger.target_total_ecd = (int32_t)launcher.trigger.motor_measure.total_ecd;
 
 
+}
+
+/** 发射机构控制 **/
+void Launcher_Control(void)
+{
+    /** 拨盘控制 **/
+    trigger_control();
+
+    /** 摩擦轮控制 **/
+    fir_wheel_control();
+
+    /** 堵转检测 **/
+    block_check();
+
+    /** 判断堵转是否被成功解决 **/
+    block_handle_judge();
 }
