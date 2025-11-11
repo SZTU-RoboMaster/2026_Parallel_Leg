@@ -246,6 +246,16 @@ static void trigger_control(void)
 //                                                 launcher.trigger.motor_measure.total_ecd,
 //                                                 launcher.trigger.target_total_ecd);
 
+        rc_last_sw_R = rc_ctrl.rc.s[RC_s_R];
+
+        /************************************************************/
+
+//        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd - DEGREE_45_TO_ENCODER;
+//
+//        launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
+//                                                 launcher.trigger.motor_measure.total_ecd,
+//                                                 launcher.trigger.target_total_ecd);
+
 
 >>>>>>> parent of 1a77681 (微卡)
     }
