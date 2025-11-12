@@ -211,7 +211,6 @@ void Gimbal_task(void const*pvParameters) {
             case GIMBAL_DISABLE:
             {
                 Gimbal_Disable_Task();
-
                 break;
             }
 
@@ -230,27 +229,19 @@ void Gimbal_task(void const*pvParameters) {
         // 发射机构
         DJI_Send_Motor_Mapping(CAN_1,
                                CAN_DJI_MOTOR_0x200_ID,
-                               launcher.fire_l.target_current,    //201 左摩擦轮
-                               launcher.fire_r.target_current,    //202 右摩擦轮
-                               launcher.trigger.target_current,    //203 拨盘
-                               0     // 204 无
+                               launcher.fire_l.target_current,    // 201 左摩擦轮
+                               launcher.fire_r.target_current,    // 202 右摩擦轮
+                               launcher.trigger.target_current,   // 203 拨盘
+                               0                                  // 204 无
         );
-
-//        DJI_Send_Motor_Mapping(CAN_1,
-//                               CAN_DJI_MOTOR_0x200_ID,
-//                               0,    //201 左摩擦轮
-//                               0,    //202 右摩擦轮
-//                               launcher.trigger.target_current,    //203 拨盘
-//                               0     // 204 无
-//        );
 
         // 云台
         DJI_Send_Motor_Mapping(CAN_1,
                                CAN_DJI_MOTOR_0x1FF_ID,
-                               gimbal.yaw.target_current,     //205 无
-                               gimbal.pitch.target_current,     //206 pitch
-                               0,     //207 无
-                               0      //208 无
+                               gimbal.yaw.target_current,         // 205 无
+                               gimbal.pitch.target_current,       // 206 pitch
+                               0,                                 // 207 无
+                               0                                  // 208 无
         );
 
 //        // 发射机构

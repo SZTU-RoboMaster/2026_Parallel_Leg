@@ -117,10 +117,8 @@ extern gimbal_t gimbal;
 
 /** 堵转检测参数 **/
 #define BLOCK_TRI_MINECD 5000     // 单发任务完成阈值 ecd
-#define BLOCK_TRI_MAXTIME 1000    // 一次单发任务、反转任务最大执行时间 1s
+#define BLOCK_TRI_MAXTIME 100    //  堵转阈值时间 ms
 #define BLOCK_TRI_MAXSPEED 100    // 堵转转速阈值 rpm
-
-#define CONTINUE_BLOCK_TRI_MAXTIME 100 // 连发堵转阈值 ms
 
 // 摩擦轮转速
 #define FIRE_SPEED  4700
@@ -159,55 +157,47 @@ typedef enum{
     Fire_ON=1,              //开启
 }Fir_Wheel_Mode;
 
-/** 拨盘状态 **/
+/** 拨盘模式 **/
 typedef enum{
     TRIGGER_CLOSE=0,              // 失能
 
-    TRIGGER_READY_TO_SINGLE,      // 预备单发（设置该模式是为了获得一次单发任务的时间，用于处理单发堵转）
     TRIGGER_SINGLE,               // 单发   （即视觉发一帧火控数据，拨盘转动一个弹丸角度）
 
     TRIGGER_CONTINUE,             // 连发
 
-    TRIGGER_READY_TO_INVERSE,   // 预备反转（设置该模式是为了获得反转的总时间，用于判断是否解决堵转）
-    TRIGGER_INVERSE,            // 反转
+    TRIGGER_BACK,                 // 回拨   （该模式下，拨盘回退一格）
 
 }Trigger_Mode;
 
 typedef enum {
 
-    SHOOT_SINGLING_STATE = 0,    // 单发中
-    SHOOT_CONTINUING_STATE,      // 连发中
-
     SHOOT_OVER_STATE,            // 发射完毕
 
-    SHOOT_INVERSING,             // 反转中
+    SHOOT_ING,                   // 射击中
 
     SHOOT_BLOCK_STATE,           //堵转
+
     SHOOT_FAIL_STATE             //拨盘坏了
 
-}Shoot_State;
+}Shoot_State; // 尽量不要添加没用的状态，避免状态被层层覆盖
 
 /** 堵转检测结构体 **/
 typedef struct {
 
-    float inversing_start_time; // 开始反转的时间点（记录反转总时间 用于判断反转是否解决堵转）
-    float inversing_total_time;
-
     /******** 1 单发模式 堵转检测 ********/
-
-    /** 计算一次单发的时间 **/
-    float single_shoot_time; // 开始时间
-    float single_shoot_total_time;// 总时间
-
-
+    uint32_t single_time;// 一次单发的时间 ms
     float total_ecd_error; // 拨盘期望总编码器值与实际总编码器值之差
 
 
     /******** 2 连发模式 堵转检测 ********/
     // 若连发模式时的反馈转速小于「堵转转速阈值」并持续一段时间，则判断其为堵转状态
-    uint32_t continue_time; // 用于记录反馈转速小于堵转速度阈值的时间
+    uint32_t continue_time; // 反馈转速小于堵转速度阈值的时间 ms
 
+    /** 记录回拨总时间 **/
+    uint32_t back_time; // 防止拨盘堵死
 
+    /** 射击状态 **/
+    Shoot_State shoot_state;
 
 }Block_Check;
 
@@ -240,9 +230,6 @@ typedef struct {
     /** 拨盘模式 **/
     Trigger_Mode trigger_last_mode;
     Trigger_Mode trigger_mode;
-
-    /** 射击状态 **/
-    Shoot_State shoot_state;
 
     /** 堵转检测 **/
     Block_Check block_check;
