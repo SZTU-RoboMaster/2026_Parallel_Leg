@@ -1,9 +1,6 @@
-//
-// Created by xhuanc on 2022/3/10.
-//
+#ifndef _DETECTION_TASK_H
+#define _DETECTION_TASK_H
 
-#ifndef DEMO1_DETECTION_H
-#define DEMO1_DETECTION_H
 #include "struct_typedef.h"
 #include <stdbool.h>
 #include "cmsis_os.h"
@@ -54,4 +51,4 @@ extern void detect_handle(uint8_t index);
 
 void Detect_task(void const*pvParameters);
 
-#endif //DEMO1_DETECTION_H
+#endif

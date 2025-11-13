@@ -1,19 +1,13 @@
-#include "decode_task.h"
 #include "string.h"
-#include "stdio.h"
-#include "CRC8_CRC16.h"
-#include "protocol_Balance.h"
-#include "fifo.h"
 #include "cmsis_os.h"
-#include "bsp_usart.h"
+#include "CRC8_CRC16.h"
+#include "fifo.h"
+#include "RoboMaster_Protocol.h"
 #include "detect_task.h"
-#include "protocol_Balance.h"
-#include "detect_task.h"
 
-void usb_fifo_init();
-
-void decode_task(void const *arg);
-
+/***************************************************************************************************
+ *                                          变量定义                                                *
+ ***************************************************************************************************/
 extern robot_ctrl_info_t robot_ctrl;
 
 //usb fifo 控制结构体
@@ -25,43 +19,51 @@ uint8_t usb_fifo_buf[512];
 //协议解包控制结构体
 unpack_data_t decode_unpack_obj;
 
-//反序列化函数
-void decode_unpack_fifo_data(void);
-
-uint16_t decode_data_solve(uint8_t *frame);
-
-extern uint8_t CDC_Transmit_FS(uint8_t *Buf, uint16_t Len);
-
-//协议序列化函数
-void encode_send_data(uint16_t cmd_id, void *buf, uint16_t len);
-
 frame_header_struct_t decode_receive_header;
 
-void decode_task(void const *argument);
+int flag3 = 0;
 
-//协议解析函数，freertos调用
-void decode_task(void const *arg) {
-    usb_fifo_init();
-    while (1) {
-        decode_unpack_fifo_data();
-        osDelay(1);
-    }
-}
-
-//USB FIFO 初始化
-void usb_fifo_init(void) {
+/***************************************************************************************************
+ *                                         Function                                                *
+ ***************************************************************************************************/
+// USB FIFO 初始化
+static void usb_fifo_init(void) {
     fifo_s_init(&usb_fifo, usb_fifo_buf, 512);
 }
 
-//usb 接受中断
+// USB 接受中断
 void usb_receiver(uint8_t *buf, uint32_t len) {
     fifo_s_puts(&usb_fifo, (char *) buf, len);
 }
 
-int flag3 = 0;
+//把frame的信息转到对应的结构体中
+uint16_t decode_data_solve(uint8_t *frame) {
+    uint8_t index = 0;
+    uint16_t cmd_id = 0;
+
+    memcpy(&decode_receive_header, frame, sizeof(frame_header_struct_t));
+    index += sizeof(frame_header_struct_t);
+
+    memcpy(&cmd_id, frame + index, sizeof(uint16_t));
+    index += sizeof(uint16_t);
+
+    switch (cmd_id) {
+        //接受控制码对应信息包
+        case CHASSIS_CTRL_CMD_ID: {
+            memcpy(&robot_ctrl, frame + index, sizeof(robot_ctrl_info_t));
+            detect_handle(DETECT_AUTO_AIM);
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    index += decode_receive_header.data_length + 2;
+    return index;
+}
 
 //反序列化
-void decode_unpack_fifo_data() {
+static void decode_unpack_fifo_data(void) {
     uint8_t byte = 0;
     uint8_t sof = HEADER_SOF;
     unpack_data_t *p_obj = &decode_unpack_obj;
@@ -151,28 +153,17 @@ void decode_unpack_fifo_data() {
     flag3 = 0;
 }
 
-//把frame的信息转到对应的结构体中
-uint16_t decode_data_solve(uint8_t *frame) {
-    uint8_t index = 0;
-    uint16_t cmd_id = 0;
 
-    memcpy(&decode_receive_header, frame, sizeof(frame_header_struct_t));
-    index += sizeof(frame_header_struct_t);
+/***************************************************************************************************
+ *                                          Task                                                   *
+ ***************************************************************************************************/
+void decode_task(void const *arg) {
+    usb_fifo_init();
 
-    memcpy(&cmd_id, frame + index, sizeof(uint16_t));
-    index += sizeof(uint16_t);
+    while (1)
+    {
+        decode_unpack_fifo_data();
 
-    switch (cmd_id) {
-        //接受控制码对应信息包
-        case CHASSIS_CTRL_CMD_ID: {
-            memcpy(&robot_ctrl, frame + index, sizeof(robot_ctrl_info_t));
-            detect_handle(DETECT_AUTO_AIM);
-            break;
-        }
-        default: {
-            break;
-        }
+        osDelay(1);
     }
-    index += decode_receive_header.data_length + 2;
-    return index;
 }

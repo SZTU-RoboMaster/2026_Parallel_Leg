@@ -77,10 +77,9 @@ include_directories(Core/Inc
         User/App/Gimbal_Task
         User/App/INS_Task
         User/App/Referee_Task
+        User/App/Vision_Task
         User/App/Vision_Task/receive
         User/App/Vision_Task/send
-
-        User/Balance
 
         User/Bsp/adc
         User/Bsp/buzzer

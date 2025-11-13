@@ -2,7 +2,8 @@
 #define ROBOMASTER_PROTOCOL_H
 
 #include "struct_typedef.h"
-#include "../App/Referee_Task/referee_task.h"
+#include "referee_task.h"
+
 #define HEADER_SOF 0xA5
 #define END1_SOF   0x0D
 #define END2_SOF   0x0A

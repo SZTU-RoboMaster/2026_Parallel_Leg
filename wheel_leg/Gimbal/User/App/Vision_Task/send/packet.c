@@ -1,27 +1,31 @@
-#include "decode_task.h"
 #include "string.h"
-#include "stdio.h"
-#include "CRC8_CRC16.h"
-#include "protocol_Balance.h"
-#include "fifo.h"
 #include "cmsis_os.h"
+#include "CRC8_CRC16.h"
+#include "RoboMaster_Protocol.h"
 #include "packet.h"
 #include "referee_task.h"
-#include "protocol_Balance.h"
 
+/***************************************************************************************************
+ *                                          变量定义                                                *
+ ***************************************************************************************************/
 robot_ctrl_info_t robot_ctrl;
 chassis_odom_info_t chassis_odom;
 extern QueueHandle_t CDC_send_queue;
 msg_end_info msg_end;
 
-void encode_send_data(uint16_t cmd_id, void* buf, uint16_t len);
+/***************************************************************************************************
+ *                                          函数声明                                                *
+ ***************************************************************************************************/
 
 //USB底层发送函数
 extern uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 
+/***************************************************************************************************
+ *                                         Function                                                *
+ ***************************************************************************************************/
 //把ID和消息内容塞进队列
-void rm_queue_data(uint16_t cmd_id,void* buf,uint16_t len ) //uint8_t queue_data[128];
+void rm_queue_data(uint16_t cmd_id,void* buf,uint16_t len)
 {
     uint16_t index = 0;
     uint8_t queue_data[128];
@@ -30,25 +34,6 @@ void rm_queue_data(uint16_t cmd_id,void* buf,uint16_t len ) //uint8_t queue_data
     memcpy(queue_data + index, (void*)buf, len);
     index += len;
     xQueueSend(CDC_send_queue, queue_data, 50);
-}
-
-//把ID和消息内容从队列中取出来
-void rm_dequeue_send_data(void* buf,uint16_t len)//auto run
-{
-    uint16_t cmd_id;
-    memcpy(&cmd_id,buf,sizeof(uint16_t));
-    switch(cmd_id)
-    {
-        case CHASSIS_ODOM_CMD_ID:  //需要发送的数据包ID号
-            encode_send_data(CHASSIS_ODOM_CMD_ID,((uint8_t*)buf+2),sizeof(chassis_odom_info_t));
-            break;
-        case CHASSIS_CTRL_CMD_ID:
-            encode_send_data(CHASSIS_CTRL_CMD_ID,((uint8_t*)buf+2),sizeof(robot_ctrl_info_t ));
-            break;
-        case VISION_ID:
-            encode_send_data(VISION_ID,((uint8_t*)buf+2),sizeof(vision_t));
-            break;
-    }
 }
 
 //实现RM协议的序列化过程
@@ -82,3 +67,23 @@ void encode_send_data(uint16_t cmd_id,void* buf ,uint16_t len)
     //调用底层发送函数
     CDC_Transmit_FS(send_buf, index);
 }
+
+//把ID和消息内容从队列中取出来
+void rm_dequeue_send_data(void* buf,uint16_t len)
+{
+    uint16_t cmd_id;
+    memcpy(&cmd_id,buf,sizeof(uint16_t));
+    switch(cmd_id)
+    {
+        case CHASSIS_ODOM_CMD_ID:  //需要发送的数据包ID号
+            encode_send_data(CHASSIS_ODOM_CMD_ID,((uint8_t*)buf+2),sizeof(chassis_odom_info_t));
+            break;
+        case CHASSIS_CTRL_CMD_ID:
+            encode_send_data(CHASSIS_CTRL_CMD_ID,((uint8_t*)buf+2),sizeof(robot_ctrl_info_t ));
+            break;
+        case VISION_ID:
+            encode_send_data(VISION_ID,((uint8_t*)buf+2),sizeof(vision_t));
+            break;
+    }
+}
+

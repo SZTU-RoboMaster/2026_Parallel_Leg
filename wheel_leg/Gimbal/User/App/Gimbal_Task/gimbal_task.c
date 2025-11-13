@@ -1,6 +1,6 @@
 #include "gimbal_task.h"
 #include "launcher.h"
-#include "protocol_balance.h"
+#include "../Vision_Task/RoboMaster_Protocol.h"
 #include "ins_task.h"
 #include "packet.h"
 #include "cmsis_os.h"
