@@ -29,7 +29,7 @@
 #include "buzzer.h"
 #include "ins_task.h"
 #include "gimbal_task.h"
-#include "decode.h"
+#include "decode_task.h"
 #include "usb_task.h"
 /* USER CODE END Includes */
 

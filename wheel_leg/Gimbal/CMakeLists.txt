@@ -77,6 +77,8 @@ include_directories(Core/Inc
         User/App/Gimbal_Task
         User/App/INS_Task
         User/App/Referee_Task
+        User/App/Vision_Task/receive
+        User/App/Vision_Task/send
 
         User/Balance
 
@@ -90,10 +92,6 @@ include_directories(Core/Inc
         User/Bsp/rc
         User/Bsp/spi
         User/Bsp/usart
-
-        User/Component/decode
-        User/Component/fifo
-        User/Component/packet
 
         User/Device/bmi088
         User/Device/buzzer

@@ -1,37 +1,25 @@
-
-//
-// Created by Shockley on 2022/12/5.
-//
-#include "decode.h"
+#include "decode_task.h"
 #include "string.h"
 #include "stdio.h"
 #include "CRC8_CRC16.h"
-#include "protocol_balance.h"
+#include "protocol_Balance.h"
 #include "fifo.h"
 #include "cmsis_os.h"
 #include "packet.h"
-extern void append_CRC16_check_sum(uint8_t * pchMessage,uint32_t dwLength);
-/*
-** Descriptions: append CRC16 to the end of data
-** Input: Data to CRC and append,Stream length = Data + checksum
-** Output: True or False (CRC Verify Result)
-*/
-extern void append_CRC16_check_sum(uint8_t * pchMessage,uint32_t dwLength);
-void encode_send_data(uint16_t cmd_id, void* buf, uint16_t len);
-/*
-** Descriptions: append CRC8 to the end of data
-** Input: Data to CRC and append,Stream length = Data + checksum
-** Output: True or False (CRC Verify Result)
-*/
-extern void append_CRC8_check_sum(unsigned char *pchMessage, unsigned int dwLength);
-//USB底层发送函数
-extern uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
+#include "referee_task.h"
+#include "protocol_Balance.h"
 
 robot_ctrl_info_t robot_ctrl;
-
 chassis_odom_info_t chassis_odom;
 extern QueueHandle_t CDC_send_queue;
 msg_end_info msg_end;
+
+void encode_send_data(uint16_t cmd_id, void* buf, uint16_t len);
+
+//USB底层发送函数
+extern uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
+
+
 //把ID和消息内容塞进队列
 void rm_queue_data(uint16_t cmd_id,void* buf,uint16_t len ) //uint8_t queue_data[128];
 {
@@ -43,6 +31,7 @@ void rm_queue_data(uint16_t cmd_id,void* buf,uint16_t len ) //uint8_t queue_data
     index += len;
     xQueueSend(CDC_send_queue, queue_data, 50);
 }
+
 //把ID和消息内容从队列中取出来
 void rm_dequeue_send_data(void* buf,uint16_t len)//auto run
 {
@@ -61,6 +50,7 @@ void rm_dequeue_send_data(void* buf,uint16_t len)//auto run
             break;
     }
 }
+
 //实现RM协议的序列化过程
 void encode_send_data(uint16_t cmd_id,void* buf ,uint16_t len)
 {
