@@ -154,19 +154,19 @@ void MX_FREERTOS_Init(void) {
 //    osThreadDef(detectTask, Detect_task, osPriorityIdle, 0, 128);
 //    detectTaskHandle = osThreadCreate(osThread(detectTask), NULL);
 //
-//    /* definition and creation of usbtask */
-//    osThreadDef(usbtask, USB_task, osPriorityHigh, 0, 128);
-//    usbtaskHandle = osThreadCreate(osThread(usbtask), NULL);
-//
-//    /* definition and creation of decodetask */
-//    osThreadDef(decodetask, Decode_task, osPriorityHigh, 0, 128);
-//    decodetaskHandle = osThreadCreate(osThread(decodetask), NULL);
+    /* definition and creation of usbtask */
+    osThreadDef(usbtask, usb_task, osPriorityHigh, 0, 128);
+    usbtaskHandle = osThreadCreate(osThread(usbtask), NULL);
+
+    /* definition and creation of decodetask */
+    osThreadDef(decodetask, decode_task, osPriorityHigh, 0, 128);
+    decodetaskHandle = osThreadCreate(osThread(decodetask), NULL);
 
 
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-//    CDC_send_queue = xQueueCreate(1, 128);
+    CDC_send_queue = xQueueCreate(1, 128);
 
   /* USER CODE END RTOS_THREADS */
 

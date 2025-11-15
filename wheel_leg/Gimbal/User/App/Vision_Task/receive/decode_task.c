@@ -157,7 +157,7 @@ static void decode_unpack_fifo_data(void) {
 /***************************************************************************************************
  *                                          Task                                                   *
  ***************************************************************************************************/
-void decode_task(void const *arg) {
+void decode_task(void const*pvParameters) {
     usb_fifo_init();
 
     while (1)

@@ -12,7 +12,7 @@ extern QueueHandle_t CDC_send_queue;
 
 rc_info_t rc_data;
 
-_Noreturn void usb_task(void const * argument)
+void usb_task(void const*pvParameters)
 {
     MX_USB_DEVICE_Init();
     while(1)

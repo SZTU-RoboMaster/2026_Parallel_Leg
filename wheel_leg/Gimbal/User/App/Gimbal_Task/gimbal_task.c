@@ -7,7 +7,7 @@
 #include "board_communication_task.h"
 
 
-vision_t vision_data;   // 给视觉传信息
+vision_t vision_data;                   // 给视觉传信息
 extern robot_ctrl_info_t robot_ctrl;    // 获取视觉信息
 //todo: 图传的
 extern uint8_t control_flag;        // 通过状态判断是什么链路
@@ -157,6 +157,65 @@ static void Gimbal_Control(void)
 }
 
 /*************************************************************************************************
+ *                                          Vision                                               *
+ *************************************************************************************************/
+
+// 单片机向小电脑发送数据
+static void Robot_Send_Vision_Data(void)
+{
+    // 107:蓝 7:红
+    if (Referee.GameRobotStat.robot_id < 10)
+    {
+        vision_data.id = 107;
+    }
+    else
+    {
+        vision_data.id = 7;
+    }
+
+
+    /* 给视觉发开自瞄 */
+    if (gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
+    {
+        vision_data.mode = 0x21;
+    }
+    else
+    {
+        vision_data.mode = 0;
+    }
+
+    vision_data.pitch = gimbal.pitch.absolute_angle_get;
+    vision_data.yaw   = gimbal.yaw.absolute_angle_get;
+
+    // 发送四元数，用于视觉建立坐标系
+    for (int i = 0; i < 4; ++i)
+    {
+        vision_data.quaternion[i] = INS_quat[i];
+    }
+
+    // 当前射速
+    vision_data.shoot_speed = Referee.ShootData.bullet_speed;
+
+    rm_queue_data(VISION_ID, &vision_data, sizeof(vision_t));
+}
+
+// 接收视觉传输的数据
+static void Gimbal_Auto_Handle(void)
+{
+    if(gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
+    {
+        // 对视觉传来的角度进行滤波
+        first_order_filter_cali(&gimbal.auto_pitch, robot_ctrl.pitch);
+        first_order_filter_cali(&gimbal.auto_yaw[0], sinf(robot_ctrl.yaw / 180.0f * PI)); //yaw数据分解成x
+        first_order_filter_cali(&gimbal.auto_yaw[1], cosf(robot_ctrl.yaw / 180.0f * PI)); //yaw数据分解成y
+
+        gimbal.yaw.absolute_angle_set = atan2f(gimbal.auto_yaw[0].out, gimbal.auto_yaw[1].out) * 180.0f / PI; // 合成
+
+        gimbal.pitch.absolute_angle_set = gimbal.auto_pitch.out;
+    }
+}
+
+/*************************************************************************************************
  *                                           Task                                                *
  *************************************************************************************************/
 
@@ -206,6 +265,9 @@ void Gimbal_task(void const*pvParameters) {
         // 板间通信
         Gimbal_Send_Chassis_Data();
 
+        // 单片机向视觉发送数据
+        Robot_Send_Vision_Data();
+
         switch(gimbal.gimbal_ctrl_mode)
         {
             case GIMBAL_DISABLE:
@@ -217,6 +279,13 @@ void Gimbal_task(void const*pvParameters) {
 
             case GIMBAL_ENABLE:
             {
+                Gimbal_Enable_Task();
+                break;
+            }
+
+            case GIMBAL_AUTO:
+            {
+                Gimbal_Auto_Handle();
                 Gimbal_Enable_Task();
                 break;
             }
@@ -235,14 +304,6 @@ void Gimbal_task(void const*pvParameters) {
                                launcher.trigger.target_current,    //203 拨盘
                                0     // 204 无
         );
-
-//        DJI_Send_Motor_Mapping(CAN_1,
-//                               CAN_DJI_MOTOR_0x200_ID,
-//                               0,    //201 左摩擦轮
-//                               0,    //202 右摩擦轮
-//                               launcher.trigger.target_current,    //203 拨盘
-//                               0     // 204 无
-//        );
 
         // 云台
         DJI_Send_Motor_Mapping(CAN_1,

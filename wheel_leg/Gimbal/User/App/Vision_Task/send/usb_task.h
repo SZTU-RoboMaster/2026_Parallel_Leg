@@ -3,4 +3,6 @@
 
 #include "packet.h"
 
+void usb_task(void const*pvParameters);
+
 #endif

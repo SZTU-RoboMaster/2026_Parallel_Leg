@@ -251,6 +251,20 @@ static void Gimbal_Mode_Set(void)
     {
         gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
         gimbal.gimbal_ctrl_mode = GIMBAL_ENABLE;
+
+        // 自瞄模式
+//        if (   ((rc_ctrl.rc.ch[4] > 300) || (rc_ctrl.rc.ch[4] < -300))
+//            && (robot_ctrl.target_lock == 0x31))
+//        {
+//            gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+//            gimbal.gimbal_ctrl_mode = GIMBAL_AUTO;
+//        }
+
+        if ((rc_ctrl.rc.ch[4] > 300) || (rc_ctrl.rc.ch[4] < -300))
+        {
+            gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+            gimbal.gimbal_ctrl_mode = GIMBAL_AUTO;
+        }
     }
 
 }

@@ -3,4 +3,6 @@
 
 #include "struct_typedef.h"
 
+void decode_task(void const*pvParameters);
+
 #endif
