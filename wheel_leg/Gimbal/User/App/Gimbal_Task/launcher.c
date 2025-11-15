@@ -101,33 +101,31 @@ static void trigger_mode_set(void) {
     // 只有在摩擦轮开启的情况下才能控制拨盘
     if(launcher.fir_wheel_mode == Fire_ON)
     {
-        if (switch_is_down(rc_last_sw_L) || (KeyBoard.Mouse_l.status == KEY_PRESS))
+        // 1.「堵转-反转」模式
+        if(launcher.shoot_state == SHOOT_BLOCK_STATE)
         {
-            // 1.「堵转-反转」模式
-            if(launcher.shoot_state == SHOOT_BLOCK_STATE)
-            {
-                launcher.trigger_last_mode = launcher.trigger_mode;
-                launcher.trigger_mode = TRIGGER_INVERSE;
-            }
+            launcher.trigger_last_mode = launcher.trigger_mode;
+            launcher.trigger_mode = TRIGGER_INVERSE;
+        }
 
-            // 2.「视觉-单发」模式
-            else if ((gimbal.gimbal_ctrl_mode == GIMBAL_AUTO) && (robot_ctrl.fire_command == 1)) // 自瞄模式
-            {
-                launcher.trigger_last_mode = launcher.trigger_mode;
-                launcher.trigger_mode = TRIGGER_SINGLE;
-            }
+        // 2.「视觉-单发」模式
+        else if ((gimbal.gimbal_ctrl_mode == GIMBAL_AUTO) && (robot_ctrl.fire_command == 1)) // 自瞄模式
+        {
+            launcher.trigger_last_mode = launcher.trigger_mode;
+            launcher.trigger_mode = TRIGGER_SINGLE;
+        }
 
-            // 3.「连发」模式（优先级最低）
-            else
-            {
-                launcher.trigger_last_mode = launcher.trigger_mode;
-                launcher.trigger_mode = TRIGGER_CONTINUE;
-            }
+        // 3.「连发」模式（优先级最低，视觉一般用来退弹）
+        else if (switch_is_down(rc_last_sw_L) || (KeyBoard.Mouse_l.status == KEY_PRESS))
+        {
+            launcher.trigger_last_mode = launcher.trigger_mode;
+            launcher.trigger_mode = TRIGGER_CONTINUE;
+
 
         }
 
     }
-    else
+    else if((launcher.fir_wheel_mode == Fire_OFF) || (launcher.shoot_state == SHOOT_FAIL_STATE))
     {
         launcher.trigger_mode = TRIGGER_CLOSE;
     }
@@ -252,35 +250,31 @@ static void block_handle_judge(void)
 /** 拨盘控制 **/
 static void trigger_control(void)
 {
-    if(launcher.shoot_state != SHOOT_BLOCK_STATE)
+    // 1 单发
+    if(launcher.trigger_mode == TRIGGER_SINGLE)
     {
-        // 1 单发
-        if(launcher.trigger_mode == TRIGGER_SINGLE)
-        {
-            // 更新发射状态
-            launcher.shoot_state = SHOOT_ING_STATE;
+        // 更新发射状态
+        launcher.shoot_state = SHOOT_ING_STATE;
 
-            // 单发
-            launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
+        // 单发
+        launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
 
-            launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
-                                                     launcher.trigger.motor_measure.total_ecd,
-                                                     launcher.trigger.target_total_ecd);
+        launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
+                                                 launcher.trigger.motor_measure.total_ecd,
+                                                 launcher.trigger.target_total_ecd);
+    }
 
-        }
+    // 2 连发
+    else if(launcher.trigger_mode == TRIGGER_CONTINUE)
+    {
+        // 更新发射状态
+        launcher.shoot_state = SHOOT_ING_STATE;
 
-        // 2 连发
-        else if(launcher.trigger_mode == TRIGGER_CONTINUE)
-        {
-            // 更新发射状态
-            launcher.shoot_state = SHOOT_ING_STATE;
+        // 连发过程中保持拨盘期望总编码值等于反馈总编码值
+        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
 
-            // 连发过程中保持拨盘期望总编码值等于反馈总编码值
-            launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+        launcher.trigger.target_speed = TRIGGER_SPEED;
 
-            launcher.trigger.target_speed = TRIGGER_SPEED;
-
-        }
     }
 
     // 3 反转
@@ -295,7 +289,7 @@ static void trigger_control(void)
     }
 
     // 4 失能
-    if((launcher.trigger_mode == TRIGGER_CLOSE) || (launcher.shoot_state == SHOOT_FAIL_STATE))
+    else if(launcher.trigger_mode == TRIGGER_CLOSE)
     {
         // 更新发射状态
         launcher.shoot_state = SHOOT_OVER_STATE;
@@ -303,13 +297,11 @@ static void trigger_control(void)
         launcher.trigger.target_speed = 0.0f;
     }
 
-    /** 速度环 **/ // 需修改逻辑
-    if((launcher.fir_wheel_mode == Fire_ON) && (launcher.trigger_mode != TRIGGER_CLOSE))
-    {
-        launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
-                                                   launcher.trigger.motor_measure.speed_rpm,
-                                                   launcher.trigger.target_speed);
-    }
+    /** 速度环 **/
+    launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
+                                               launcher.trigger.motor_measure.speed_rpm,
+                                               launcher.trigger.target_speed);
+
 
 
 }
@@ -378,9 +370,9 @@ void Launcher_Control(void)
     /** 摩擦轮控制 **/
     fir_wheel_control();
 
-//    /** 堵转检测 **/
-//    block_check();
-//
-//    /** 判断堵转是否被成功解决 **/
-//    block_handle_judge();
+    /** 堵转检测 **/
+    block_check();
+
+    /** 判断堵转是否被成功解决 **/
+    block_handle_judge();
 }
