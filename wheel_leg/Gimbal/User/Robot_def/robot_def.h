@@ -163,50 +163,39 @@ typedef enum{
 typedef enum{
     TRIGGER_CLOSE=0,              // 失能
 
-    TRIGGER_READY_TO_SINGLE,      // 预备单发（设置该模式是为了获得一次单发任务的时间，用于处理单发堵转）
     TRIGGER_SINGLE,               // 单发   （即视觉发一帧火控数据，拨盘转动一个弹丸角度）
 
     TRIGGER_CONTINUE,             // 连发
 
-    TRIGGER_READY_TO_INVERSE,   // 预备反转（设置该模式是为了获得反转的总时间，用于判断是否解决堵转）
-    TRIGGER_INVERSE,            // 反转
+    TRIGGER_INVERSE,             // 反转
 
 }Trigger_Mode;
 
 typedef enum {
 
-    SHOOT_SINGLING_STATE = 0,    // 单发中
-    SHOOT_CONTINUING_STATE,      // 连发中
+    SHOOT_OVER_STATE = 0,        // 发射完毕
 
-    SHOOT_OVER_STATE,            // 发射完毕
+    SHOOT_ING_STATE,             // 发射中
 
-    SHOOT_INVERSING,             // 反转中
+    SHOOT_BLOCK_STATE,           // 堵转
 
-    SHOOT_BLOCK_STATE,           //堵转
-    SHOOT_FAIL_STATE             //拨盘坏了
+    SHOOT_FAIL_STATE             // 拨盘坏了，需要重启拨盘
 
 }Shoot_State;
 
 /** 堵转检测结构体 **/
 typedef struct {
 
-    float inversing_start_time; // 开始反转的时间点（记录反转总时间 用于判断反转是否解决堵转）
-    float inversing_total_time;
-
     /******** 1 单发模式 堵转检测 ********/
-
-    /** 计算一次单发的时间 **/
-    float single_shoot_time; // 开始时间
-    float single_shoot_total_time;// 总时间
-
-
     float total_ecd_error; // 拨盘期望总编码器值与实际总编码器值之差
+    uint16_t single_shoot_time; // 一次单发任务的时间 ms
 
 
     /******** 2 连发模式 堵转检测 ********/
-    // 若连发模式时的反馈转速小于「堵转转速阈值」并持续一段时间，则判断其为堵转状态
-    uint32_t continue_time; // 用于记录反馈转速小于堵转速度阈值的时间
+    uint16_t block_continue_time; // 堵转持续时间
 
+    /** 用于判定堵转是否被解决 **/
+    uint16_t inverse_time;
 
 
 }Block_Check;
