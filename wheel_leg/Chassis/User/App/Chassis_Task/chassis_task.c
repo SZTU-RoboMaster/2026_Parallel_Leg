@@ -315,10 +315,7 @@ static void wheel_calc(void)
     chassis_K_matrix_fitting(chassis.leg_R.vmc.forward_kinematics.fk_L0.L0, wheel_K_R, wheel_fitting_factor);
 
     float target_yaw_speed = pid_calc(&chassis.chassis_turn_pos_pid,
-                                      gimbal_unpack_data.yaw_relative_angle * DEGREE_TO_RAD,
-                                      0.0f);
-
-
+                                      gimbal_unpack_data.yaw_relative_angle * DEGREE_TO_RAD,0.0f);
 
     if(chassis.chassis_ctrl_mode == CHASSIS_SPIN)
     {
@@ -329,7 +326,7 @@ static void wheel_calc(void)
                                          chassis.imu_reference.yaw_gyro,
                                          target_yaw_speed);
 
-    // USART_Vofa_Justfloat_Transmit(target_yaw_speed, chassis.imu_reference.yaw_gyro, gimbal_unpack_data.yaw_relative_angle * DEGREE_TO_RAD);
+
 
     chassis.leg_L.wheel_torque =  wheel_K_L[0] * (chassis.leg_L.state_variable_feedback.theta - 0.0f)
                                   + wheel_K_L[1] * (chassis.leg_L.state_variable_feedback.theta_dot - 0.0f)
@@ -399,7 +396,6 @@ static void joint_calc(void)
     /** F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F **/
 
     /****** Leg pid ******/
-
     float L_L0_dot_set = pid_calc(&chassis.leg_L.leg_pos_pid,
                                   chassis.leg_L.vmc.forward_kinematics.fk_L0.L0,
                                   chassis.chassis_ctrl_info.height_m);
@@ -418,28 +414,14 @@ static void joint_calc(void)
 
     /****** Roll pid ******/
 
-    // pid_calc(&chassis.chassis_roll_pid,
-    //          chassis.imu_reference.roll_rad,
-    //          chassis.chassis_ctrl_info.roll_rad);
-    // USART_Vofa_Justfloat_Transmit(chassis.imu_reference.roll_rad,chassis.chassis_ctrl_info.roll_rad,0);
-
     chassis.roll_f =  CHASSIS_ROLL_PID_P * (0.0f - chassis.roll_error)
                                              + CHASSIS_ROLL_PID_D * (0.0f - chassis.d_roll_error); // 注意微分项正负
-
-    // USART_Vofa_Justfloat_Transmit(chassis.roll_error,0,0);
 
     chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point =  0.5f * chassis_physical_config.body_weight * GRAVITY * cosf(chassis.leg_L.state_variable_feedback.theta)
                                                                          + chassis.leg_L.leg_speed_pid.out;
 
     chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point =  0.5f * chassis_physical_config.body_weight * GRAVITY * cosf(chassis.leg_R.state_variable_feedback.theta)
                                                                          + chassis.leg_R.leg_speed_pid.out;
-
-    // chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += chassis.chassis_roll_pid.out;
-    // chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= chassis.chassis_roll_pid.out;
-
-    // //测试用
-    // chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point = 0;
-    // chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point = 0;
 
     chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += chassis.roll_f;
     chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= chassis.roll_f;
@@ -540,6 +522,120 @@ static void chassis_enable_task(void)
     /** 倒地自救 **/
     chassis_selfhelp();
 }
+/** 跳跃任务 **/
+/**
+ * @brief 跳跃任务函数
+ * 实现机器人的跳跃功能，包含收腿蓄力、蹬腿起跳、腾空收腿、伸腿降落、落地缓冲五个阶段
+ * 并在空中阶段实现姿态控制
+ */
+static void chassis_jump_task()
+{
+    // 静态变量用于记录跳跃状态
+    static JumpState jump_state = NOT_READY;
+    static bool air_control_enabled = false; // 空中控制使能标志
+
+
+    switch(jump_state)
+    {
+        case NOT_READY:
+            // 收腿蓄力阶段：将腿部收缩至最短腿长
+            chassis.chassis_ctrl_info.height_m = MIN_L0;
+
+            // 检查是否达到最短腿长
+            if(fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.1f &&
+               fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.1f)
+            {
+                jump_state = READY;
+            }
+            break;
+
+        case READY:
+            // 蹬腿起跳阶段：设置腿长为目标最大值
+            chassis.chassis_ctrl_info.height_m = 0.32f; // 使用最大腿长
+
+            // 检查腿是否开始伸展
+            if(chassis.chassis_ctrl_info.height_m > (MIN_L0 + 0.05f) ||
+               chassis.chassis_ctrl_info.height_m > (MIN_L0 + 0.05f))
+            {
+                jump_state = STRETCHING;
+            }
+            break;
+
+        case STRETCHING:
+            // 腾空收腿阶段：检测到腿伸展至最长后收腿
+            if(chassis.chassis_ctrl_info.height_m > 0.29f ||
+               chassis.chassis_ctrl_info.height_m > 0.29f)
+            {
+                chassis.chassis_ctrl_info.height_m = MIN_L0;
+                jump_state = SHRINKING;
+                air_control_enabled = true; // 启用空中控制
+            }
+            break;
+
+        case SHRINKING:
+            // 伸腿降落阶段：收腿完成后设置为标准腿长
+            // 在空中保持腿部姿态垂直于地面
+            if(air_control_enabled) {
+                // 使用Roll PID控制保持腿部姿态
+                chassis.roll_error = chassis.imu_reference.roll_rad - 0.0f; // 目标Roll角度为0
+                chassis.d_roll_error = chassis.imu_reference.roll_gyro - 0.0f; // 目标Roll角速度为0
+
+                // 计算Roll控制输出
+                chassis.roll_f = CHASSIS_ROLL_PID_P * (0.0f - chassis.imu_reference.roll_rad)
+                               + CHASSIS_ROLL_PID_D * (0.0f - chassis.imu_reference.roll_gyro);
+
+                // 将Roll控制输出应用到腿部支撑力
+                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += chassis.roll_f;
+                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= chassis.roll_f;
+            }
+
+            if(fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.01f &&
+               fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.01f)
+            {
+                chassis.chassis_ctrl_info.height_m = 0.22f; // 标准腿长
+                jump_state = LANDING;
+            }
+            break;
+
+        case LANDING:
+            // 着陆前继续空中姿态控制
+            if(air_control_enabled) {
+                chassis.roll_error = chassis.imu_reference.roll_rad - 0.0f;
+                chassis.d_roll_error = chassis.imu_reference.roll_gyro - 0.0f;
+
+                chassis.roll_f = CHASSIS_ROLL_PID_P * (0.0f - chassis.imu_reference.roll_rad)
+                               + CHASSIS_ROLL_PID_D * (0.0f - chassis.imu_reference.roll_gyro);
+
+                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += chassis.roll_f;
+                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= chassis.roll_f;
+            }
+
+            // 检测到着陆冲击时增加腿部支撑力
+            if(chassis.imu_reference.robot_az > 5.0f)
+            {
+                // 增加缓冲转矩
+                float landing_boost = 1.5f;
+                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point *= landing_boost;
+                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point *= landing_boost;
+                air_control_enabled = false; // 着陆后关闭空中控制
+
+                // 当向下加速度减小到一定程度时，认为缓冲完成
+                if(fabsf(chassis.imu_reference.robot_az) < 0.5f)
+                {
+                    jump_state = NOT_READY;
+                    chassis.chassis_ctrl_mode = CHASSIS_ENABLE;
+                }
+            }
+            break;
+
+        default:
+            jump_state = NOT_READY;
+            air_control_enabled = false;
+            break;
+    }
+}
+
+
 
 /** 发送力矩任务 **/
 static void send_torque_task(float joint_LF_torque, float joint_LB_torque, float joint_RF_torque, float joint_RB_torque,
@@ -579,18 +675,23 @@ void chassis_task(void)
 
         case CHASSIS_ENABLE:
         case CHASSIS_SPIN:
+
         {
             chassis_enable_task();
             break;
         }
-
+        case CHASSIS_JUMP: {
+            chassis_enable_task();
+            chassis_jump_task();
+            break;
+        }
 
         default:
         {
             break;
         }
     }
-
+//testing
         send_torque_task(-chassis.leg_L.joint_F_torque,
                      -chassis.leg_L.joint_B_torque,
                      chassis.leg_R.joint_F_torque,

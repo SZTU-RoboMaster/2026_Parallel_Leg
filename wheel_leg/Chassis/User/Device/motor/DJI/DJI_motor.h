@@ -1,7 +1,7 @@
 #ifndef _DJI_MOTOR_H
 #define _DJI_MOTOR_H
 
-#include "bsp_can.h"
+#include "../../../../Bsp/can/bsp_can.h"
 
 // C620/C610 id=1~4 (0x201~0x204)
 #define CAN_DJI_MOTOR_0x200_ID 0x200

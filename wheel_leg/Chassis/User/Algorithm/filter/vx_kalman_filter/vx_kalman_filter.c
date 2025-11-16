@@ -59,7 +59,7 @@ void speed_calc(void)
 {
     static float w_l,w_r=0.0f;//左右驱动轮的角速度
     static float v_lb,v_rb=0.0f;//通过左右驱动轮算出的机体速度
-    static float aver_v=0.0f;//通过取平均计算出机体速度
+    static float aver_v=0.0f;//通过取平均计算出机体速度吗
 
     // 以向前移动为正方向
 

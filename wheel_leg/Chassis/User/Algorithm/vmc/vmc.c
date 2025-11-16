@@ -75,11 +75,21 @@ static void forward_kinematics(Leg* leg_L, Leg* leg_R, ChassisPhysicalConfig *ph
     float x = L_A0 + L_C0;
     leg_L->vmc.forward_kinematics.fk_phi.phi2 = 2.0f * atan2f(y, x);
 
+
+
+
+
+
     leg_L->vmc.forward_kinematics.fk_point_coordinates.c_x = physical_config->l1 * cosf(leg_L->vmc.forward_kinematics.fk_phi.phi1) + physical_config->l2 * cosf(leg_L->vmc.forward_kinematics.fk_phi.phi2);
     leg_L->vmc.forward_kinematics.fk_point_coordinates.c_y = physical_config->l1 * sinf(leg_L->vmc.forward_kinematics.fk_phi.phi1) + physical_config->l2 * sinf(leg_L->vmc.forward_kinematics.fk_phi.phi2);
     y = leg_L->vmc.forward_kinematics.fk_point_coordinates.c_y - leg_L->vmc.forward_kinematics.fk_point_coordinates.d_y;
     x = leg_L->vmc.forward_kinematics.fk_point_coordinates.c_x - leg_L->vmc.forward_kinematics.fk_point_coordinates.d_x;
     leg_L->vmc.forward_kinematics.fk_phi.phi3 = atan2f(y, x);
+
+
+
+
+
 
     temp =  (leg_L->vmc.forward_kinematics.fk_point_coordinates.c_x - physical_config->l5 * 0.5f) * (leg_L->vmc.forward_kinematics.fk_point_coordinates.c_x - physical_config->l5 * 0.5f)
             + leg_L->vmc.forward_kinematics.fk_point_coordinates.c_y * leg_L->vmc.forward_kinematics.fk_point_coordinates.c_y;
@@ -97,6 +107,12 @@ static void forward_kinematics(Leg* leg_L, Leg* leg_R, ChassisPhysicalConfig *ph
     y = leg_L->vmc.forward_kinematics.fk_point_coordinates.c_y;
     x = leg_L->vmc.forward_kinematics.fk_point_coordinates.c_x - physical_config->l5 * 0.5f;
     leg_L->vmc.forward_kinematics.fk_phi.phi0 = atan2f(y, x);
+
+
+
+
+
+
     leg_L->vmc.forward_kinematics.fk_phi.last_d_phi0 = leg_L->vmc.forward_kinematics.fk_phi.d_phi0;
     leg_L->vmc.forward_kinematics.fk_phi.d_phi0 =  (leg_L->vmc.forward_kinematics.fk_phi.phi0 - leg_L->vmc.forward_kinematics.fk_phi.last_phi0)
                                                    / (CHASSIS_PERIOD * 0.001f);

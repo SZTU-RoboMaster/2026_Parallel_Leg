@@ -74,8 +74,7 @@ IMU_Data_t BMI088;
         BMI088_GYRO_NS_H();                         \
     }
 
-static void
-BMI088_write_single_reg(uint8_t reg, uint8_t data);
+static void BMI088_write_single_reg(uint8_t reg, uint8_t data);
 static void BMI088_read_single_reg(uint8_t reg, uint8_t *return_data);
 // static void BMI088_write_muli_reg(uint8_t reg, uint8_t* buf, uint8_t len );
 static void BMI088_read_muli_reg(uint8_t reg, uint8_t *buf, uint8_t len);

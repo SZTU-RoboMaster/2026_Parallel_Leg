@@ -7,7 +7,6 @@
 #include "moving_filter.h"
 #include "can_device.h"
 #include "user_lib.h"
-#include "DJI_motor.h"
 #include "board_communication_task.h"
 #include "low_pass_filter.h"
 
@@ -50,8 +49,8 @@
 #define MAX_CHASSIS_VX_SPEED 2.1f
 #define MAX_WHEEL_TORQUE 10.f
 #define MIN_WHEEL_TORQUE (-10.f)
-#define MAX_JOINT_TORQUE 40.f
-#define MIN_JOINT_TORQUE (-40.f)
+#define MAX_JOINT_TORQUE 10.f//40
+#define MIN_JOINT_TORQUE (-10.f)//-40
 
 /** 遥控器值映射 **/
 #define RC_TO_VX  (MAX_CHASSIS_VX_SPEED/660)
@@ -76,17 +75,17 @@
 // #define CHASSIS_TURN_SPEED_PID_IOUT_LIMIT 0.0f
 // #define CHASSIS_TURN_SPEED_PID_OUT_LIMIT 4.0f
 
-#define CHASSIS_TURN_POS_PID_P 16.0f
+#define CHASSIS_TURN_POS_PID_P 15.0f
 #define CHASSIS_TURN_POS_PID_I 0.0f
 #define CHASSIS_TURN_POS_PID_D 23.0f
 #define CHASSIS_TURN_POS_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_TURN_POS_PID_OUT_LIMIT 7.0f
+#define CHASSIS_TURN_POS_PID_OUT_LIMIT 5.5f
 
-#define CHASSIS_TURN_SPEED_PID_P 10.0f
+#define CHASSIS_TURN_SPEED_PID_P 5.0f
 #define CHASSIS_TURN_SPEED_PID_I 0.0f
 #define CHASSIS_TURN_SPEED_PID_D 0.0f
 #define CHASSIS_TURN_SPEED_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_TURN_SPEED_PID_OUT_LIMIT 4.0f
+#define CHASSIS_TURN_SPEED_PID_OUT_LIMIT 5.0f
 
 
 /** Joint **/
@@ -98,9 +97,9 @@
 // #define CHASSIS_LEG_COORDINATION_PID_IOUT_LIMIT 0.0f
 // #define CHASSIS_LEG_COORDINATION_PID_OUT_LIMIT 10.0f
 
-#define CHASSIS_LEG_COORDINATION_PID_P 15.0f // 20.0f 30.0f
+#define CHASSIS_LEG_COORDINATION_PID_P 14.0f
 #define CHASSIS_LEG_COORDINATION_PID_I 0.0f
-#define CHASSIS_LEG_COORDINATION_PID_D 5.0f // 1.0f 5.0f
+#define CHASSIS_LEG_COORDINATION_PID_D 5.0f
 #define CHASSIS_LEG_COORDINATION_PID_IOUT_LIMIT 0.0f
 #define CHASSIS_LEG_COORDINATION_PID_OUT_LIMIT 10.0f
 
@@ -123,10 +122,10 @@
 #define CHASSIS_LEG_L0_POS_PID_I 0.0f
 #define CHASSIS_LEG_L0_POS_PID_D 15.0f
 #define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT 2.0f
+#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT 3.0f
 
 // 腿长速度环PID
-#define CHASSIS_LEG_L0_SPEED_PID_P 30.0f // 50.0f
+#define CHASSIS_LEG_L0_SPEED_PID_P 25.0f
 #define CHASSIS_LEG_L0_SPEED_PID_I 0.0f
 #define CHASSIS_LEG_L0_SPEED_PID_D 0.0f
 #define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT 0.0f
@@ -199,7 +198,7 @@ typedef struct{
     float v_m_per_s; // 期望速度
     float yaw_rad;
     float roll_rad;
-    float height_m; // 期望腿长
+    float height_m ; // 期望腿长 testing
     float spin_speed;
 
 } ChassisCtrlInfo;

@@ -4,7 +4,7 @@
 #include "dm_8009.h"
 #include "bsp_can.h"
 
-Dm8009 *dm_motors[4];
+Dm8009 *dm_8009[4];
 uint8_t dm_motors_len = 0;
 
 static int float_to_uint(float x, float x_min, float x_max, int bits) {
@@ -23,7 +23,7 @@ static float uint_to_float(int x_int, float x_min, float x_max, int bits) {
 
 /** 这两个函数是为了将joint.c定义的joint[4]和dm8009.c定义的dm_motors[4]绑定在一起 **/
 static void dm8009_register(Dm8009 *motor) {
-    dm_motors[dm_motors_len] = motor;
+    dm_8009[dm_motors_len] = motor;
     ++dm_motors_len;
 }
 
@@ -101,11 +101,11 @@ void set_dm8009_MIT(Dm8009* motor,
     JointTxFrame.Header.StdId = motor->id;
 
     uint16_t pos_tmp, vel_tmp, kp_tmp, kd_tmp, tor_tmp;
-    pos_tmp = float_to_uint(pos, -12.5f, 12.5f, 16);
-    vel_tmp = float_to_uint(speed, -45, 45, 12);
-    kp_tmp = float_to_uint(kp, 0.0f, 500, 12);
-    kd_tmp = float_to_uint(kd, 0.0f, 5.0f, 12);
-    tor_tmp = float_to_uint(torque, -50, 50, 12);
+    pos_tmp = float_to_uint(pos, DM8009_P_MIN, DM8009_P_MAX, 16);
+    vel_tmp = float_to_uint(speed, DM8009_V_MIN, DM8009_V_MAX, 12);
+    kp_tmp = float_to_uint(kp, DM8009_KP_MIN, DM8009_KP_MAX, 12);
+    kd_tmp = float_to_uint(kd, DM8009_KD_MIN, DM8009_KD_MAX, 12);
+    tor_tmp = float_to_uint(torque, DM8009_T_MIN, DM8009_T_MAX, 12);
 
     JointTxFrame.Data[0] = (pos_tmp >> 8);
     JointTxFrame.Data[1] = pos_tmp;
@@ -126,8 +126,8 @@ void dm8009_info_update(Dm8009* motor, uint8_t data[])
     int speed_int = (data[3] << 4) | (data[4] >> 4);
     int torque_int = (data[4] & 0xF) << 8 | data[5];
 
-    motor->pos_r = uint_to_float(pos_int, -12.5f, 12.5f, 16);
-    motor->angular_vel = uint_to_float(speed_int, -45.0f, 45.0f, 12);
-    motor->torque = uint_to_float(torque_int, -50.0f, 50.0f, 12);
+    motor->pos_r = uint_to_float(pos_int, DM8009_P_MIN, DM8009_P_MAX, 16);
+    motor->angular_vel = uint_to_float(speed_int, DM8009_V_MIN, DM8009_V_MAX, 12);
+    motor->torque = uint_to_float(torque_int, DM8009_T_MIN, DM8009_T_MAX, 12);
 }
 

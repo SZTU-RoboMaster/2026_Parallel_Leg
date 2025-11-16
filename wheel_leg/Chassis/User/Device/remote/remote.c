@@ -303,32 +303,60 @@ static void set_chassis_ctrl_info() {
     /** 期望腿长 **/
     rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] = gimbal_unpack_data.leg_channel.value;
 
-    // if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == -660)
-    // {
-    //     chassis.chassis_ctrl_info.height_m = 0.12f;
-    // }
-    // else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == 660)
-    // {
-    //     chassis.chassis_ctrl_info.height_m = 0.32f;
-    // }
-    // else
-    // {
-    //     chassis.chassis_ctrl_info.height_m = 0.18f;
-    //
-    //     if(!chassis.chassis_recover_finish)
-    //     {
-    //         chassis.chassis_ctrl_info.height_m = MIN_L0;
-    //     }
-    // }
+//     if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == -660)
+//     {
+//         chassis.chassis_ctrl_info.height_m = 0.12f;
+//     }
+//     else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == 660)
+//     {
+//         chassis.chassis_ctrl_info.height_m = 0.32f;
+//     }
+//     else
+//     {
+//         chassis.chassis_ctrl_info.height_m = 0.18f;
+//
+//         if(!chassis.chassis_recover_finish)
+//         {
+//             chassis.chassis_ctrl_info.height_m = MIN_L0;
+//         }
+//     }
+//
+//     chassis.chassis_ctrl_info.height_m = 0.165f / 660 * rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] +0.22f;
+//         if(!chassis.chassis_recover_finish)
+//         {
+//             chassis.chassis_ctrl_info.height_m = MIN_L0;
+//         }
 
-    chassis.chassis_ctrl_info.height_m = 0.165f / 660 * rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] +0.22f;
-        if(!chassis.chassis_recover_finish)
-        {
-            chassis.chassis_ctrl_info.height_m = MIN_L0;
-        }
-    //
-    USART_Vofa_Justfloat_Transmit(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL],chassis.chassis_ctrl_info.height_m,0);
+    // USART_Vofa_Justfloat_Transmit(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL],chassis.chassis_ctrl_info.height_m,0);
 
+//testing
+
+    if(!chassis.chassis_recover_finish)
+    {
+        chassis.chassis_ctrl_info.height_m = MIN_L0;
+    }
+
+    if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] >= -660 && rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] <= -300)
+    {
+        chassis.chassis_ctrl_info.height_m -= 0.005f;
+    }
+    else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] <= 660 && rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] >= 300)
+    {
+        chassis.chassis_ctrl_info.height_m += 0.005f;
+    }
+
+    //limit
+    if(chassis.chassis_ctrl_info.height_m <= 0.1f)
+    {
+        chassis.chassis_ctrl_info.height_m = 0.1f;
+    }
+    if(chassis.chassis_ctrl_info.height_m >= 0.32f)
+     {
+        chassis.chassis_ctrl_info.height_m = 0.32f;
+    }
+
+
+     USART_Vofa_Justfloat_Transmit(chassis.chassis_ctrl_info.height_m,0,0);
 }
 
 /** 底盘根据遥控器设置模式 **/
@@ -349,6 +377,11 @@ static void set_chassis_mode() {
         chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
         chassis.chassis_ctrl_mode = CHASSIS_ENABLE;
     }
+    // else if(switch_is_up(rc_ctrl.rc.s[RC_s_R]))
+    // {
+    //     chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
+    //     chassis.chassis_ctrl_mode = CHASSIS_SPIN;
+    // }
     else if(switch_is_up(rc_ctrl.rc.s[RC_s_R]))
     {
         chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
