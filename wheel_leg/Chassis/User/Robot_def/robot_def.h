@@ -15,17 +15,22 @@
  *                                    底盘                                     *
  *******************************************************************************/
 
-/** 宏定义 **/
+/******** 宏定义 ********/
 
 // 底盘运行周期
 #define CHASSIS_PERIOD 5 // ms 计算频率: 200Hz
 
-// 平衡点
-#define PHI_BALANCE 0.0f * DEGREE_TO_RAD // 平衡点在0.0°
-
 // 旋转速度
 #define SPIN_SPEED 5.0f
 
+/** 离地检测 **/
+// 离地阈值
+#define OFF_GROUND_VALUE 20.0f
+
+// 触地阈值
+#define TOUCH_GROUND_VALUE 60.0f
+
+/** 倒地自救 **/
 // 机体倾角
 #define NOT_BALANCE_RAD 13.0f * DEGREE_TO_RAD
 #define RECOVER_RAD 5.0f * DEGREE_TO_RAD
@@ -95,13 +100,6 @@
 #define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT 0.0f
 #define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT 60.0f
 
-// 离地后的腿长PID 暂时没用到
-#define CHASSIS_OFFGROUND_LO_PID_P 0.0f
-#define CHASSIS_OFFGROUND_L0_PID_I 0.0f
-#define CHASSIS_OFFGROUND_L0_PID_D 0.0f
-#define CHASSIS_OFFGROUND_L0_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_OFFGROUND_L0_PID_OUT_LIMIT 0.0f
-
 // Roll补偿PID
 #define CHASSIS_ROLL_PID_P 500.0f
 #define CHASSIS_ROLL_PID_I 0.0f
@@ -130,7 +128,7 @@ typedef enum{
     CHASSIS_JUMP, // 跳跃模式
 } ChassisCtrlMode;
 
-/** 底盘状态结构体 -- 用于倒地自救 **/
+/** 底盘状态结构体 -- 用于倒地自救（丑陋，待优化） **/
 typedef enum{
     CHASSIS_BODY_UNNORMAL,
     CHASSIS_BODY_NORMAL,
@@ -364,9 +362,6 @@ typedef struct{
     Pid leg_pos_pid; // 腿长位置环
     Pid leg_speed_pid; // 腿长速度环
 
-    /** 离地后的腿长PID **/
-    Pid offground_leg_pid; // 离地后的腿长pid  使腿尽量接近地面，增加缓冲
-
     float wheel_torque; // 轮毂力矩
     float joint_F_torque; // 关节力矩
     float joint_B_torque;
@@ -425,9 +420,15 @@ typedef struct{
 
     ChassisRecoverState chassis_recover_state;
 
+    /** 离地检测 **/
+    uint16_t touch_ground_time; // 接触地面的时间
+    bool chassis_is_offground;   // 底盘离地标志位
+
+
     // flag
-    bool init_flag;            // 底盘初始化完成标志位
-    bool chassis_recover_finish;
+    bool init_flag;              // 底盘初始化完成标志位
+    bool chassis_recover_finish; // 倒地自救完成标志位
+
 
 } Chassis;
 

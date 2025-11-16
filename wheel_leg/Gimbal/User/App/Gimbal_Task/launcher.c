@@ -127,6 +127,7 @@ static void trigger_mode_set(void) {
     }
     else if((launcher.fir_wheel_mode == Fire_OFF) || (launcher.shoot_state == SHOOT_FAIL_STATE))
     {
+        launcher.trigger_last_mode = launcher.trigger_mode;
         launcher.trigger_mode = TRIGGER_CLOSE;
     }
 

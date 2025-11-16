@@ -78,11 +78,11 @@ typedef struct
     fp32 vx;
     fp32 vy;
     fp32 vw;
-    fp32 yaw;
-    fp32 pitch;
-    int8_t target_lock;
-    int8_t fire_command;
-//    int8_t aim_id;
+    fp32 yaw; // 世界坐标系
+    fp32 pitch; // 世界坐标系
+    int8_t target_lock; // 锁敌标志位；视觉发十进制的49（0x31）表示锁到了目标，发十进制的50（0x32）表示没锁到
+    int8_t fire_command; // 开火模式； 不开火为0，单发为1，连发为3,
+
 }  robot_ctrl_info_t;
 
 // 遥控器

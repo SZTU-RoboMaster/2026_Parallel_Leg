@@ -226,9 +226,6 @@ void USART3_IRQHandler(void)
             {
                 //处理遥控器数据
                 sbus_to_rc(sbus_rx_buf[1], &rc_ctrl);
-                //记录数据接收时间
-//                detect_hook(DBUS_TOE);
-//                sbus_to_usart1(sbus_rx_buf[1]);
             }
         }
     }
@@ -242,25 +239,25 @@ void USART3_IRQHandler(void)
 /** 云台根据遥控器设置模式 **/
 static void Gimbal_Mode_Set(void)
 {
-    if (switch_is_down(rc_ctrl.rc.s[RC_s_R])) // 失能
+    // 1 失能模式
+    if (switch_is_down(rc_ctrl.rc.s[RC_s_R]))
     {
             gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
             gimbal.gimbal_ctrl_mode = GIMBAL_DISABLE;
     }
-    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R])) // 使能
+    // 2 使能模式
+    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R]))
     {
         gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
         gimbal.gimbal_ctrl_mode = GIMBAL_ENABLE;
 
-        // 自瞄模式
-//        if (   ((rc_ctrl.rc.ch[4] > 300) || (rc_ctrl.rc.ch[4] < -300))
-//            && (robot_ctrl.target_lock == 0x31))
-//        {
-//            gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
-//            gimbal.gimbal_ctrl_mode = GIMBAL_AUTO;
-//        }
+        // 3 自瞄模式（先进使能模式才有机会进入自瞄模式）
 
-        if ((rc_ctrl.rc.ch[4] > 300) || (rc_ctrl.rc.ch[4] < -300))
+        // 遥控器进入自瞄模式的逻辑：只有当上下拨「拨轮」，同时视觉锁到了目标时，才会进入自瞄模式，否则保持正常使能模式
+        bool Auto_Mode_Remote_Logic = ((rc_ctrl.rc.ch[4] > 300) || (rc_ctrl.rc.ch[4] < -300))
+                                      && (robot_ctrl.target_lock == 0x31);
+
+        if (Auto_Mode_Remote_Logic)
         {
             gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
             gimbal.gimbal_ctrl_mode = GIMBAL_AUTO;

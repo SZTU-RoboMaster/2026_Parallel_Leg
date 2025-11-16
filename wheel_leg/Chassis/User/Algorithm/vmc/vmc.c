@@ -56,7 +56,7 @@ float cal_leg_theta(float phi0, float phi) {
 }
 
 // vmc正运动学解算
-static void forward_kinematics(Leg* leg_L, Leg* leg_R, ChassisPhysicalConfig *physical_config) {
+static void vmc_forward_kinematics(Leg* leg_L, Leg* leg_R, ChassisPhysicalConfig *physical_config) {
     /***LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L LEG_L***/
 
     leg_L->vmc.forward_kinematics.fk_point_coordinates.b_x = physical_config->l1 * cosf(leg_L->vmc.forward_kinematics.fk_phi.phi1);
@@ -287,6 +287,37 @@ void vmc_calc(void) {
     vmc_phi_update(&chassis.leg_L, &chassis.leg_R);
 
     // VMC 正运动学解算
-    forward_kinematics(&chassis.leg_L, &chassis.leg_R, &chassis_physical_config);
+    vmc_forward_kinematics(&chassis.leg_L, &chassis.leg_R, &chassis_physical_config);
+
+    // VMC 逆运动学解算
+    vmc_inverse_kinematics(&chassis.leg_L.vmc,
+                           joint[LB].angular_vel,
+                           joint[LF].angular_vel,
+                           &chassis_physical_config);
+
+    vmc_inverse_kinematics(&chassis.leg_R.vmc,
+                           -joint[RB].angular_vel,
+                           -joint[RF].angular_vel,
+                           &chassis_physical_config);
+
+    // VMC 逆动力学解算
+    vmc_inverse_dynamics(&chassis.leg_L.vmc,
+                         joint[LB].torque,
+                         joint[LF].torque,
+                         &chassis_physical_config);
+
+    vmc_inverse_dynamics(&chassis.leg_R.vmc,
+                           -joint[RB].torque,
+                           -joint[RF].torque,
+                           &chassis_physical_config);
+
+    // 计算竖直方向支持力
+    fn_cal(&chassis.leg_L,
+           chassis.imu_reference.robot_az,
+           &chassis_physical_config);
+
+    fn_cal(&chassis.leg_R,
+           chassis.imu_reference.robot_az,
+           &chassis_physical_config);
 
 }

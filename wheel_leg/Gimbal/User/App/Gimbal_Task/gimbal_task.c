@@ -151,9 +151,13 @@ static void Gimbal_Control(void)
     // 反馈角速度滤波
     first_order_filter_cali(&gimbal.pitch_gyro_filter,gimbal.pitch.gyro);
 
-    gimbal.pitch.target_current = -(int16_t)pid_calc(&gimbal.pitch.speed_pid,
-                                                    gimbal.pitch_gyro_filter.out,
-                                                     pitch_gyro_set);
+    gimbal.pitch.target_current = (int16_t)(-pid_calc(&gimbal.pitch.speed_pid,
+                                                      gimbal.pitch_gyro_filter.out,
+                                                      pitch_gyro_set));
+
+//    gimbal.pitch.target_current = -(int16_t)pid_calc(&gimbal.pitch.speed_pid,
+//                                                    gimbal.pitch_gyro_filter.out,
+//                                                     pitch_gyro_set);
 }
 
 /*************************************************************************************************
@@ -177,7 +181,7 @@ static void Robot_Send_Vision_Data(void)
     /* 给视觉发开自瞄 */
     if (gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
     {
-        vision_data.mode = 0x21;
+        vision_data.mode = 0x21; // 视觉接收到的是十进制的33，然后进行单发自瞄
     }
     else
     {
