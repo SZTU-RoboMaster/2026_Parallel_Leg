@@ -6,6 +6,7 @@
 #include "user_lib.h"
 #include "filter.h"
 #include "../App/Vision_Task/RoboMaster_Protocol.h"
+#include "low_pass_filter.h"
 
 /* 云台任务初始化时间 */
 #define GIMBAL_TASK_INIT_TIME 800
@@ -30,26 +31,26 @@
 /** PID参数 **/
 
 // Pitch
-#define GIMBAL_PITCH_ANGLE_PID_KP          30.0f // 30.0f 60.0f
+#define GIMBAL_PITCH_ANGLE_PID_KP           90.0f // 120.0f
 #define GIMBAL_PITCH_ANGLE_PID_KI           0.0f
-#define GIMBAL_PITCH_ANGLE_PID_KD           0.0f
+#define GIMBAL_PITCH_ANGLE_PID_KD           200.0f // 600.0f
 #define GIMBAL_PITCH_ANGLE_MAX_IOUT         0.0f
 #define GIMBAL_PITCH_ANGLE_MAX_OUT          9000.f
 
-#define GIMBAL_PITCH_SPEED_PID_KP           55.0f // 120.0f 200.0f
+#define GIMBAL_PITCH_SPEED_PID_KP           55.0f // 120.0f 200.0f 50.0f
 #define GIMBAL_PITCH_SPEED_PID_KI           0.0f
 #define GIMBAL_PITCH_SPEED_PID_KD           0.0f
 #define GIMBAL_PITCH_SPEED_MAX_IOUT         0.0f
 #define GIMBAL_PITCH_SPEED_MAX_OUT          15000.f
 
 // Yaw
-#define GIMBAL_YAW_ANGLE_PID_KP             20.0f // 30 35 35 35 35
+#define GIMBAL_YAW_ANGLE_PID_KP             60.0f
 #define GIMBAL_YAW_ANGLE_PID_KI             0.0f
-#define GIMBAL_YAW_ANGLE_PID_KD             20.0f // 0 100 120 150 170
+#define GIMBAL_YAW_ANGLE_PID_KD             20.0f
 #define GIMBAL_YAW_ANGLE_MAX_IOUT           0.0f
 #define GIMBAL_YAW_ANGLE_MAX_OUT            10000.f
 
-#define GIMBAL_YAW_SPEED_PID_KP             300.0f // 500
+#define GIMBAL_YAW_SPEED_PID_KP             300.0f // 300.0f
 #define GIMBAL_YAW_SPEED_PID_KI             0.0f
 #define GIMBAL_YAW_SPEED_PID_KD             0.0f
 #define GIMBAL_YAW_SPEED_MAX_IOUT           0.0f

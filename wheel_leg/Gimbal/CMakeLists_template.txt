@@ -66,6 +66,7 @@ include_directories(Core/Inc
         User/Algorithm/CRC8_CRC16
         User/Algorithm/filter
         User/Algorithm/filter/kalman_filter
+        User/Algorithm/filter/low_pass_filter
         User/Algorithm/pid
         User/Algorithm/QuaternionEKF
         User/Algorithm/ramp
