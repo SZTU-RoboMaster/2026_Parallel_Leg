@@ -155,9 +155,6 @@ static void Gimbal_Control(void)
                                                       gimbal.pitch_gyro_filter.out,
                                                       pitch_gyro_set));
 
-//    gimbal.pitch.target_current = -(int16_t)pid_calc(&gimbal.pitch.speed_pid,
-//                                                    gimbal.pitch_gyro_filter.out,
-//                                                     pitch_gyro_set);
 }
 
 /*************************************************************************************************

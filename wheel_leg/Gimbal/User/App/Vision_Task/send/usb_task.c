@@ -21,7 +21,7 @@ void usb_task(void const*pvParameters)
         {
             rm_dequeue_send_data(usb_buf,128);
         }
-        osDelay(2);
+        osDelay(1);
     }
 
 }
