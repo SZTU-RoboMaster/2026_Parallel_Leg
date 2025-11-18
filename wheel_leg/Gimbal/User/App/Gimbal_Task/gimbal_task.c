@@ -1,14 +1,10 @@
 #include "gimbal_task.h"
 #include "launcher.h"
-#include "../Vision_Task/RoboMaster_Protocol.h"
 #include "ins_task.h"
 #include "packet.h"
 #include "cmsis_os.h"
 #include "board_communication_task.h"
 
-
-vision_t vision_data;                   // 给视觉传信息
-extern robot_ctrl_info_t robot_ctrl;    // 获取视觉信息
 //todo: 图传的
 extern uint8_t control_flag;        // 通过状态判断是什么链路
 

@@ -1,13 +1,12 @@
 #include "launcher.h"
 #include "gimbal_task.h"
 #include "key_board.h"
-#include "../Vision_Task/RoboMaster_Protocol.h"
+#include "RoboMaster_Protocol.h"
 #include "robot_def.h"
 
 /*********************************************************************************************************
 *                                              内部变量                                                   *
 *********************************************************************************************************/
-extern robot_ctrl_info_t robot_ctrl;    // 上位机数据
 static uint8_t rc_last_sw_L;            // 拨杆上一时刻的状态值记录
 
 
@@ -201,7 +200,7 @@ static void block_handle(void)
 static void trigger_control(void)
 {
     /** 位置环 **/
-    // 1 单发
+    // 单发 /
     if(launcher.trigger_mode == TRIGGER_SINGLE)
     {
         // 更新发射状态

@@ -238,4 +238,6 @@ extern launcher_t launcher;
 
 extern robot_ctrl_info_t robot_ctrl;
 
+extern vision_t vision_data;
+
 #endif
