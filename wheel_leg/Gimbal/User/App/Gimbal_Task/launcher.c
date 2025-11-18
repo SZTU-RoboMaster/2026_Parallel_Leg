@@ -101,31 +101,22 @@ static void trigger_mode_set(void) {
     // 只有在摩擦轮开启的情况下才能控制拨盘
     if(launcher.fir_wheel_mode == Fire_ON)
     {
-        // 1.「堵转-反转」模式
-        if(launcher.shoot_state == SHOOT_BLOCK_STATE)
-        {
-            launcher.trigger_last_mode = launcher.trigger_mode;
-            launcher.trigger_mode = TRIGGER_INVERSE;
-        }
-
-        // 2.「视觉-单发」模式
-        else if ((gimbal.gimbal_ctrl_mode == GIMBAL_AUTO) && (robot_ctrl.fire_command == 1)) // 自瞄模式
+        // 1.「视觉-单发」模式
+        if ((gimbal.gimbal_ctrl_mode == GIMBAL_AUTO) && (robot_ctrl.fire_command == 1)) // 自瞄模式
         {
             launcher.trigger_last_mode = launcher.trigger_mode;
             launcher.trigger_mode = TRIGGER_SINGLE;
         }
 
-        // 3.「连发」模式（优先级最低，视觉一般用来退弹）
+        // 2.「连发」模式（优先级最低，视觉一般用来退弹）
         else if (switch_is_down(rc_last_sw_L) || (KeyBoard.Mouse_l.status == KEY_PRESS))
         {
             launcher.trigger_last_mode = launcher.trigger_mode;
             launcher.trigger_mode = TRIGGER_CONTINUE;
-
-
         }
 
     }
-    else if((launcher.fir_wheel_mode == Fire_OFF) || (launcher.shoot_state == SHOOT_FAIL_STATE))
+    else
     {
         launcher.trigger_last_mode = launcher.trigger_mode;
         launcher.trigger_mode = TRIGGER_CLOSE;
@@ -147,110 +138,69 @@ void Launcher_Mode_Set(void) {
 
 }
 
-/** 堵转检测 **/
-static void block_check(void)
+static void block_handle(void)
 {
-    /** 1. 单发堵转判定 **/
-
-    // 记录拨盘期望总编码值和实际总编码值的误差
-    launcher.block_check.total_ecd_error = ABS(launcher.trigger.target_total_ecd - launcher.trigger.motor_measure.total_ecd);
-
-    if(launcher.trigger_mode != TRIGGER_INVERSE) // 如果是反转模式，说明已经是堵转状态了，不必再进行堵转检测，只需判断堵转是否被解决即可
+    if(ABS(launcher.trigger.target_current) > BLOCK_CURRENT) // 堵转时电流飙升
     {
-        if(launcher.trigger_mode == TRIGGER_SINGLE)
+        // 记录堵转时间
+        launcher.block_check.block_time ++;
+
+        if(launcher.block_check.block_time >= BLOCK_THRESHOLD_TIME)
         {
-            launcher.block_check.single_shoot_time ++;
-
-            if(launcher.block_check.total_ecd_error > BLOCK_TRI_MINECD) // 单发任务尚未完成
+            // 堵转超过0.4s直接失能，防止干爆拨盘
+            if(launcher.block_check.block_time > BLOCK_DISABLE_TIME)
             {
-                if(launcher.block_check.single_shoot_time > BLOCK_TRI_MAXTIME)// 单发任务超时，且仍未完成单发任务，判定为单发堵转
-                {
-                    // 更新射击状态
-                    launcher.shoot_state = SHOOT_BLOCK_STATE;
+                // 失能拨盘
+                launcher.trigger.target_current = 0;
 
-                    // 重置单发时间
-                    launcher.block_check.single_shoot_time = 0;
-                }
-                else if(launcher.block_check.single_shoot_time < BLOCK_TRI_MAXTIME)// 继续执行单发任务
-                {
-                    // 保持当前射击状态不变
-                    launcher.shoot_state = SHOOT_ING_STATE;
-                }
-
-
-            }
-            else if((launcher.block_check.total_ecd_error < BLOCK_TRI_MINECD) && (launcher.block_check.single_shoot_time < BLOCK_TRI_MAXTIME))
-            { // 在规定时间内完成单发任务
-
-                // 更新射击状态
-                launcher.shoot_state = SHOOT_OVER_STATE;
-
-                // 重置单发时间
-                launcher.block_check.single_shoot_time = 0;
-            }
-        }
-
-        /** 2 连发堵转判定 **/
-        else if(launcher.trigger_mode == TRIGGER_CONTINUE)
-        {
-            // 记录堵转持续时间
-            if(ABS(launcher.trigger.motor_measure.speed_rpm) < BLOCK_TRI_MAXSPEED)
-            {
-                launcher.block_check.block_continue_time ++;
+                // 重置堵转时间
+                launcher.block_check.block_time = 0;
             }
             else
             {
-                launcher.block_check.block_continue_time = 0;
-            }
+                /** 连发模式堵转处理 **/
+                if(launcher.trigger_mode == TRIGGER_CONTINUE)
+                {
+                    // 回退一格
+                    launcher.block_check.target_ecd = launcher.trigger.target_total_ecd + DEGREE_45_TO_ENCODER;
+                }
 
-            // 堵转判定
-            if(launcher.block_check.block_continue_time > CONTINUE_BLOCK_TRI_MAXTIME)
-            {
-                // 更新射击状态
-                launcher.shoot_state = SHOOT_BLOCK_STATE;
-            }
-            else
-            {
-                // 保持当前射击状态不变
-                launcher.shoot_state = SHOOT_ING_STATE;
+                    /** 单发模式堵转处理 **/
+                else if(launcher.trigger_mode == TRIGGER_SINGLE)
+                {
+                    // 只回退一格
+                    if(!launcher.block_check.single_shoot_inverse)
+                    {
+                        launcher.block_check.target_ecd = launcher.trigger.target_total_ecd + DEGREE_45_TO_ENCODER;
+
+                        launcher.block_check.single_shoot_inverse = true;
+                    }
+                }
+
+                launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
+                                                         launcher.trigger.motor_measure.total_ecd,
+                                                         launcher.block_check.target_ecd);
+
+                launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
+                                                           launcher.trigger.motor_measure.speed_rpm,
+                                                           launcher.trigger.target_speed);
             }
 
         }
-    }
-}
 
-/** 判断堵转是否被成功解决 **/
-static void block_handle_judge(void)
-{
-    if(launcher.trigger_mode == TRIGGER_INVERSE)
+    }
+    else
     {
-        launcher.block_check.inverse_time ++;
+        launcher.block_check.block_time = 0;
 
-        // 若反转总时间未超过规定时间，则继续执行当前任务
-        if(launcher.block_check.inverse_time < BLOCK_TRI_MAXTIME)
-        {
-            // 在规定时间内解决堵转成功
-            if(ABS(launcher.trigger.motor_measure.speed_rpm) > BLOCK_TRI_MAXSPEED)
-            {
-                // Success 恢复正常发射模式
-                launcher.shoot_state = SHOOT_OVER_STATE;
-            }
-        }
-
-            // 反转任务超时
-        else if(launcher.block_check.inverse_time > BLOCK_TRI_MAXTIME)
-        {
-            // Fail 需要重启拨盘
-            launcher.shoot_state = SHOOT_FAIL_STATE;
-        }
-
+        launcher.block_check.single_shoot_inverse = false;
     }
-
 }
 
 /** 拨盘控制 **/
 static void trigger_control(void)
 {
+    /** 位置环 **/
     // 1 单发
     if(launcher.trigger_mode == TRIGGER_SINGLE)
     {
@@ -278,33 +228,23 @@ static void trigger_control(void)
 
     }
 
-    // 3 反转
-    else if(launcher.trigger_mode == TRIGGER_INVERSE)
-    {
-        // 更新射击状态
-        launcher.shoot_state = SHOOT_BLOCK_STATE;
-
-        // 反转
-        launcher.trigger.target_speed = -TRIGGER_SPEED;
-
-    }
-
-    // 4 失能
-    else if(launcher.trigger_mode == TRIGGER_CLOSE)
-    {
-        // 更新发射状态
-        launcher.shoot_state = SHOOT_OVER_STATE;
-
-        launcher.trigger.target_speed = 0.0f;
-    }
-
     /** 速度环 **/
     launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
                                                launcher.trigger.motor_measure.speed_rpm,
                                                launcher.trigger.target_speed);
 
+    // 3 失能
+    if(launcher.trigger_mode == TRIGGER_CLOSE)
+    {
+        // 更新发射状态
+        launcher.shoot_state = SHOOT_OVER_STATE;
+
+        // 直接失能拨盘
+        launcher.trigger.target_current = 0;
+    }
 
 
+    block_handle();
 }
 
 /** 摩擦轮控制 **/
@@ -370,10 +310,4 @@ void Launcher_Control(void)
 
     /** 摩擦轮控制 **/
     fir_wheel_control();
-
-    /** 堵转检测 **/
-    block_check();
-
-    /** 判断堵转是否被成功解决 **/
-    block_handle_judge();
 }

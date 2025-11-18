@@ -117,11 +117,9 @@ extern gimbal_t gimbal;
  **********************************************************************************/
 
 /** 堵转检测参数 **/
-#define BLOCK_TRI_MINECD 5000     // 单发任务完成阈值 ecd
-#define BLOCK_TRI_MAXTIME 1000    // 一次单发任务、反转任务最大执行时间 1s
-#define BLOCK_TRI_MAXSPEED 100    // 堵转转速阈值 rpm
-
-#define CONTINUE_BLOCK_TRI_MAXTIME 100 // 连发堵转阈值 ms
+#define BLOCK_CURRENT 12000     // 堵转电流
+#define BLOCK_THRESHOLD_TIME 300 // 300 // 堵转阈值时间 ms
+#define BLOCK_DISABLE_TIME 400 // 堵转失能时间 ms
 
 // 摩擦轮转速
 #define FIRE_SPEED  4700
@@ -144,7 +142,7 @@ extern gimbal_t gimbal;
 #define TRIGGER_SPEED_PID_KI        0.0f
 #define TRIGGER_SPEED_PID_KD        0.0f
 #define TRIGGER_SPEED_PID_MAX_IOUT  0.0f
-#define TRIGGER_SPEED_PID_MAX_OUT   10000.0f
+#define TRIGGER_SPEED_PID_MAX_OUT   16384.0f
 
 // 摩擦轮
 #define FIR_WHEEL_SPEED_PID_KP        50.0f
@@ -168,8 +166,6 @@ typedef enum{
 
     TRIGGER_CONTINUE,             // 连发
 
-    TRIGGER_INVERSE,             // 反转
-
 }Trigger_Mode;
 
 typedef enum {
@@ -178,26 +174,16 @@ typedef enum {
 
     SHOOT_ING_STATE,             // 发射中
 
-    SHOOT_BLOCK_STATE,           // 堵转
-
-    SHOOT_FAIL_STATE             // 拨盘坏了，需要重启拨盘
-
 }Shoot_State;
 
 /** 堵转检测结构体 **/
 typedef struct {
 
-    /******** 1 单发模式 堵转检测 ********/
-    float total_ecd_error; // 拨盘期望总编码器值与实际总编码器值之差
-    uint16_t single_shoot_time; // 一次单发任务的时间 ms
+    uint16_t block_time; // 堵转时间
 
+    int32_t target_ecd; // 堵转处理中的期望编码值
 
-    /******** 2 连发模式 堵转检测 ********/
-    uint16_t block_continue_time; // 堵转持续时间
-
-    /** 用于判定堵转是否被解决 **/
-    uint16_t inverse_time;
-
+    bool single_shoot_inverse; // 确保单发模式下拨盘只回拨一次
 
 }Block_Check;
 
