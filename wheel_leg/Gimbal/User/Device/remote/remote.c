@@ -231,12 +231,33 @@ void USART3_IRQHandler(void)
         }
     }
 }
+bool get_channel_info(int16_t channel)
+{
+    static bool flag = false;
+
+    static bool temp = false;
+
+    if((channel < -600) && (!temp))
+    {
+        temp = true;
+
+        flag = true;
+    }
+
+    if(channel > -600)
+    {
+        temp = false;
+
+        flag = false;
+    }
+
+    return flag;
+}
 
 
 /****************************************************************************************
  *                                         remote                                       *
  ****************************************************************************************/
-
 
 
 

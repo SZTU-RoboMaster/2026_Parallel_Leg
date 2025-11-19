@@ -87,7 +87,7 @@ void Gimbal_Mode_Set(void)
         gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
         gimbal.gimbal_ctrl_mode = GIMBAL_DISABLE;
     }
-        // 2 使能模式
+    // 2 使能模式
     else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R]))
     {
         gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
@@ -231,10 +231,10 @@ static void Robot_Send_Vision_Data(void)
     }
 
 
-    /* 给视觉发开自瞄 */
+    /* 给视觉发开启自瞄 */
     if (gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
     {
-        vision_data.mode = 0x21; // 视觉接收到的是十进制的33，然后进行单发自瞄
+        vision_data.mode = 0x21;
     }
     else
     {
@@ -353,14 +353,14 @@ void Gimbal_task(void const*pvParameters) {
             }
         }
 
-        // 发射机构
-        DJI_Send_Motor_Mapping(CAN_1,
-                               CAN_DJI_MOTOR_0x200_ID,
-                               launcher.fire_l.target_current,    //201 左摩擦轮
-                               launcher.fire_r.target_current,    //202 右摩擦轮
-                               launcher.trigger.target_current,    //203 拨盘
-                               0     // 204 无
-        );
+//        // 发射机构
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x200_ID,
+//                               launcher.fire_l.target_current,    //201 左摩擦轮
+//                               launcher.fire_r.target_current,    //202 右摩擦轮
+//                               launcher.trigger.target_current,    //203 拨盘
+//                               0     // 204 无
+//        );
 
         // 云台
         DJI_Send_Motor_Mapping(CAN_1,
@@ -371,14 +371,14 @@ void Gimbal_task(void const*pvParameters) {
                                0      //208 无
         );
 
-//        // 发射机构
-//        DJI_Send_Motor_Mapping(CAN_1,
-//                               CAN_DJI_MOTOR_0x200_ID,
-//                               0,    //201 左摩擦轮
-//                               0,    //202 右摩擦轮
-//                               0,    //203 拨盘
-//                               0     // 204 无
-//        );
+        // 发射机构
+        DJI_Send_Motor_Mapping(CAN_1,
+                               CAN_DJI_MOTOR_0x200_ID,
+                               0,    //201 左摩擦轮
+                               0,    //202 右摩擦轮
+                               0,    //203 拨盘
+                               0     // 204 无
+        );
 //
 //        // 云台
 //        DJI_Send_Motor_Mapping(CAN_1,

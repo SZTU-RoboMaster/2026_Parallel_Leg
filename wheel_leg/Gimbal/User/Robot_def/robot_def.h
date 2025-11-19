@@ -159,42 +159,32 @@ typedef enum{
 
 /** 拨盘状态 **/
 typedef enum{
-    TRIGGER_CLOSE=0,              // 失能
-
-    TRIGGER_SINGLE,               // 单发   （即视觉发一帧火控数据，拨盘转动一个弹丸角度）
-
-    TRIGGER_CONTINUE,             // 连发
-
+    TRIGGER_CLOSE = 0,
+    TRIGGER_SINGLE,
+    TRIGGER_CONTINUE
 }Trigger_Mode;
 
-typedef enum {
-
-    SHOOT_OVER_STATE = 0,        // 发射完毕
-
-    SHOOT_ING_STATE,             // 发射中
-
-}Shoot_State;
-
-/** 堵转检测结构体 **/
-typedef struct {
-
-    uint16_t block_time; // 堵转时间
-
-    bool single_shoot_inverse; // 确保单发模式下拨盘只回拨一次
-
-}Block_Check;
+/** 拨盘状态 **/
 
 /** 发射机构电机结构体 **/
 typedef struct {
     DJI_Motor_t motor_measure;    // 电机的真实信息
 
     float target_speed;           // 摩擦轮期望转速
-    int32_t target_total_ecd;     // 拨盘期望总编码值 用于堵转检测
 
     Pid angle_pid;                // 角度环 pid
     Pid speed_pid;                // 速度环 pid
 
     int16_t target_current;       // 期望电流值
+
+    /** 拨盘 **/
+    // 单发的串级pid
+    Pid single_angle_pid;
+    Pid single_speed_pid;
+
+    // 连发的串级pid
+    Pid continuous_angle_pid;
+    Pid continuous_speed_pid;
 
 }Motor_Launcher_t;
 
@@ -207,18 +197,10 @@ typedef struct {
     Motor_Launcher_t trigger;
 
     /** 摩擦轮模式 **/
-    Fir_Wheel_Mode fir_wheel_last_mode;
     Fir_Wheel_Mode fir_wheel_mode;
 
     /** 拨盘模式 **/
-    Trigger_Mode trigger_last_mode;
     Trigger_Mode trigger_mode;
-
-    /** 射击状态 **/
-    Shoot_State shoot_state;
-
-    /** 堵转检测 **/
-    Block_Check block_check;
 
     /** 滤波器 **/
     first_order_filter_type_t filter_fire;

@@ -85,6 +85,8 @@ extern void sbus_to_usart1(uint8_t *sbus);
  *                                         remote                                       *
  ****************************************************************************************/
 
+bool get_channel_info(int16_t channel);
+
 void Gimbal_Remote_Cmd(void);
 
 #endif

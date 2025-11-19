@@ -494,7 +494,7 @@ static void chassis_disable_task() {
 
     chassis.chassis_ctrl_info.yaw_rad = chassis.imu_reference.yaw_total_rad;
 
-    chassis.chassis_ctrl_info.height_m = MIN_L0;
+    chassis.chassis_ctrl_info.height_m = 0.18f;
 
     // ÖØÖÃµ×ÅÌ×´Ì¬
     chassis.chassis_body_state = CHASSIS_BODY_UNNORMAL;
@@ -584,23 +584,23 @@ void chassis_task(void)
         }
     }
 
-        send_torque_task(-chassis.leg_L.joint_F_torque,
-                     -chassis.leg_L.joint_B_torque,
-                     chassis.leg_R.joint_F_torque,
-                     chassis.leg_R.joint_B_torque,
-                     -chassis.leg_L.wheel_torque,
-                     -chassis.leg_R.wheel_torque,
-                     vel,
-                     Kd);
+//        send_torque_task(-chassis.leg_L.joint_F_torque,
+//                     -chassis.leg_L.joint_B_torque,
+//                     chassis.leg_R.joint_F_torque,
+//                     chassis.leg_R.joint_B_torque,
+//                     -chassis.leg_L.wheel_torque,
+//                     -chassis.leg_R.wheel_torque,
+//                     vel,
+//                     Kd);
 
-//    send_torque_task(0,
-//                     0,
-//                     0,
-//                     0,
-//                     0,
-//                     0,
-//                     0,
-//                     0);
+    send_torque_task(0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0,
+                     0);
 
 
 }

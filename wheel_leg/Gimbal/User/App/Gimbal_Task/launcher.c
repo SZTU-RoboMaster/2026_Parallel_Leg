@@ -9,8 +9,6 @@
 *********************************************************************************************************/
 static uint8_t rc_last_sw_L;            // 拨杆上一时刻的状态值记录
 
-bool single_shoot_finish = true;
-
 /*************************************************************************************************
  *                                        Function                                               *
  *************************************************************************************************/
@@ -62,15 +60,12 @@ void Launcher_Init(void) {
 
     /** 初始化发射机构模式 **/
     // 摩擦轮
-    launcher.fir_wheel_mode = launcher.fir_wheel_last_mode = Fire_OFF;
+    launcher.fir_wheel_mode  = Fire_OFF;
     // 拨盘
-    launcher.trigger_mode = launcher.trigger_last_mode = TRIGGER_CLOSE;
+    launcher.trigger_mode = TRIGGER_CLOSE;
 
     /** 发射机构PID初始化 **/
     launcher_pid_init();
-
-    /** 初始化堵转检测 **/
-    launcher.shoot_state = SHOOT_OVER_STATE;
 
     /** 滤波器 **/
     first_order_filter_init(&launcher.filter_fire,0.05f, 0.5f);
@@ -86,45 +81,10 @@ static void fir_wheel_mode_set(void)
         // 只有当云台不为失能模式时才能控制发射机构
         if(gimbal.gimbal_ctrl_mode != GIMBAL_DISABLE)
         {
-            launcher.fir_wheel_last_mode = launcher.fir_wheel_mode;
             // 通过三元运算符对当前摩擦轮模式状态进行反转
             launcher.fir_wheel_mode = (launcher.fir_wheel_mode == Fire_ON) ? Fire_OFF : Fire_ON;
         }
 
-    }
-
-}
-
-/** 拨盘模式设置（单发、连发、反转） **/
-static void trigger_mode_set(void) {
-
-    // 只有在摩擦轮开启的情况下才能控制拨盘
-    if(launcher.fir_wheel_mode == Fire_ON)
-    {
-        // 1.「视觉-单发」模式
-        if((gimbal.gimbal_ctrl_mode == GIMBAL_AUTO) && (robot_ctrl.fire_command == 1))
-        {
-            launcher.trigger_last_mode = launcher.trigger_mode;
-            launcher.trigger_mode = TRIGGER_SINGLE;
-        }
-
-        // 2.「连发」模式（优先级最低，视觉一般用来退弹）
-        else if (switch_is_down(rc_last_sw_L) || (KeyBoard.Mouse_l.status == KEY_PRESS))
-        {
-            launcher.trigger_last_mode = launcher.trigger_mode;
-            launcher.trigger_mode = TRIGGER_CONTINUE;
-        }
-        else
-        {
-            launcher.trigger_last_mode = launcher.trigger_mode;
-            launcher.trigger_mode = TRIGGER_CLOSE;
-        }
-
-    }
-    else
-    {
-        launcher.trigger_last_mode = launcher.trigger_mode;
-        launcher.trigger_mode = TRIGGER_CLOSE;
     }
 
 }
@@ -135,141 +95,95 @@ void Launcher_Mode_Set(void) {
     /** 摩擦轮模式判断 **/
     fir_wheel_mode_set();
 
-    /** 拨盘模式判断 ***/
-    trigger_mode_set();
-
     /** 更新上一次的左拨杆值 **/
     rc_last_sw_L = rc_ctrl.rc.s[RC_s_L];
 
 }
 
-static void block_handle(void)
-{
-    if(ABS(launcher.trigger.target_current) > BLOCK_CURRENT) // 堵转时电流飙升
-    {
-        // 记录堵转时间
-        launcher.block_check.block_time ++;
-
-        if(launcher.block_check.block_time >= BLOCK_THRESHOLD_TIME)
-        {
-            // 堵转超过0.4s直接失能，防止干爆拨盘
-            if(launcher.block_check.block_time > BLOCK_DISABLE_TIME)
-            {
-                launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
-
-                // 失能拨盘
-                launcher.trigger.target_current = 0;
-
-                // 重置堵转时间
-                launcher.block_check.block_time = 0;
-            }
-            else
-            {
-                /** 连发模式堵转处理 **/
-                if(launcher.trigger_mode == TRIGGER_CONTINUE)
-                {
-                    // 回退一格
-                    launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd + DEGREE_45_TO_ENCODER;
-                }
-
-                /** 单发模式堵转处理 **/
-                else if(launcher.trigger_mode == TRIGGER_SINGLE)
-                {
-                    // 只回退一格
-                    if(!launcher.block_check.single_shoot_inverse)
-                    {
-                        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd + DEGREE_45_TO_ENCODER;
-
-                        launcher.block_check.single_shoot_inverse = true;
-                    }
-                }
-
-                launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
-                                                         launcher.trigger.motor_measure.total_ecd,
-                                                         launcher.trigger.target_total_ecd);
-
-                launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
-                                                           launcher.trigger.motor_measure.speed_rpm,
-                                                           launcher.trigger.target_speed);
-            }
-
-        }
-
-    }
-    else
-    {
-        launcher.block_check.block_time = 0;
-
-        launcher.block_check.single_shoot_inverse = false;
-    }
-}
 
 /** 拨盘控制 **/
+
+
+uint16_t block_time = 0;
+bool block_flag = false;
+bool block_to_dead = false;
+
+int32_t single_target_ecd = 0;
+int32_t continuous_target_ecd = 0;
+
 static void trigger_control(void)
 {
-    /** 位置环 **/
-    // 1 连发
-    if(launcher.trigger_mode == TRIGGER_CONTINUE)
+    /****  堵转  ****/
+    // 单发堵转
+    if(ABS(launcher.trigger.single_speed_pid.out) > BLOCK_CURRENT)
     {
-        // 更新发射状态
-        launcher.shoot_state = SHOOT_ING_STATE;
+        block_time ++;
 
-        // 连发过程中保持拨盘期望总编码值等于反馈总编码值
-        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
-
-        launcher.trigger.target_speed = TRIGGER_SPEED;
-
-        launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
-                                                   launcher.trigger.motor_measure.speed_rpm,
-                                                   launcher.trigger.target_speed);
-
-    }
-
-    // 2 单发
-    else if((launcher.trigger_mode == TRIGGER_SINGLE)
-        || (launcher.shoot_state == SHOOT_ING_STATE)) // 视觉触发一次单发后，即使下一周期拨盘变为失能模式，也得打完这一发才能失能
-    {
-        // 更新发射状态
-        launcher.shoot_state = SHOOT_ING_STATE;
-
-        if(single_shoot_finish)
+        if(block_time == BLOCK_THRESHOLD_TIME)
         {
-            single_shoot_finish = false;
+            block_flag = true;
 
-            launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd - DEGREE_45_TO_ENCODER;
+            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
+
+            single_target_ecd += DEGREE_45_TO_ENCODER;
         }
 
-        launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
-                                                 launcher.trigger.motor_measure.total_ecd,
-                                                 launcher.trigger.target_total_ecd);
-
-        launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
-                                                   launcher.trigger.motor_measure.speed_rpm,
-                                                   launcher.trigger.target_speed);
-
-        // 判断单发完成
-        if(ABS(launcher.trigger.target_total_ecd - launcher.trigger.motor_measure.total_ecd) < 5000)
+        if(block_time >= BLOCK_DISABLE_TIME)
         {
-            // 确保打完当前一发，才能执行下一次单发任务
-            single_shoot_finish = true;
+            block_flag = false;
+            block_to_dead = true;
 
-            launcher.shoot_state = SHOOT_OVER_STATE;
+            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
+        }
+    }
+    // 连发堵转
+    else if(ABS(launcher.trigger.continuous_speed_pid.out) > BLOCK_CURRENT)
+    {
+        block_time ++;
+
+        if(block_time == BLOCK_THRESHOLD_TIME)
+        {
+            block_flag = true;
+
+            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
+
+            continuous_target_ecd += 2 * DEGREE_45_TO_ENCODER;
+        }
+
+        if(block_time >= BLOCK_DISABLE_TIME)
+        {
+            block_flag = false;
+            block_to_dead = true;
+
+            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
         }
     }
 
-    // 3 失能
-    else if(launcher.trigger_mode == TRIGGER_CLOSE)
+    /****  发弹  ****/
+    else
     {
-        // 更新发射状态
-        launcher.shoot_state = SHOOT_OVER_STATE;
+        // 单发
+        if(get_channel_info(rc_ctrl.rc.ch[2]))
+        {
+            launcher.trigger_mode = TRIGGER_SINGLE;
 
-        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+            single_target_ecd = launcher.trigger.motor_measure.total_ecd;
 
-        // 直接失能拨盘
-        launcher.trigger.target_current = 0;
+            // 清空堵转时间
+            block_time = 0;
+            block_flag = false;
+            block_to_dead = false;
+
+            // 单发和连发之间切换
+            continuous_target_ecd = single_target_ecd;
+        }
+
+        else if(rc_ctrl.rc.ch[2] > 600)
+        {
+
+        }
     }
 
-    block_handle();
 }
 
 /** 摩擦轮控制 **/
@@ -316,13 +230,13 @@ void Launcher_Disable(void) {
     launcher.trigger.target_current = 0;
 
     /** 关闭摩擦轮 **/
-    launcher.fir_wheel_mode = launcher.fir_wheel_last_mode = Fire_OFF;
+    launcher.fir_wheel_mode = Fire_OFF;
 
     /** 关闭拨盘 **/
-    launcher.trigger_mode = launcher.trigger_last_mode = TRIGGER_CLOSE;
+    launcher.trigger_mode = TRIGGER_CLOSE;
 
     /** 令拨盘电机期望总编码器值总等于反馈的总编码器值，便于下次发射 **/
-    launcher.trigger.target_total_ecd = (int32_t)launcher.trigger.motor_measure.total_ecd;
+    single_target_ecd = continuous_target_ecd = (int32_t)launcher.trigger.motor_measure.total_ecd;
 
 
 }
