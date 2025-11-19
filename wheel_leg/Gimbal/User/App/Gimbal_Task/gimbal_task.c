@@ -78,6 +78,66 @@ static void Gimbal_Init(void) {
 
 }
 
+/** 云台根据遥控器设置模式 **/
+void Gimbal_Mode_Set(void)
+{
+    // 1 失能模式
+    if (switch_is_down(rc_ctrl.rc.s[RC_s_R]))
+    {
+        gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+        gimbal.gimbal_ctrl_mode = GIMBAL_DISABLE;
+    }
+        // 2 使能模式
+    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R]))
+    {
+        gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+        gimbal.gimbal_ctrl_mode = GIMBAL_ENABLE;
+
+        // 3 自瞄模式（先进使能模式才有机会进入自瞄模式）
+
+        // 遥控器进入自瞄模式的逻辑：只有当上下拨「拨轮」，同时视觉锁到了目标时，才会进入自瞄模式，否则保持正常使能模式
+        bool Auto_Mode_Remote_Logic = ((rc_ctrl.rc.ch[4] > 300) || (rc_ctrl.rc.ch[4] < -300))
+                                      && (robot_ctrl.target_lock == 0x31);
+
+        if (Auto_Mode_Remote_Logic)
+        {
+            gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+            gimbal.gimbal_ctrl_mode = GIMBAL_AUTO;
+        }
+
+
+    }
+
+}
+
+/** 云台接收遥控器信息 **/
+void Gimbal_Ctrl_Info_Set(void)
+{
+    /** pitch **/
+    //在pit期望值上,按遥控器或者鼠标进行增减
+    gimbal.pitch.absolute_angle_set += (float)rc_ctrl.rc.ch[GIMBAL_PITCH_CHANNEL] * RC_TO_PITCH + (float)gimbal.mouse_in_y.out * MOUSE_Y_RADIO;  // rc_ctrl.mouse.y
+
+    //限幅
+    gimbal.pitch.absolute_angle_set = fp32_constrain(gimbal.pitch.absolute_angle_set,
+                                                     MIN_ABS_ANGLE,
+                                                     MAX_ABS_ANGLE);
+
+    /** yaw **/
+    //在yaw期望值上,按遥控器或者鼠标进行增减
+    gimbal.yaw.absolute_angle_set -= (float)rc_ctrl.rc.ch[GIMBAL_YAW_CHANNEL] * RC_TO_YAW + (float)gimbal.mouse_in_x.out * MOUSE_X_RADIO;    // rc_ctrl.mouse.x
+
+    // 圈数检测
+    if (gimbal.yaw.absolute_angle_set >= 180)
+    {
+        gimbal.yaw.absolute_angle_set -= 360;
+    }
+    else if (gimbal.yaw.absolute_angle_set <= -180)
+    {
+        gimbal.yaw.absolute_angle_set += 360;
+    }
+
+}
+
 
 /** 更新云台角度 **/
 static void Gimbal_Angle_Update(void)

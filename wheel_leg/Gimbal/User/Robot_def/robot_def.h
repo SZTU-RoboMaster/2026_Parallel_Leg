@@ -5,7 +5,7 @@
 #include "pid.h"
 #include "user_lib.h"
 #include "filter.h"
-#include "../App/Vision_Task/RoboMaster_Protocol.h"
+#include "RoboMaster_Protocol.h"
 #include "low_pass_filter.h"
 
 /* 云台任务初始化时间 */
@@ -37,7 +37,7 @@
 #define GIMBAL_PITCH_ANGLE_MAX_IOUT         0.0f
 #define GIMBAL_PITCH_ANGLE_MAX_OUT          9000.f
 
-#define GIMBAL_PITCH_SPEED_PID_KP           55.0f // 120.0f 200.0f 50.0f
+#define GIMBAL_PITCH_SPEED_PID_KP           35.0f // 120.0f 200.0f 50.0f
 #define GIMBAL_PITCH_SPEED_PID_KI           0.0f
 #define GIMBAL_PITCH_SPEED_PID_KD           0.0f
 #define GIMBAL_PITCH_SPEED_MAX_IOUT         0.0f
@@ -61,7 +61,6 @@ typedef enum {
     GIMBAL_DISABLE,   // 失能
     GIMBAL_ENABLE,    // 使能
     GIMBAL_AUTO,    //云台自瞄模式
-    GIMBAL_FIRE,    //云台打弹模式
 }Gimbal_Mode;
 
 /** 云台电机结构体 **/
@@ -180,8 +179,6 @@ typedef enum {
 typedef struct {
 
     uint16_t block_time; // 堵转时间
-
-    int32_t target_ecd; // 堵转处理中的期望编码值
 
     bool single_shoot_inverse; // 确保单发模式下拨盘只回拨一次
 

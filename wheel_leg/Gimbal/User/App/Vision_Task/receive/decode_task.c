@@ -146,6 +146,7 @@ static void decode_unpack_fifo_data(void) {
                 break;
         }
     }
+
     //供视觉调试的设计
     if (flag3 == 0) {
         robot_ctrl.fire_command = 0;
