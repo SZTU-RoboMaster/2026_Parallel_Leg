@@ -132,7 +132,7 @@ int16_t count = 0;
 static void trigger_control(void)
 {
     // 接收开火标志位
-    if((robot_ctrl.fire_command != 4) && (robot_ctrl.fire_command != 0)) // 4是视觉发的停火标志位；0是默认值，无意义
+    if(robot_ctrl.fire_command != 4) // 4是视觉发的停火标志位；0是默认值，无意义
     {
         if(robot_ctrl.fire_command == 1) // 单发
         {
@@ -145,7 +145,7 @@ static void trigger_control(void)
 
         stop_flag = false;
     }
-    else if(robot_ctrl.fire_command == 4)
+    else if((robot_ctrl.fire_command == 0) || (robot_ctrl.fire_command == 4))
     {
         stop_flag = true; // 停火标志位
         vision_single = 0;
@@ -199,24 +199,24 @@ static void trigger_control(void)
                     {
                         launcher.trigger_mode = TRIGGER_SINGLE;
 
-//                        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+                        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+
+                        launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
+
+//                        if(single_shoot_finish)
+//                        {
+//                            single_shoot_finish = false;
 //
-//                        launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
-
-                        if(single_shoot_finish)
-                        {
-                            single_shoot_finish = false;
-
-                            launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
-
-                            launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
-                        }
-
-                        // 判断单发完成 / 如果单发时进入堵转，下下一周期也会进入该判断
-                        if(ABS(launcher.trigger.target_total_ecd - launcher.trigger.motor_measure.total_ecd) < 2000)
-                        {
-                            single_shoot_finish = true;
-                        }
+//                            launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+//
+//                            launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
+//                        }
+//
+//                        // 判断单发完成 / 如果单发时进入堵转，下下一周期也会进入该判断
+//                        if(ABS(launcher.trigger.target_total_ecd - launcher.trigger.motor_measure.total_ecd) < 2000)
+//                        {
+//                            single_shoot_finish = true;
+//                        }
                     }
                     else if(vision_single == 2) // 视觉无限连发
                     {
