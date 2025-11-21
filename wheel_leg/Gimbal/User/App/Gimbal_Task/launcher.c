@@ -122,36 +122,21 @@ bool block_to_dead = false; // 拨盘要寄了
 
 /** Vision **/
 bool stop_flag = true; // 停火标志位
-int8_t vision_single = 0; // 0为不开火，1为视觉单发模式，2为视觉无限连发模式
 
 /** Shoot **/
 bool single_shoot_finish = true; // 确保打完当前一发，才能执行下一次单发任务
 
-bool test = false;
-int32_t error_test = 0;
-
 /** 拨盘控制 **/
-int16_t count = 0;
 static void trigger_control(void)
 {
     // 接收开火标志位
-    if(robot_ctrl.fire_command != 4) // 4是视觉发的停火标志位；0是默认值，无意义
+    if((robot_ctrl.fire_command != 4) && (robot_ctrl.fire_command != 0)) // 4是视觉发的停火标志位；0是默认值，无意义
     {
-        if(robot_ctrl.fire_command == 1) // 单发
-        {
-            vision_single = 1;
-        }
-        else if(robot_ctrl.fire_command == 3) // 连发
-        {
-            vision_single = 2;
-        }
-
         stop_flag = false;
     }
-    else if((robot_ctrl.fire_command == 0) || (robot_ctrl.fire_command == 4))
+    else if(robot_ctrl.fire_command == 4)
     {
         stop_flag = true; // 停火标志位
-        vision_single = 0;
     }
 
     /**** 堵转 ****/
@@ -211,29 +196,19 @@ static void trigger_control(void)
                             launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
                         }
 
-                        error_test = launcher.trigger.motor_measure.total_ecd - launcher.trigger.target_total_ecd;
-                        test = (error_test < 2000);
-
-//                        // 判断单发完成 / 如果单发时进入堵转，下下一周期也会进入该判断
-                        if(ABS(launcher.trigger.target_total_ecd - launcher.trigger.motor_measure.total_ecd) < 2000)
+                        // 判断单发完成 / 如果单发时进入堵转，下下一周期也会进入该判断
+                        if(launcher.trigger.motor_measure.total_ecd - launcher.trigger.target_total_ecd < 2000) // 不能反过来
                         {
-                            single_shoot_finish = true;
-                        }
-
-                        if(test)
-                        {
-                            error_test = 0;
                             single_shoot_finish = true;
                         }
                     }
-                    else if(vision_single == 2) // 视觉无限连发
+                    else if(robot_ctrl.fire_command == 3) // 视觉无限连发
                     {
-//                        single_shoot_finish = true;
-
                         launcher.trigger_mode = TRIGGER_CONTINUE;
 
                         launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
 
+                        // 待改进
                         launcher.trigger.target_total_ecd -= 10 * DEGREE_45_TO_ENCODER;
                     }
 
