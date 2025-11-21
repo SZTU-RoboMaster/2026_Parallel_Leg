@@ -7,7 +7,7 @@
 /*********************************************************************************************************
 *                                              内部变量                                                   *
 *********************************************************************************************************/
-static uint8_t rc_last_sw_L;            // 拨杆上一时刻的状态值记录
+uint8_t rc_last_sw_L;            // 拨杆上一时刻的状态值记录
 
 /*************************************************************************************************
  *                                        Function                                               *
@@ -60,7 +60,7 @@ void Launcher_Init(void) {
 
     /** 初始化发射机构模式 **/
     // 摩擦轮
-    launcher.fir_wheel_mode  = Fire_OFF;
+    launcher.fir_wheel_mode = Fire_OFF;
     // 拨盘
     launcher.trigger_mode = TRIGGER_CLOSE;
 
@@ -72,8 +72,7 @@ void Launcher_Init(void) {
     first_order_filter_init(&launcher.filter_trigger,1,1);
 }
 
-/** 摩擦轮模式设置 **/
-static void fir_wheel_mode_set(void)
+void Launcher_Mode_Set(void)
 {
     if ((!switch_is_up(rc_last_sw_L)) && switch_is_up(rc_ctrl.rc.s[RC_s_L]))
     {// 当 「上一时刻左边拨盘不在上」 且 「该时刻模式在上」 时进入发射机构模式切换  说人话就是只有往上拨才能开关摩擦轮
@@ -84,106 +83,9 @@ static void fir_wheel_mode_set(void)
             // 通过三元运算符对当前摩擦轮模式状态进行反转
             launcher.fir_wheel_mode = (launcher.fir_wheel_mode == Fire_ON) ? Fire_OFF : Fire_ON;
         }
-
     }
 
-}
-
-/** 发射机构模式设置 **/
-void Launcher_Mode_Set(void) {
-
-    /** 摩擦轮模式判断 **/
-    fir_wheel_mode_set();
-
-    /** 更新上一次的左拨杆值 **/
     rc_last_sw_L = rc_ctrl.rc.s[RC_s_L];
-
-}
-
-
-/** 拨盘控制 **/
-
-
-uint16_t block_time = 0;
-bool block_flag = false;
-bool block_to_dead = false;
-
-int32_t single_target_ecd = 0;
-int32_t continuous_target_ecd = 0;
-
-static void trigger_control(void)
-{
-    /****  堵转  ****/
-    // 单发堵转
-    if(ABS(launcher.trigger.single_speed_pid.out) > BLOCK_CURRENT)
-    {
-        block_time ++;
-
-        if(block_time == BLOCK_THRESHOLD_TIME)
-        {
-            block_flag = true;
-
-            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
-
-            single_target_ecd += DEGREE_45_TO_ENCODER;
-        }
-
-        if(block_time >= BLOCK_DISABLE_TIME)
-        {
-            block_flag = false;
-            block_to_dead = true;
-
-            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
-        }
-    }
-    // 连发堵转
-    else if(ABS(launcher.trigger.continuous_speed_pid.out) > BLOCK_CURRENT)
-    {
-        block_time ++;
-
-        if(block_time == BLOCK_THRESHOLD_TIME)
-        {
-            block_flag = true;
-
-            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
-
-            continuous_target_ecd += 2 * DEGREE_45_TO_ENCODER;
-        }
-
-        if(block_time >= BLOCK_DISABLE_TIME)
-        {
-            block_flag = false;
-            block_to_dead = true;
-
-            single_target_ecd = continuous_target_ecd = launcher.trigger.motor_measure.total_ecd;
-        }
-    }
-
-    /****  发弹  ****/
-    else
-    {
-        // 单发
-        if(get_channel_info(rc_ctrl.rc.ch[2]))
-        {
-            launcher.trigger_mode = TRIGGER_SINGLE;
-
-            single_target_ecd = launcher.trigger.motor_measure.total_ecd;
-
-            // 清空堵转时间
-            block_time = 0;
-            block_flag = false;
-            block_to_dead = false;
-
-            // 单发和连发之间切换
-            continuous_target_ecd = single_target_ecd;
-        }
-
-        else if(rc_ctrl.rc.ch[2] > 600)
-        {
-
-        }
-    }
-
 }
 
 /** 摩擦轮控制 **/
@@ -214,7 +116,151 @@ static void fir_wheel_control(void)
 
 }
 
+/** 堵转 **/
+bool block_flag = false; // 堵转标志位
+bool block_to_dead = false; // 拨盘要寄了
 
+/** Vision **/
+bool stop_flag = true; // 停火标志位
+int8_t vision_single = 0; // 0为不开火，1为视觉单发模式，2为视觉无限连发模式
+
+/** Shoot **/
+bool single_shoot_finish = true; // 确保打完当前一发，才能执行下一次单发任务
+
+/** 拨盘控制 **/
+int16_t count = 0;
+static void trigger_control(void)
+{
+    // 接收开火标志位
+    if((robot_ctrl.fire_command != 4) && (robot_ctrl.fire_command != 0)) // 4是视觉发的停火标志位；0是默认值，无意义
+    {
+        if(robot_ctrl.fire_command == 1) // 单发
+        {
+            vision_single = 1;
+        }
+        else if(robot_ctrl.fire_command == 3) // 连发
+        {
+            vision_single = 2;
+        }
+
+        stop_flag = false;
+    }
+    else if(robot_ctrl.fire_command == 4)
+    {
+        stop_flag = true; // 停火标志位
+        vision_single = 0;
+    }
+
+    /**** 堵转 ****/
+    if(ABS(launcher.trigger.target_current) > BLOCK_CURRENT)
+    {
+        launcher.block_check.block_time ++;
+
+        if(launcher.block_check.block_time == BLOCK_THRESHOLD_TIME)
+        {
+            block_flag = true;
+            block_to_dead = false;
+
+            launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+
+            if(launcher.trigger_mode == TRIGGER_SINGLE)
+            {
+                launcher.trigger.target_total_ecd += DEGREE_45_TO_ENCODER;
+            }
+            else if(launcher.trigger_mode == TRIGGER_CONTINUE)
+            {
+                launcher.trigger.target_total_ecd += 2 * DEGREE_45_TO_ENCODER;
+            }
+        }
+
+        if(launcher.block_check.block_time >= BLOCK_DEAD_TIME)
+        {
+            block_flag = false;
+            block_to_dead = true;
+
+            launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+        }
+    }
+
+     /**** 发弹 ****/
+    else
+    {
+        /** 重置堵转时间 **/
+        launcher.block_check.block_time = 0;
+
+        if(launcher.fir_wheel_mode == Fire_ON)
+        {
+            /** 自瞄 **/
+            if(gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
+            {
+                if(!stop_flag) // 不停火
+                {
+                    if(vision_single == 1) // 视觉单发
+                    {
+                        launcher.trigger_mode = TRIGGER_SINGLE;
+
+//                        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+//
+//                        launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
+
+                        if(single_shoot_finish)
+                        {
+                            single_shoot_finish = false;
+
+                            launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+
+                            launcher.trigger.target_total_ecd -= DEGREE_45_TO_ENCODER;
+                        }
+
+                        // 判断单发完成 / 如果单发时进入堵转，下下一周期也会进入该判断
+                        if(ABS(launcher.trigger.target_total_ecd - launcher.trigger.motor_measure.total_ecd) < 2000)
+                        {
+                            single_shoot_finish = true;
+                        }
+                    }
+                    else if(vision_single == 2) // 视觉无限连发
+                    {
+                        launcher.trigger_mode = TRIGGER_CONTINUE;
+
+                        launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+
+                        launcher.trigger.target_total_ecd -= 10 * DEGREE_45_TO_ENCODER;
+                    }
+
+                }
+                else
+                {
+                    launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+                }
+            }
+
+            /** 正常 **/
+            else
+            {
+                // 连发
+                if (switch_is_down(rc_last_sw_L) || (KeyBoard.Mouse_l.status == KEY_PRESS))
+                {
+                    launcher.trigger_mode = TRIGGER_CONTINUE;
+
+                    launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
+
+                    launcher.trigger.target_total_ecd -= 10 * DEGREE_45_TO_ENCODER;
+                }
+
+            }
+
+        }
+    }
+
+    launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
+                                             launcher.trigger.motor_measure.total_ecd,
+                                             launcher.trigger.target_total_ecd);
+
+    launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
+                                               launcher.trigger.motor_measure.speed_rpm,
+                                               launcher.trigger.target_speed);
+
+}
 
 
 /*************************************************************************************************
@@ -236,17 +282,17 @@ void Launcher_Disable(void) {
     launcher.trigger_mode = TRIGGER_CLOSE;
 
     /** 令拨盘电机期望总编码器值总等于反馈的总编码器值，便于下次发射 **/
-    single_target_ecd = continuous_target_ecd = (int32_t)launcher.trigger.motor_measure.total_ecd;
+    launcher.trigger.target_total_ecd = (int32_t)launcher.trigger.motor_measure.total_ecd;
 
-
+    single_shoot_finish = true;
 }
 
 /** 发射机构控制 **/
 void Launcher_Control(void)
 {
-    /** 拨盘控制 **/
-    trigger_control();
-
     /** 摩擦轮控制 **/
     fir_wheel_control();
+
+    /** 拨盘控制 **/
+    trigger_control();
 }

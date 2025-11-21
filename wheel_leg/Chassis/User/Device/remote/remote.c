@@ -300,26 +300,26 @@ static void set_chassis_ctrl_info() {
     slope_following(&vel_temp,&chassis.chassis_ctrl_info.v_m_per_s,0.02f); // 0.05f
 
 
-//    /** 期望腿长 **/
-//    rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] = gimbal_unpack_data.leg_channel.value;
-//
-//    if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == -660)
-//    {
-//        chassis.chassis_ctrl_info.height_m = 0.12f;
-//    }
-//    else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == 660)
-//    {
-//        chassis.chassis_ctrl_info.height_m = 0.32f;
-//    }
-//    else
-//    {
-//        chassis.chassis_ctrl_info.height_m = 0.18f;
-//
-//        if(!chassis.chassis_recover_finish)
-//        {
-//            chassis.chassis_ctrl_info.height_m = MIN_L0;
-//        }
-//    }
+    /** 期望腿长 **/
+    rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] = gimbal_unpack_data.leg_channel.value;
+
+    if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == -660)
+    {
+        chassis.chassis_ctrl_info.height_m = 0.12f;
+    }
+    else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == 660)
+    {
+        chassis.chassis_ctrl_info.height_m = 0.32f;
+    }
+    else
+    {
+        chassis.chassis_ctrl_info.height_m = 0.18f;
+
+        if(!chassis.chassis_recover_finish)
+        {
+            chassis.chassis_ctrl_info.height_m = MIN_L0;
+        }
+    }
 
 
 

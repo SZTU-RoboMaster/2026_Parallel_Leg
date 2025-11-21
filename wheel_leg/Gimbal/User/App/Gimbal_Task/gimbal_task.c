@@ -104,10 +104,7 @@ void Gimbal_Mode_Set(void)
             gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
             gimbal.gimbal_ctrl_mode = GIMBAL_AUTO;
         }
-
-
     }
-
 }
 
 /** 云台接收遥控器信息 **/
@@ -167,10 +164,18 @@ static void Gimbal_Send_Chassis_Data(void) {
 
     static int count = 1;
 
+    int16_t chassis_leg_channel = rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL];
+
     if(count % 2 == 1) // 奇数发，偶数不发，实现500Hz
     {
+        // 调试发射机构用，右边拨杆在上时不再变腿长，也不再小陀螺
+        if(switch_is_up(rc_ctrl.rc.s[RC_s_R]))
+        {
+            chassis_leg_channel = 0;
+        }
+
         Send_Chassis_Data(rc_ctrl.rc.ch[CHASSIS_VX_CHANNEL],
-                          rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL],
+                          chassis_leg_channel,
                           rc_ctrl.rc.s[RC_s_R],
                           gimbal.yaw.relative_angle_get);
     }
@@ -234,7 +239,16 @@ static void Robot_Send_Vision_Data(void)
     /* 给视觉发开启自瞄 */
     if (gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
     {
-        vision_data.mode = 0x21;
+        if(rc_ctrl.rc.ch[4] > 300)
+        {
+            vision_data.mode = 0x21; // 单发
+        }
+        else if(rc_ctrl.rc.ch[4] < -300)
+        {
+            vision_data.mode = 0x23; // 连发
+        }
+
+
     }
     else
     {
@@ -353,14 +367,14 @@ void Gimbal_task(void const*pvParameters) {
             }
         }
 
-//        // 发射机构
-//        DJI_Send_Motor_Mapping(CAN_1,
-//                               CAN_DJI_MOTOR_0x200_ID,
-//                               launcher.fire_l.target_current,    //201 左摩擦轮
-//                               launcher.fire_r.target_current,    //202 右摩擦轮
-//                               launcher.trigger.target_current,    //203 拨盘
-//                               0     // 204 无
-//        );
+        // 发射机构
+        DJI_Send_Motor_Mapping(CAN_1,
+                               CAN_DJI_MOTOR_0x200_ID,
+                               launcher.fire_l.target_current,    //201 左摩擦轮
+                               launcher.fire_r.target_current,    //202 右摩擦轮
+                               launcher.trigger.target_current,    //203 拨盘
+                               0     // 204 无
+        );
 
         // 云台
         DJI_Send_Motor_Mapping(CAN_1,
@@ -371,14 +385,14 @@ void Gimbal_task(void const*pvParameters) {
                                0      //208 无
         );
 
-        // 发射机构
-        DJI_Send_Motor_Mapping(CAN_1,
-                               CAN_DJI_MOTOR_0x200_ID,
-                               0,    //201 左摩擦轮
-                               0,    //202 右摩擦轮
-                               0,    //203 拨盘
-                               0     // 204 无
-        );
+//        // 发射机构
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x200_ID,
+//                               0,    //201 左摩擦轮
+//                               0,    //202 右摩擦轮
+//                               0,    //203 拨盘
+//                               0     // 204 无
+//        );
 //
 //        // 云台
 //        DJI_Send_Motor_Mapping(CAN_1,

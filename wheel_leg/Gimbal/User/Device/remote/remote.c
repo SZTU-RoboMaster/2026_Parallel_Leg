@@ -23,7 +23,6 @@
 
 #define RC_CHANNAL_ERROR_VALUE 700
 
-
 extern UART_HandleTypeDef huart3;
 extern DMA_HandleTypeDef hdma_usart3_rx;
 
@@ -231,43 +230,16 @@ void USART3_IRQHandler(void)
         }
     }
 }
-bool get_channel_info(int16_t channel)
-{
-    static bool flag = false;
-
-    static bool temp = false;
-
-    if((channel < -600) && (!temp))
-    {
-        temp = true;
-
-        flag = true;
-    }
-
-    if(channel > -600)
-    {
-        temp = false;
-
-        flag = false;
-    }
-
-    return flag;
-}
-
 
 /****************************************************************************************
  *                                         remote                                       *
  ****************************************************************************************/
-
-
-
-
 void Gimbal_Remote_Cmd(void)
 {
     /** 云台根据遥控器设置模式 **/
     Gimbal_Mode_Set();
 
-    /** 发射根据遥控器设置模式 **/
+    /** 发射机构根据遥控器设置模式 **/
     Launcher_Mode_Set();
 
     /** 云台接收遥控器信息 **/

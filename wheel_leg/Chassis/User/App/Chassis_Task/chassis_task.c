@@ -300,10 +300,11 @@ static void wheel_calc(void)
                                       gimbal_unpack_data.yaw_relative_angle * DEGREE_TO_RAD,
                                       0.0f);
 
-    if(chassis.chassis_ctrl_mode == CHASSIS_SPIN)
-    {
-        target_yaw_speed = SPIN_SPEED;
-    }
+    // 调试发射机构用，右边拨杆在上时不再变腿长，也不再小陀螺
+//    if(chassis.chassis_ctrl_mode == CHASSIS_SPIN)
+//    {
+//        target_yaw_speed = SPIN_SPEED;
+//    }
 
     chassis.wheel_turn_torque = pid_calc(&chassis.chassis_turn_speed_pid,
                                          chassis.imu_reference.yaw_gyro,
@@ -584,23 +585,23 @@ void chassis_task(void)
         }
     }
 
-//        send_torque_task(-chassis.leg_L.joint_F_torque,
-//                     -chassis.leg_L.joint_B_torque,
-//                     chassis.leg_R.joint_F_torque,
-//                     chassis.leg_R.joint_B_torque,
-//                     -chassis.leg_L.wheel_torque,
-//                     -chassis.leg_R.wheel_torque,
-//                     vel,
-//                     Kd);
+        send_torque_task(-chassis.leg_L.joint_F_torque,
+                     -chassis.leg_L.joint_B_torque,
+                     chassis.leg_R.joint_F_torque,
+                     chassis.leg_R.joint_B_torque,
+                     -chassis.leg_L.wheel_torque,
+                     -chassis.leg_R.wheel_torque,
+                     vel,
+                     Kd);
 
-    send_torque_task(0,
-                     0,
-                     0,
-                     0,
-                     0,
-                     0,
-                     0,
-                     0);
+//    send_torque_task(0,
+//                     0,
+//                     0,
+//                     0,
+//                     0,
+//                     0,
+//                     0,
+//                     0);
 
 
 }
