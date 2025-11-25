@@ -172,8 +172,6 @@ typedef struct {
 
     uint16_t block_time; // 堵转时间
 
-    bool single_shoot_inverse; // 确保单发模式下拨盘只回拨一次
-
 }Block_Check;
 
 /** 发射机构电机结构体 **/

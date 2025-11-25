@@ -121,7 +121,11 @@ bool block_flag = false; // 堵转标志位
 bool block_to_dead = false; // 拨盘要寄了
 
 /** Vision **/
-bool stop_flag = true; // 停火标志位
+// 停火标志位
+bool stop_flag = true;
+
+// 视觉无限连发标志位
+bool vision_continue_flag = false;
 
 /** Shoot **/
 bool single_shoot_finish = true; // 确保打完当前一发，才能执行下一次单发任务
@@ -132,10 +136,17 @@ static void trigger_control(void)
     // 接收开火标志位
     if((robot_ctrl.fire_command != 4) && (robot_ctrl.fire_command != 0)) // 4是视觉发的停火标志位；0是默认值，无意义
     {
+        if(robot_ctrl.fire_command == 3)
+        {
+            vision_continue_flag = true;
+        }
+
         stop_flag = false;
     }
     else if(robot_ctrl.fire_command == 4)
     {
+        vision_continue_flag = false;
+
         stop_flag = true; // 停火标志位
     }
 
@@ -178,15 +189,17 @@ static void trigger_control(void)
 
         if(launcher.fir_wheel_mode == Fire_ON)
         {
-            /** 自瞄 **/
+            /********** 自瞄 **********/
             if(gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
             {
                 if(!stop_flag) // 不停火
                 {
-                    if(robot_ctrl.fire_command == 1) // 视觉单发
+                    /** 视觉单发 **/
+                    if(robot_ctrl.fire_command == 1)
                     {
                         launcher.trigger_mode = TRIGGER_SINGLE;
 
+                        // 确保一次只打一发，直到该发打完，才可进行下一发
                         if(single_shoot_finish)
                         {
                             single_shoot_finish = false;
@@ -202,14 +215,13 @@ static void trigger_control(void)
                             single_shoot_finish = true;
                         }
                     }
-                    else if(robot_ctrl.fire_command == 3) // 视觉无限连发
+
+                    /** 视觉无限连发 **/
+                    else if(vision_continue_flag)
                     {
                         launcher.trigger_mode = TRIGGER_CONTINUE;
 
                         launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
-
-                        // 待改进
-                        launcher.trigger.target_total_ecd -= 10 * DEGREE_45_TO_ENCODER;
                     }
 
                 }
@@ -219,20 +231,14 @@ static void trigger_control(void)
                 }
             }
 
-            /** 正常 **/
+            /********** 遥控器控制 **********/
             else
             {
                 // 连发
-                if (switch_is_down(rc_last_sw_L) || (KeyBoard.Mouse_l.status == KEY_PRESS))
-                {
+                        {
                     launcher.trigger_mode = TRIGGER_CONTINUE;
-
-                    launcher.trigger.target_total_ecd = launcher.trigger.motor_measure.total_ecd;
-
-                    launcher.trigger.target_total_ecd -= 10 * DEGREE_45_TO_ENCODER;
-                }
-
-            }
+                 }
+             }
 
         }
     }
@@ -240,6 +246,12 @@ static void trigger_control(void)
     launcher.trigger.target_speed = pid_calc(&launcher.trigger.angle_pid,
                                              launcher.trigger.motor_measure.total_ecd,
                                              launcher.trigger.target_total_ecd);
+
+
+    if((launcher.fir_wheel_mode == Fire_ON) && (vision_continue_flag))
+    {
+        launcher.trigger.target_speed = TRIGGER_SPEED;
+    }
 
     launcher.trigger.target_current = pid_calc(&launcher.trigger.speed_pid,
                                                launcher.trigger.motor_measure.speed_rpm,

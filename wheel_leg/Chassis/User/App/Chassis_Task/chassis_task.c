@@ -301,10 +301,10 @@ static void wheel_calc(void)
                                       0.0f);
 
     // 调试发射机构用，右边拨杆在上时不再变腿长，也不再小陀螺
-//    if(chassis.chassis_ctrl_mode == CHASSIS_SPIN)
-//    {
-//        target_yaw_speed = SPIN_SPEED;
-//    }
+    if(chassis.chassis_ctrl_mode == CHASSIS_SPIN)
+    {
+        target_yaw_speed = SPIN_SPEED;
+    }
 
     chassis.wheel_turn_torque = pid_calc(&chassis.chassis_turn_speed_pid,
                                          chassis.imu_reference.yaw_gyro,
