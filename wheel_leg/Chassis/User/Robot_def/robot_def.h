@@ -27,11 +27,11 @@
 #define SPIN_SPEED 5.0f
 
 // 机体倾角
-#define NOT_BALANCE_RAD 13.0f * DEGREE_TO_RAD
-#define RECOVER_RAD 5.0f * DEGREE_TO_RAD
+#define NOT_BALANCE_RAD 13.0f * DEGREE_TO_RAD//13*PI/180
+#define RECOVER_RAD 5.0f * DEGREE_TO_RAD //5*PI/180
 
 // 腿摆角
-#define LEG_NORMAL_RAD 30.0f * DEGREE_TO_RAD
+#define LEG_NORMAL_RAD 50.0f * DEGREE_TO_RAD//30
 
 // //LK9025最大转速
 // #define LK9025_MAX_SPEED 490
@@ -44,13 +44,13 @@
 #define CHASSIS_LEG_CHANNEL 2
 
 /** 变量约束 **/
-#define MIN_L0 0.10f
+#define MIN_L0 0.15f
 
 #define MAX_CHASSIS_VX_SPEED 2.1f
 #define MAX_WHEEL_TORQUE 10.f
 #define MIN_WHEEL_TORQUE (-10.f)
-#define MAX_JOINT_TORQUE 10.f//40
-#define MIN_JOINT_TORQUE (-10.f)//-40
+#define MAX_JOINT_TORQUE 40.f//40 //10
+#define MIN_JOINT_TORQUE (-40.f)//-40
 
 /** 遥控器值映射 **/
 #define RC_TO_VX  (MAX_CHASSIS_VX_SPEED/660)
@@ -75,11 +75,11 @@
 // #define CHASSIS_TURN_SPEED_PID_IOUT_LIMIT 0.0f
 // #define CHASSIS_TURN_SPEED_PID_OUT_LIMIT 4.0f
 
-#define CHASSIS_TURN_POS_PID_P 15.0f
+#define CHASSIS_TURN_POS_PID_P 10.0f
 #define CHASSIS_TURN_POS_PID_I 0.0f
 #define CHASSIS_TURN_POS_PID_D 23.0f
 #define CHASSIS_TURN_POS_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_TURN_POS_PID_OUT_LIMIT 5.5f
+#define CHASSIS_TURN_POS_PID_OUT_LIMIT 20.0f//5.5
 
 #define CHASSIS_TURN_SPEED_PID_P 5.0f
 #define CHASSIS_TURN_SPEED_PID_I 0.0f
@@ -97,7 +97,7 @@
 // #define CHASSIS_LEG_COORDINATION_PID_IOUT_LIMIT 0.0f
 // #define CHASSIS_LEG_COORDINATION_PID_OUT_LIMIT 10.0f
 
-#define CHASSIS_LEG_COORDINATION_PID_P 14.0f
+#define CHASSIS_LEG_COORDINATION_PID_P 10.0f//12
 #define CHASSIS_LEG_COORDINATION_PID_I 0.0f
 #define CHASSIS_LEG_COORDINATION_PID_D 5.0f
 #define CHASSIS_LEG_COORDINATION_PID_IOUT_LIMIT 0.0f
@@ -118,18 +118,80 @@
 // #define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT 60.0f
 
 // 腿长位置环PID
-#define CHASSIS_LEG_L0_POS_PID_P 10.0f
-#define CHASSIS_LEG_L0_POS_PID_I 0.0f
-#define CHASSIS_LEG_L0_POS_PID_D 15.0f
-#define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT 3.0f
+#define CHASSIS_LEG_L0_POS_PID_P_H 30.0f//10
+#define CHASSIS_LEG_L0_POS_PID_I_H 0.0f
+#define CHASSIS_LEG_L0_POS_PID_D_H 15.0f
+#define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_H 0.0f
+#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_H 2.0f
+
+#define CHASSIS_LEG_L0_POS_PID_P_M 20.0f//10
+#define CHASSIS_LEG_L0_POS_PID_I_M 0.0f
+#define CHASSIS_LEG_L0_POS_PID_D_M 15.0f
+#define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_M 0.0f
+#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_M 2.0f
+
+#define CHASSIS_LEG_L0_POS_PID_P_L 20.0f//10
+#define CHASSIS_LEG_L0_POS_PID_I_L 0.0f
+#define CHASSIS_LEG_L0_POS_PID_D_L 15.0f
+#define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_L 0.0f
+#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_L 2.0f
+
+#define CHASSIS_LEG_L0_POS_PID_P_JH 28.0f//10
+#define CHASSIS_LEG_L0_POS_PID_I_JH 0.0f
+#define CHASSIS_LEG_L0_POS_PID_D_JH 15.0f
+#define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JH 0.0f
+#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JH 2.0f
+
+#define CHASSIS_LEG_L0_POS_PID_P_JM 20.0f//10
+#define CHASSIS_LEG_L0_POS_PID_I_JM 0.0f
+#define CHASSIS_LEG_L0_POS_PID_D_JM 15.0f
+#define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JM 0.0f
+#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JM 2.0f
+
+#define CHASSIS_LEG_L0_POS_PID_P_JL 20.0f//10
+#define CHASSIS_LEG_L0_POS_PID_I_JL 0.0f
+# define CHASSIS_LEG_L0_POS_PID_D_JL 15.0f
+#define CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JL 0.0f
+#define CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JL 2.0f
+
 
 // 腿长速度环PID
-#define CHASSIS_LEG_L0_SPEED_PID_P 25.0f
-#define CHASSIS_LEG_L0_SPEED_PID_I 0.0f
-#define CHASSIS_LEG_L0_SPEED_PID_D 0.0f
-#define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT 0.0f
-#define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT 60.0f
+#define CHASSIS_LEG_L0_SPEED_PID_P_H 10.0f//25
+#define CHASSIS_LEG_L0_SPEED_PID_I_H 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_D_H 50.0f
+#define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_H 0.0f
+#define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_H 60.0f
+
+#define CHASSIS_LEG_L0_SPEED_PID_P_M 20.0f//25
+#define CHASSIS_LEG_L0_SPEED_PID_I_M 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_D_M 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_M 0.0f
+#define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_M 60.0f
+
+#define CHASSIS_LEG_L0_SPEED_PID_P_L 15.0f//25
+#define CHASSIS_LEG_L0_SPEED_PID_I_L 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_D_L 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_L 0.0f
+#define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_L 60.0f
+
+#define CHASSIS_LEG_L0_SPEED_PID_P_JH 15.0f//25 //15
+#define CHASSIS_LEG_L0_SPEED_PID_I_JH 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_D_JH 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JH 0.0f
+#define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JH 60.0f
+
+#define CHASSIS_LEG_L0_SPEED_PID_P_JM 40.0f//25 //15
+#define CHASSIS_LEG_L0_SPEED_PID_I_JM 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_D_JM 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JM 0.0f
+#define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JM 60.0f
+
+#define CHASSIS_LEG_L0_SPEED_PID_P_JL 35.0f
+#define CHASSIS_LEG_L0_SPEED_PID_I_JL 5.0f
+# define CHASSIS_LEG_L0_SPEED_PID_D_JL 5.0f
+#define CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JL 0.0f
+#define CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JL 60.0f
+
 
 // 离地后的腿长PID 暂时没用到
 #define CHASSIS_OFFGROUND_LO_PID_P 0.0f
@@ -152,7 +214,7 @@
 // #define CHASSIS_ROLL_PID_OUT_LIMIT 50.0f
 
 // Roll补偿PID 公式+
-#define CHASSIS_ROLL_PID_P 1500.0f
+#define CHASSIS_ROLL_PID_P 1300.0f//1500
 #define CHASSIS_ROLL_PID_I 0.0f
 #define CHASSIS_ROLL_PID_D 20.0f
 #define CHASSIS_ROLL_PID_IOUT_LIMIT 0.0f
@@ -177,9 +239,9 @@ typedef enum{
     CHASSIS_JUMP, // 跳跃模式
 } ChassisCtrlMode;
 
-/** 底盘状态结构体 -- 用于倒地自救 **/
+/** 底盘状态结构体 -- 用于倒地自救&离地检测 **/
 typedef enum{
-    CHASSIS_BODY_UNNORMAL,
+    CHASSIS_BODY_UNNORMAL=0,
     CHASSIS_BODY_NORMAL,
 } ChassisBodyState;
 
@@ -193,6 +255,19 @@ typedef enum{
     CHASSIS_COULD_RECOVER,
 } ChassisRecoverState;
 
+typedef enum{
+    CHASSIS_Off_Ground=1,
+    CHASSIS_On_Ground
+} ChassisOffGroundState;
+
+/** 自起状态 **/
+typedef enum {
+    SELFHELP_IDLE = 0,      // 空闲
+    SELFHELP_PREPARE,       // 准备阶段：收缩腿部
+    SELFHELP_LIFT_LEG,      // 抬腿阶段
+    SELFHELP_PUSH_GROUND,   // 推地阶段
+    SELFHELP_CHECK          // 检查阶段
+} SelfHelpState;
 
 typedef struct{
     float v_m_per_s; // 期望速度
@@ -204,13 +279,14 @@ typedef struct{
 } ChassisCtrlInfo;
 
 
-/** 跳跃状态结构体 **/
-typedef enum{
-    NOT_READY,
-    READY, // 第一阶段：收腿蓄力
-    STRETCHING, // 第二阶段：伸腿蹬地
-    SHRINKING, // 第三阶段：空中收腿
-    LANDING, // 第四阶段：落地
+/** 跳跃状态 **/
+typedef enum {
+    NOT_READY = 0,      // 未准备
+    STRETCHING,         // 第二阶段：施加弹射力伸展
+    SHRINKING_IN_AIR,   // 第三阶段：空中收缩腿部
+    PREPARE_LANDING,    // 第四阶段：准备落地伸展
+    RECOVERING,          // 第五阶段：恢复到跳跃前高度
+    JUMP_OVER
 } JumpState;
 
 /** 传感器结构体 **/
@@ -477,9 +553,15 @@ typedef struct{
 
     ChassisRecoverState chassis_recover_state;
 
+    ChassisOffGroundState chassis_on_ground_state;
+
+    // 跳跃
+    JumpState jump_state;
+
     // flag
     bool init_flag;            // 底盘初始化完成标志位
     bool chassis_recover_finish;
+    bool jump_flag;
 
 } Chassis;
 

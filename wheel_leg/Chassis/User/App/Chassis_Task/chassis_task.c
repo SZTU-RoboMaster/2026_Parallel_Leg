@@ -13,13 +13,13 @@
 #include "bsp_delay.h"
 #include "bsp_dwt.h"
 #include "vofa.h"
-
-/** µ×ÅÌpid³õÊ¼»¯ **/
+static int calc_count = 0;//Test
+/** ï¿½ï¿½ï¿½ï¿½pidï¿½ï¿½Ê¼ï¿½ï¿½ **/
 static void chassis_pid_init() {
 
     /** Wheel **/
 
-    // ×ªÏòPID
+    // ×ªï¿½ï¿½PID
     pid_init(&chassis.chassis_turn_pos_pid,
              CHASSIS_TURN_POS_PID_OUT_LIMIT,
              CHASSIS_TURN_POS_PID_IOUT_LIMIT,
@@ -36,7 +36,7 @@ static void chassis_pid_init() {
 
     /** Joint **/
 
-    // ·ÀÅü²æPID
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PID
     pid_init(&chassis.chassis_leg_coordination_pid,
              CHASSIS_LEG_COORDINATION_PID_OUT_LIMIT,
              CHASSIS_LEG_COORDINATION_PID_IOUT_LIMIT,
@@ -44,37 +44,35 @@ static void chassis_pid_init() {
              CHASSIS_LEG_COORDINATION_PID_I,
              CHASSIS_LEG_COORDINATION_PID_D);
 
-    // ÍÈ³¤Î»ÖÃ»·PID
+
     pid_init(&chassis.leg_L.leg_pos_pid,
-             CHASSIS_LEG_L0_POS_PID_OUT_LIMIT,
-             CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT,
-             CHASSIS_LEG_L0_POS_PID_P,
-             CHASSIS_LEG_L0_POS_PID_I,
-             CHASSIS_LEG_L0_POS_PID_D);
-
+             CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_M,
+             CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_M,
+             CHASSIS_LEG_L0_POS_PID_P_M,
+             CHASSIS_LEG_L0_POS_PID_I_M,
+             CHASSIS_LEG_L0_POS_PID_D_M);
     pid_init(&chassis.leg_R.leg_pos_pid,
-             CHASSIS_LEG_L0_POS_PID_OUT_LIMIT,
-             CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT,
-             CHASSIS_LEG_L0_POS_PID_P,
-             CHASSIS_LEG_L0_POS_PID_I,
-             CHASSIS_LEG_L0_POS_PID_D);
+             CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_M,
+             CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_M,
+             CHASSIS_LEG_L0_POS_PID_P_M,
+             CHASSIS_LEG_L0_POS_PID_I_M,
+             CHASSIS_LEG_L0_POS_PID_D_M);
 
-    // ÍÈ³¤ËÙ¶È»·PID
     pid_init(&chassis.leg_L.leg_speed_pid,
-             CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT,
-             CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT,
-             CHASSIS_LEG_L0_SPEED_PID_P,
-             CHASSIS_LEG_L0_SPEED_PID_I,
-             CHASSIS_LEG_L0_SPEED_PID_D);
-
+             CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_M,
+             CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_M,
+             CHASSIS_LEG_L0_SPEED_PID_P_M,
+             CHASSIS_LEG_L0_SPEED_PID_I_M,
+             CHASSIS_LEG_L0_SPEED_PID_D_M);
     pid_init(&chassis.leg_R.leg_speed_pid,
-             CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT,
-             CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT,
-             CHASSIS_LEG_L0_SPEED_PID_P,
-             CHASSIS_LEG_L0_SPEED_PID_I,
-             CHASSIS_LEG_L0_SPEED_PID_D);
+             CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_M,
+             CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_M,
+             CHASSIS_LEG_L0_SPEED_PID_P_M,
+             CHASSIS_LEG_L0_SPEED_PID_I_M,
+             CHASSIS_LEG_L0_SPEED_PID_D_M);
 
-    // ÀëµØºóµÄÍÈ³¤PID ÔİÊ±Ã»ÓÃµ½
+
+        // ï¿½ï¿½Øºï¿½ï¿½ï¿½È³ï¿½PID ï¿½ï¿½Ê±Ã»ï¿½Ãµï¿½
     pid_init(&chassis.leg_L.offground_leg_pid,
              CHASSIS_OFFGROUND_L0_PID_OUT_LIMIT,
              CHASSIS_OFFGROUND_L0_PID_IOUT_LIMIT,
@@ -89,7 +87,7 @@ static void chassis_pid_init() {
              CHASSIS_OFFGROUND_L0_PID_I,
              CHASSIS_OFFGROUND_L0_PID_D);
 
-    // Roll²¹³¥PID
+    // Rollï¿½ï¿½ï¿½ï¿½PID
     pid_init(&chassis.chassis_roll_pid,
              CHASSIS_ROLL_PID_OUT_LIMIT,
              CHASSIS_ROLL_PID_IOUT_LIMIT,
@@ -98,44 +96,63 @@ static void chassis_pid_init() {
              CHASSIS_ROLL_PID_D);
 }
 
-/** µ×ÅÌ³õÊ¼»¯ **/
+/** ï¿½ï¿½ï¿½Ì³ï¿½Ê¼ï¿½ï¿½ **/
 void chassis_init(void)
 {
-    /** ³õÊ¼»¯µ×ÅÌÄ£Ê½ **/
+    /** ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ **/
     chassis.chassis_ctrl_mode = CHASSIS_DISABLE;
 
-    /** ¹Ø½Úµç»ú³õÊ¼»¯ **/
+    /** ï¿½Ø½Úµï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ **/
     joint_init();
 
-    /** ÂÖì±µç»ú³õÊ¼»¯ **/
+    /** ï¿½ï¿½ì±µï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ **/
     wheel_init();
 
-    /** µ×ÅÌpid³õÊ¼»¯ **/
+    /** ï¿½ï¿½ï¿½ï¿½pidï¿½ï¿½Ê¼ï¿½ï¿½ **/
     chassis_pid_init();
 
-    /** ÂË²¨Æ÷³õÊ¼»¯ **/
-    // µÍÍ¨ÂË²¨
+    /** ï¿½Ë²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ **/
+    // ï¿½ï¿½Í¨ï¿½Ë²ï¿½
     low_pass_filter_init(&chassis.leg_L.theta_dot_lpf, 0.75f);
     low_pass_filter_init(&chassis.leg_R.theta_dot_lpf, 0.75f);
 
-    // ¿¨¶ûÂüÂË²¨
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½
     xvEstimateKF_Init(&vaEstimateKF);
 
+    // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ô¾×´Ì¬
+    chassis.jump_state = NOT_READY;
+}
+/** ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½Ğ¶ï¿½ **/
+static void chassis_off_ground_check(void) {
+    calculate_f();
+    // ï¿½ï¿½È¡ï¿½ï¿½Ç°Ö§ï¿½ï¿½ï¿½ï¿½
+    float left_support = chassis.leg_L.Fn;
+    float right_support = chassis.leg_R.Fn;
+    float total_support = left_support + right_support;
+//    USART_Vofa_Justfloat_Transmit(total_support,chassis.chassis_on_ground_state,0);
+    float expected_weight = -6.5f ; //ï¿½ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ //40
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È³ï¿½~ï¿½ï¿½ï¿½È³ï¿½ total -50~10
+    if (total_support < expected_weight)
+    {
+        chassis.chassis_on_ground_state = CHASSIS_Off_Ground;
+    }
+    else
+        chassis.chassis_on_ground_state = CHASSIS_On_Ground;
 }
 
-/** µ×ÅÌ×ÔÆğ×´Ì¬ÅĞ¶Ï **/
+/** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ğ¶ï¿½ **/
 static void chassis_recover_state_check(void) {
 
     if(chassis.chassis_recover_finish == false)
     {
-        // »úÌå×ËÌ¬¼ì²â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½
         if (ABS(chassis.imu_reference.pitch_rad) <= NOT_BALANCE_RAD) {
             chassis.chassis_body_state = CHASSIS_BODY_NORMAL;
         } else {
             chassis.chassis_body_state = CHASSIS_BODY_UNNORMAL;
         }
 
-        // ÅĞ¶Ïµ¹µØÊ±µÄÍÈÇã½Ç×ËÌ¬
+        // ï¿½Ğ¶Ïµï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬
         if((ABS(chassis.leg_L.state_variable_feedback.theta) <= LEG_NORMAL_RAD)
            && (ABS(chassis.leg_R.state_variable_feedback.theta) <= LEG_NORMAL_RAD))
         {
@@ -146,8 +163,8 @@ static void chassis_recover_state_check(void) {
             chassis.chassis_fall_leg_state = CHASSIS_FALL_LEG_UNNORMAL;
         }
 
-        // µ¹µØ×ÔÆğÅĞ¶Ï
-        // µ¹µØÊ±£¬Ö»ÓĞµ±ÍÈÇã½Ç´¦ÓÚÕı³£·¶Î§²ÅÔÊĞí×ÔÆğ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
+        // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ö»ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if(chassis.chassis_fall_leg_state == CHASSIS_FALL_LEG_NORMAL)
         {
             chassis.chassis_recover_state = CHASSIS_COULD_RECOVER;
@@ -160,8 +177,23 @@ static void chassis_recover_state_check(void) {
     }
 }
 
+/** ï¿½ï¿½Ø¼ï¿½ï¿½ **/
+static void chassis_off_ground(void)
+{
+    chassis_off_ground_check();
 
-/** µ×ÅÌµ¹µØ×Ô¾È **/
+    if((chassis.chassis_on_ground_state == CHASSIS_Off_Ground) && (chassis.chassis_ctrl_mode != CHASSIS_JUMP))
+    {
+        joint_K_L[0] = 0;
+        joint_K_L[1] = 0;
+        joint_K_R[0] = 0;
+        joint_K_R[1] = 0;
+    }
+}
+
+
+/** ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ô¾ï¿½ **/
+
 static void chassis_selfhelp(void)
 {
     chassis_recover_state_check();
@@ -186,16 +218,16 @@ static void chassis_selfhelp(void)
             chassis.leg_L.wheel_torque = 0;
             chassis.leg_R.wheel_torque = 0;
 
-            // ÍÈ¸´Î»
+            // ï¿½È¸ï¿½Î»
             if(chassis.imu_reference.pitch_rad < 0.0f)
             {
-                Kd = 3.0f;
-                vel = -2.0f;
+                Kd = 8.0f;
+                vel = -5.0f;
             }
             else
             {
-                Kd = 3.0f;
-                vel = 2.0f;
+                Kd = 8.0f;
+                vel = 5.0f;
             }
 
         }
@@ -210,8 +242,136 @@ static void chassis_selfhelp(void)
         chassis.chassis_recover_finish = false;
     }
 }
-
-/** »ñÈ¡µ×ÅÌ´«¸ĞÆ÷Êı¾İ **/
+///test
+// static void chassis_selfhelp(void)
+//{
+//    static uint32_t selfhelp_timer = 0;
+//    static SelfHelpState selfhelp_state = SELFHELP_IDLE;
+//
+//    chassis_recover_state_check();
+//
+//    if(chassis.chassis_recover_finish == false) {
+//        // å¦‚æœçŠ¶æ€æœºä¸ºç©ºé—²ï¼Œæ ¹æ®å€¾æ–œæ–¹å‘åˆå§‹åŒ–
+//        if(selfhelp_state == SELFHELP_IDLE) {
+//            selfhelp_state = SELFHELP_PREPARE;
+//            selfhelp_timer = xTaskGetTickCount();
+//        }
+//
+//        uint32_t current_time = xTaskGetTickCount();
+//        uint32_t elapsed_time = current_time - selfhelp_timer;
+//
+//        switch(selfhelp_state) {
+//            case SELFHELP_PREPARE:
+//                // å‡†å¤‡é˜¶æ®µï¼šæ”¶ç¼©è…¿éƒ¨
+//                chassis.chassis_ctrl_info.height_m = 0.15f;  // é€‚å½“æ”¶ç¼©
+//
+//                // ç›´æ¥è®¾ç½®å…³èŠ‚åŠ›çŸ©è¿›è¡Œæ”¶ç¼©
+//                if(chassis.imu_reference.pitch_rad < 0.0f) {
+//                    // å‘å‰å€¾æ–œ
+//                    chassis.leg_L.joint_F_torque = -30.0f;
+//                    chassis.leg_L.joint_B_torque = -30.0f;
+//                    chassis.leg_R.joint_F_torque = -30.0f;
+//                    chassis.leg_R.joint_B_torque = -30.0f;
+//                } else {
+//                    // å‘åå€¾æ–œ
+//                    chassis.leg_L.joint_F_torque = 30.0f;
+//                    chassis.leg_L.joint_B_torque = 30.0f;
+//                    chassis.leg_R.joint_F_torque = 30.0f;
+//                    chassis.leg_R.joint_B_torque = 30.0f;
+//                }
+//
+//                // å‡†å¤‡1ç§’åè¿›å…¥æŠ¬è…¿é˜¶æ®µ
+//                if(elapsed_time > 1000) {
+//                    selfhelp_state = SELFHELP_LIFT_LEG;
+//                    selfhelp_timer = current_time;
+//                }
+//                break;
+//
+//            case SELFHELP_LIFT_LEG:
+//                // æŠ¬è…¿é˜¶æ®µï¼šå¼ºåŠ›æŠ¬è…¿
+//                if(chassis.imu_reference.pitch_rad < 0.0f) {
+//                    // å‘å‰å€¾æ–œï¼šæŠ¬å‰è…¿
+//                    chassis.leg_L.joint_F_torque = 80.0f;   // å¤§åŠ›æŠ¬å‰è…¿
+//                    chassis.leg_L.joint_B_torque = -40.0f;  // åè…¿æ¨åœ°
+//                    chassis.leg_R.joint_F_torque = 80.0f;
+//                    chassis.leg_R.joint_B_torque = -40.0f;
+//                    chassis.leg_L.wheel_torque = 25.0f;     // è½®å­å‘å
+//                    chassis.leg_R.wheel_torque = 25.0f;
+//                } else {
+//                    // å‘åå€¾æ–œï¼šæŠ¬åè…¿
+//                    chassis.leg_L.joint_F_torque = -40.0f;  // å‰è…¿æ¨åœ°
+//                    chassis.leg_L.joint_B_torque = 80.0f;   // å¤§åŠ›æŠ¬åè…¿
+//                    chassis.leg_R.joint_F_torque = -40.0f;
+//                    chassis.leg_R.joint_B_torque = 80.0f;
+//                    chassis.leg_L.wheel_torque = -25.0f;    // è½®å­å‘å‰
+//                    chassis.leg_R.wheel_torque = -25.0f;
+//                }
+//
+//                // æŠ¬è…¿0.5ç§’åè¿›å…¥æ¨åœ°é˜¶æ®µ
+//                if(elapsed_time > 500) {
+//                    selfhelp_state = SELFHELP_PUSH_GROUND;
+//                    selfhelp_timer = current_time;
+//                }
+//                break;
+//
+//            case SELFHELP_PUSH_GROUND:
+//                // æ¨åœ°é˜¶æ®µï¼šå¿«é€Ÿä¼¸å±•
+//                chassis.chassis_ctrl_info.height_m = 0.3f;  // ä¼¸å±•
+//
+//                // æ–½åŠ å¾ˆå¤§çš„ä¼¸å±•åŠ›çŸ©
+//                if(chassis.imu_reference.pitch_rad < 0.0f) {
+//                    chassis.leg_L.joint_F_torque = -60.0f;  // å‰è…¿å‘ä¸‹æ¨
+//                    chassis.leg_L.joint_B_torque = 100.0f;  // åè…¿å¼ºåŠ›æ¨
+//                    chassis.leg_R.joint_F_torque = -60.0f;
+//                    chassis.leg_R.joint_B_torque = 100.0f;
+//                    chassis.leg_L.wheel_torque = 30.0f;
+//                    chassis.leg_R.wheel_torque = 30.0f;
+//                } else {
+//                    chassis.leg_L.joint_F_torque = 100.0f;  // å‰è…¿å¼ºåŠ›æ¨
+//                    chassis.leg_L.joint_B_torque = -60.0f;  // åè…¿å‘ä¸‹æ¨
+//                    chassis.leg_R.joint_F_torque = 100.0f;
+//                    chassis.leg_R.joint_B_torque = -60.0f;
+//                    chassis.leg_L.wheel_torque = -30.0f;
+//                    chassis.leg_R.wheel_torque = -30.0f;
+//                }
+//
+//                // æ¨åœ°0.3ç§’åæ£€æŸ¥
+//                if(elapsed_time > 300) {
+//                    selfhelp_state = SELFHELP_CHECK;
+//                    selfhelp_timer = current_time;
+//                }
+//                break;
+//
+//            case SELFHELP_CHECK:
+//                // æ£€æŸ¥é˜¶æ®µï¼šçŸ­æš‚ä¿æŒ
+//                if(elapsed_time > 200) {
+//                    // æ£€æŸ¥å€¾è§’æ˜¯å¦æ¢å¤
+//                    if(ABS(chassis.imu_reference.pitch_rad) <= RECOVER_RAD) {
+//                        // æ¢å¤æˆåŠŸ
+//                        selfhelp_state = SELFHELP_IDLE;
+//                        chassis.chassis_recover_finish = true;
+//
+//                        // æ¢å¤å¸¸è§„æ§åˆ¶
+//                        chassis.leg_L.joint_F_torque = 0;
+//                        chassis.leg_L.joint_B_torque = 0;
+//                        chassis.leg_R.joint_F_torque = 0;
+//                        chassis.leg_R.joint_B_torque = 0;
+//                        chassis.leg_L.wheel_torque = 0;
+//                        chassis.leg_R.wheel_torque = 0;
+//                    } else {
+//                        // æ¢å¤å¤±è´¥ï¼Œé‡æ–°å°è¯•
+//                        selfhelp_state = SELFHELP_PREPARE;
+//                        selfhelp_timer = current_time;
+//                    }
+//                }
+//                break;
+//        }
+//    } else {
+//        // è‡ªæ•‘å®Œæˆï¼Œé‡ç½®çŠ¶æ€æœº
+//        selfhelp_state = SELFHELP_IDLE;
+//    }
+//}
+/** ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 static void get_IMU_info(void) {
 
     /** Yaw **/
@@ -225,7 +385,7 @@ static void get_IMU_info(void) {
     /** Roll **/
     chassis.imu_reference.roll_rad = INS.Pitch * DEGREE_TO_RAD;
 
-    /** ¸üĞÂ¸÷Öá¼ÓËÙ¶ÈºÍ½ÇËÙ¶È **/
+    /** ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ÈºÍ½ï¿½ï¿½Ù¶ï¿½ **/
     chassis.imu_reference.pitch_gyro = -INS.Gyro[Y];
     chassis.imu_reference.yaw_gyro = -INS.Gyro[Z];
     chassis.imu_reference.roll_gyro = INS.Gyro[X];
@@ -234,11 +394,11 @@ static void get_IMU_info(void) {
     chassis.imu_reference.ay = INS.Accel[Y];
     chassis.imu_reference.az = INS.Accel[Z];
 
-    /** »úÌåÊúÖ±·½Ïò¼ÓËÙ¶È **/
+    /** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½ **/
     chassis.imu_reference.robot_az = INS.MotionAccel_n[Z];
 }
 
-/** ¸üĞÂµ×ÅÌ±äÁ¿ **/
+/** ï¿½ï¿½ï¿½Âµï¿½ï¿½Ì±ï¿½ï¿½ï¿½ **/
 static void chassis_variable_update(void) {
 
     get_IMU_info();
@@ -304,18 +464,19 @@ static void chassis_variable_update(void) {
     chassis.leg_R.state_variable_feedback.x_ddot = (chassis.leg_R.state_variable_feedback.x_dot - chassis.leg_R.state_variable_feedback.x_dot_last) / (CHASSIS_PERIOD * 0.001f);
 }
 
-/** ¼ÆËãÇı¶¯ÂÖÁ¦¾Ø **/
+/** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 
 static void wheel_calc(void)
 {
     /******************************* Wheel *************************************/
 
-    /** ¸ù¾İÍÈ³¤ºÍÈı´ÎÄâºÏÏµÊıÄâºÏ³ö·´À¡ÔöÒæK **/
+    /** ï¿½ï¿½ï¿½ï¿½ï¿½È³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ï³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½K **/
     chassis_K_matrix_fitting(chassis.leg_L.vmc.forward_kinematics.fk_L0.L0, wheel_K_L, wheel_fitting_factor);
     chassis_K_matrix_fitting(chassis.leg_R.vmc.forward_kinematics.fk_L0.L0, wheel_K_R, wheel_fitting_factor);
 
     float target_yaw_speed = pid_calc(&chassis.chassis_turn_pos_pid,
                                       gimbal_unpack_data.yaw_relative_angle * DEGREE_TO_RAD,0.0f);
+
 
     if(chassis.chassis_ctrl_mode == CHASSIS_SPIN)
     {
@@ -325,7 +486,6 @@ static void wheel_calc(void)
     chassis.wheel_turn_torque = pid_calc(&chassis.chassis_turn_speed_pid,
                                          chassis.imu_reference.yaw_gyro,
                                          target_yaw_speed);
-
 
 
     chassis.leg_L.wheel_torque =  wheel_K_L[0] * (chassis.leg_L.state_variable_feedback.theta - 0.0f)
@@ -351,20 +511,28 @@ static void wheel_calc(void)
 
 }
 
-/** ¼ÆËã¹Ø½ÚÁ¦¾Ø **/
-
+/** ï¿½ï¿½ï¿½ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 static void joint_calc(void)
 {
+
+//    if(chassis.chassis_recover_finish == false) {
+//        // åªåœ¨è‡ªæ•‘çŠ¶æ€æœºä¸­ç›´æ¥è®¾ç½®åŠ›çŸ©
+//        return;
+//    }
+
 /******************************* Joint *************************************/
 
     chassis_K_matrix_fitting(chassis.leg_L.vmc.forward_kinematics.fk_L0.L0, joint_K_L, joint_fitting_factor);
     chassis_K_matrix_fitting(chassis.leg_R.vmc.forward_kinematics.fk_L0.L0, joint_K_R, joint_fitting_factor);
 
+    /** ï¿½ï¿½Ø¼ï¿½ï¿½ **/
+    chassis_off_ground();
+
     /** Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp Tp **/
 
-    /****** ·ÀÅü²æpid ******/
+    /****** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pid ******/
     chassis.steer_compensatory_torque =  CHASSIS_LEG_COORDINATION_PID_P * (0.0f - chassis.phi0_error)
-                                         + CHASSIS_LEG_COORDINATION_PID_D * (0.0f - chassis.d_phi0_error); // ×¢ÒâÎ¢·ÖÏîÕı¸º
+                                         + CHASSIS_LEG_COORDINATION_PID_D * (0.0f - chassis.d_phi0_error); // ×¢ï¿½ï¿½Î¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     // USART_Vofa_Justfloat_Transmit(chassis.phi0_error,0,0);
     //Left
@@ -396,6 +564,186 @@ static void joint_calc(void)
     /** F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F **/
 
     /****** Leg pid ******/
+
+    if(chassis.chassis_ctrl_mode == CHASSIS_JUMP)
+    {
+        if(chassis.chassis_ctrl_info.height_m >= 0.3f)
+        {
+            pid_init(&chassis.leg_L.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_POS_PID_P_JH,
+                     CHASSIS_LEG_L0_POS_PID_I_JH,
+                     CHASSIS_LEG_L0_POS_PID_D_JH);
+
+            pid_init(&chassis.leg_R.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_POS_PID_P_JH,
+                     CHASSIS_LEG_L0_POS_PID_I_JH,
+                     CHASSIS_LEG_L0_POS_PID_D_JH);
+
+            pid_init(&chassis.leg_L.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_P_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_I_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_D_JH);
+            pid_init(&chassis.leg_R.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_P_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_I_JH,
+                     CHASSIS_LEG_L0_SPEED_PID_D_JH);
+        }
+        else if(chassis.chassis_ctrl_info.height_m >= 0.15f && chassis.chassis_ctrl_info.height_m < 0.30f)
+        {
+            pid_init(&chassis.leg_L.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_POS_PID_P_JM,
+                     CHASSIS_LEG_L0_POS_PID_I_JM,
+                     CHASSIS_LEG_L0_POS_PID_D_JM);
+            pid_init(&chassis.leg_R.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_POS_PID_P_JM,
+                     CHASSIS_LEG_L0_POS_PID_I_JM,
+                     CHASSIS_LEG_L0_POS_PID_D_JM);
+
+            pid_init(&chassis.leg_L.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_P_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_I_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_D_JM);
+            pid_init(&chassis.leg_R.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_P_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_I_JM,
+                     CHASSIS_LEG_L0_SPEED_PID_D_JM);
+        }
+        else if(chassis.chassis_ctrl_info.height_m < 0.15f)
+
+        {
+            pid_init(&chassis.leg_L.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_POS_PID_P_JL,
+                     CHASSIS_LEG_L0_POS_PID_I_JL,
+                     CHASSIS_LEG_L0_POS_PID_D_JL);
+            pid_init(&chassis.leg_R.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_POS_PID_P_JL,
+                     CHASSIS_LEG_L0_POS_PID_I_JL,
+                     CHASSIS_LEG_L0_POS_PID_D_JL);
+
+            pid_init(&chassis.leg_L.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_P_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_I_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_D_JL);
+            pid_init(&chassis.leg_R.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_P_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_I_JL,
+                     CHASSIS_LEG_L0_SPEED_PID_D_JL);
+        }
+    }
+    else{
+        if(chassis.chassis_ctrl_info.height_m >= 0.3f)
+        {
+            pid_init(&chassis.leg_L.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_H,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_H,
+                     CHASSIS_LEG_L0_POS_PID_P_H,
+                     CHASSIS_LEG_L0_POS_PID_I_H,
+                     CHASSIS_LEG_L0_POS_PID_D_H);
+
+            pid_init(&chassis.leg_R.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_H,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_H,
+                     CHASSIS_LEG_L0_POS_PID_P_H,
+                     CHASSIS_LEG_L0_POS_PID_I_H,
+                     CHASSIS_LEG_L0_POS_PID_D_H);
+
+            pid_init(&chassis.leg_L.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_H,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_H,
+                     CHASSIS_LEG_L0_SPEED_PID_P_H,
+                     CHASSIS_LEG_L0_SPEED_PID_I_H,
+                     CHASSIS_LEG_L0_SPEED_PID_D_H);
+            pid_init(&chassis.leg_R.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_H,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_H,
+                     CHASSIS_LEG_L0_SPEED_PID_P_H,
+                     CHASSIS_LEG_L0_SPEED_PID_I_H,
+                     CHASSIS_LEG_L0_SPEED_PID_D_H);
+        }
+        else if(chassis.chassis_ctrl_info.height_m >= 0.15f && chassis.chassis_ctrl_info.height_m < 0.30f)
+        {
+            pid_init(&chassis.leg_L.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_M,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_M,
+                     CHASSIS_LEG_L0_POS_PID_P_M,
+                     CHASSIS_LEG_L0_POS_PID_I_M,
+                     CHASSIS_LEG_L0_POS_PID_D_M);
+            pid_init(&chassis.leg_R.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_M,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_M,
+                     CHASSIS_LEG_L0_POS_PID_P_M,
+                     CHASSIS_LEG_L0_POS_PID_I_M,
+                     CHASSIS_LEG_L0_POS_PID_D_M);
+
+            pid_init(&chassis.leg_L.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_M,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_M,
+                     CHASSIS_LEG_L0_SPEED_PID_P_M,
+                     CHASSIS_LEG_L0_SPEED_PID_I_M,
+                     CHASSIS_LEG_L0_SPEED_PID_D_M);
+            pid_init(&chassis.leg_R.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_M,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_M,
+                     CHASSIS_LEG_L0_SPEED_PID_P_M,
+                     CHASSIS_LEG_L0_SPEED_PID_I_M,
+                     CHASSIS_LEG_L0_SPEED_PID_D_M);
+        }
+        else if(chassis.chassis_ctrl_info.height_m < 0.15f)
+
+        {
+            pid_init(&chassis.leg_L.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_L,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_L,
+                     CHASSIS_LEG_L0_POS_PID_P_L,
+                     CHASSIS_LEG_L0_POS_PID_I_L,
+                     CHASSIS_LEG_L0_POS_PID_D_L);
+            pid_init(&chassis.leg_R.leg_pos_pid,
+                     CHASSIS_LEG_L0_POS_PID_OUT_LIMIT_L,
+                     CHASSIS_LEG_L0_POS_PID_IOUT_LIMIT_L,
+                     CHASSIS_LEG_L0_POS_PID_P_L,
+                     CHASSIS_LEG_L0_POS_PID_I_L,
+                     CHASSIS_LEG_L0_POS_PID_D_L);
+
+            pid_init(&chassis.leg_L.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_L,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_L,
+                     CHASSIS_LEG_L0_SPEED_PID_P_L,
+                     CHASSIS_LEG_L0_SPEED_PID_I_L,
+                     CHASSIS_LEG_L0_SPEED_PID_D_L);
+            pid_init(&chassis.leg_R.leg_speed_pid,
+                     CHASSIS_LEG_L0_SPEED_PID_OUT_LIMIT_L,
+                     CHASSIS_LEG_L0_SPEED_PID_IOUT_LIMIT_L,
+                     CHASSIS_LEG_L0_SPEED_PID_P_L,
+                     CHASSIS_LEG_L0_SPEED_PID_I_L,
+                     CHASSIS_LEG_L0_SPEED_PID_D_L);
+        }
+    }
+
+
     float L_L0_dot_set = pid_calc(&chassis.leg_L.leg_pos_pid,
                                   chassis.leg_L.vmc.forward_kinematics.fk_L0.L0,
                                   chassis.chassis_ctrl_info.height_m);
@@ -411,11 +759,10 @@ static void joint_calc(void)
     pid_calc(&chassis.leg_R.leg_speed_pid,
              chassis.leg_R.vmc.forward_kinematics.fk_L0.L0_dot,
              R_L0_dot_set);
-
     /****** Roll pid ******/
 
     chassis.roll_f =  CHASSIS_ROLL_PID_P * (0.0f - chassis.roll_error)
-                                             + CHASSIS_ROLL_PID_D * (0.0f - chassis.d_roll_error); // ×¢ÒâÎ¢·ÖÏîÕı¸º
+                                             + CHASSIS_ROLL_PID_D * (0.0f - chassis.d_roll_error); // ×¢ï¿½ï¿½Î¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point =  0.5f * chassis_physical_config.body_weight * GRAVITY * cosf(chassis.leg_L.state_variable_feedback.theta)
                                                                          + chassis.leg_L.leg_speed_pid.out;
@@ -426,9 +773,40 @@ static void joint_calc(void)
     chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += chassis.roll_f;
     chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= chassis.roll_f;
 
+     // è·³è·ƒæ¨¡å¼ç‰¹æ®Šå¤„ç†
+    if(chassis.chassis_ctrl_mode == CHASSIS_JUMP) {
+        switch(chassis.jump_state) {
+            case STRETCHING:
+                // åœ¨å¼¹å°„é˜¶æ®µæ·»åŠ å¾ˆå¤§çš„è·³è·ƒåŠ›
+                float extra_jump_force = 650.0f; // å¾ˆå¤§çš„å¼¹å°„åŠ›//650
+//                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += 0.75f * extra_jump_force;
+                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point +=  extra_jump_force;
+                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += extra_jump_force;
+                break;
+
+            case SHRINKING_IN_AIR:
+                // åœ¨ç©ºä¸­æ”¶ç¼©é˜¶æ®µæ·»åŠ åæ¨åŠ›
+                float retract_compensation = 180.0f; // åæ¨åŠ›ï¼ŒåŠ é€Ÿè…¿éƒ¨æ”¶ç¼©
+                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= retract_compensation;
+                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= retract_compensation;
+                break;
+
+            case RECOVERING:
+                // æ¢å¤é˜¶æ®µï¼Œå¢åŠ æ¢å¤åŠ›
+                float recover_force = 100.0f; // æ¢å¤åŠ›
+                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += recover_force;
+                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += recover_force;
+                break;
+
+            default:
+                // å…¶ä»–çŠ¶æ€ä¸æ·»åŠ é¢å¤–åŠ›
+                break;
+        }
+    }
+
     /** End End End End End End End End End End End End End End End End End End End End End End End End **/
 
-    // ¼ÆËã¹Ø½Úµç»úÁ¦¾Ø
+    // ï¿½ï¿½ï¿½ï¿½Ø½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     vmc_forward_dynamics(&chassis.leg_L.vmc, &chassis_physical_config);
     vmc_forward_dynamics(&chassis.leg_R.vmc, &chassis_physical_config);
 
@@ -441,7 +819,7 @@ static void joint_calc(void)
     // USART_Vofa_Justfloat_Transmit(chassis.leg_L.joint_F_torque - chassis.leg_R.joint_F_torque
     //     , chassis.leg_L.joint_B_torque -  chassis.leg_R.joint_B_torque  ,0);
 
-    // Êä³öÏŞ·ù
+    // ï¿½ï¿½ï¿½ï¿½Ş·ï¿½
     VAL_LIMIT(chassis.leg_R.joint_F_torque, MIN_JOINT_TORQUE, MAX_JOINT_TORQUE);
     VAL_LIMIT(chassis.leg_R.joint_B_torque, MIN_JOINT_TORQUE, MAX_JOINT_TORQUE);
     VAL_LIMIT(chassis.leg_L.joint_F_torque, MIN_JOINT_TORQUE, MAX_JOINT_TORQUE);
@@ -449,18 +827,18 @@ static void joint_calc(void)
 
 }
 
-/** ¿ØÖÆÆ÷¼ÆËã **/
+/** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 static void controller_calc(void)
 {
-    /** ¸üĞÂÎåÁ¬¸Ë²ÎÊı **/
+    /** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ **/
     vmc_calc();
-    /** ËÙ¶ÈÈÚºÏ **/
+    /** ï¿½Ù¶ï¿½ï¿½Úºï¿½ **/
     speed_calc();
-    /** ¸üĞÂµ×ÅÌ±äÁ¿ **/
+    /** ï¿½ï¿½ï¿½Âµï¿½ï¿½Ì±ï¿½ï¿½ï¿½ **/
     chassis_variable_update();
-    /** ¼ÆËãÇı¶¯ÂÖÁ¦¾Ø **/
+    /** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
     wheel_calc();
-    /** ¼ÆËã¹Ø½ÚÁ¦¾Ø **/
+    /** ï¿½ï¿½ï¿½ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
     joint_calc();
 }
 
@@ -469,7 +847,7 @@ static void controller_calc(void)
  *                                  Task                                       *
  *******************************************************************************/
 
-/** µ×ÅÌÊ§ÄÜÈÎÎñ **/
+/** ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 static void chassis_disable_task() {
 
     chassis.leg_L.wheel_torque = 0;
@@ -489,23 +867,25 @@ static void chassis_disable_task() {
 
     chassis.chassis_ctrl_info.height_m = MIN_L0;
 
-    // µ×ÅÌ×´Ì¬
+    // ï¿½ï¿½ï¿½ï¿½×´Ì¬
     chassis.chassis_body_state = CHASSIS_BODY_UNNORMAL;
 
     chassis.chassis_fall_leg_state = CHASSIS_FALL_LEG_UNNORMAL;
 
     chassis.chassis_recover_state = CHASSIS_COULD_NOT_RECOVER;
 
-    /** ³õÊ¼»¯±êÖ¾Î» **/
+    /** ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ö¾Î» **/
 
-    // µ×ÅÌ³õÊ¼»¯±êÖ¾Î»
+    // ï¿½ï¿½ï¿½Ì³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ö¾Î»
     chassis.init_flag = false;
 
     chassis.chassis_recover_finish = false;
 
+    chassis.jump_flag = false;
+
 }
 
-/** µ×ÅÌ³õÊ¼»¯ÈÎÎñ **/
+/** ï¿½ï¿½ï¿½Ì³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 static void chassis_init_task()
 {
     joint_enable();
@@ -513,148 +893,120 @@ static void chassis_init_task()
     chassis.init_flag = true;
 }
 
-/** µ×ÅÌÊ¹ÄÜÈÎÎñ **/
+/** ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 static void chassis_enable_task(void)
 {
-    /** ¿ØÖÆÆ÷¼ÆËã **/
+    /** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
     controller_calc();
 
-    /** µ¹µØ×Ô¾È **/
+    /** ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾ï¿½ **/
     chassis_selfhelp();
 }
-/** ÌøÔ¾ÈÎÎñ **/
-/**
- * @brief ÌøÔ¾ÈÎÎñº¯Êı
- * ÊµÏÖ»úÆ÷ÈËµÄÌøÔ¾¹¦ÄÜ£¬°üº¬ÊÕÍÈĞîÁ¦¡¢µÅÍÈÆğÌø¡¢ÌÚ¿ÕÊÕÍÈ¡¢ÉìÍÈ½µÂä¡¢ÂäµØ»º³åÎå¸ö½×¶Î
- * ²¢ÔÚ¿ÕÖĞ½×¶ÎÊµÏÖ×ËÌ¬¿ØÖÆ
- */
+/** è·³è·ƒä»»åŠ¡ **/
 static void chassis_jump_task()
 {
-    // ¾²Ì¬±äÁ¿ÓÃÓÚ¼ÇÂ¼ÌøÔ¾×´Ì¬
-    static JumpState jump_state = NOT_READY;
-    static bool air_control_enabled = false; // ¿ÕÖĞ¿ØÖÆÊ¹ÄÜ±êÖ¾
+    static uint32_t jump_timer = 0;
 
-
-    switch(jump_state)
+    switch(chassis.jump_state)
     {
         case NOT_READY:
-            // ÊÕÍÈĞîÁ¦½×¶Î£º½«ÍÈ²¿ÊÕËõÖÁ×î¶ÌÍÈ³¤
-            chassis.chassis_ctrl_info.height_m = MIN_L0;
+            // åˆå§‹åŒ–è·³è·ƒçŠ¶æ€
+            // å…ˆå°†è…¿é•¿æ”¶åˆ°æœ€çŸ­ï¼Œä»¥è·å¾—æœ€é•¿çš„åŠ é€Ÿè·ç¦»
+            chassis.chassis_ctrl_info.height_m = 0.09685f;
+            jump_timer = 0;
 
-            // ¼ì²éÊÇ·ñ´ïµ½×î¶ÌÍÈ³¤
-            if(fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.1f &&
-               fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.1f)
+            // æ£€æŸ¥æ˜¯å¦å‡†å¤‡å¥½è·³è·ƒï¼ˆè…¿éƒ¨æ”¶ç¼©åˆ°æœ€å°ï¼‰
+            if((fabsf(chassis.leg_R.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.05f &&
+                fabsf(chassis.leg_L.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.05f) )
+                //||((xTaskGetTickCount() - jump_timer) > 1000)
             {
-                jump_state = READY;
+                chassis.jump_state = STRETCHING; // ç›´æ¥è¿›å…¥å¼¹å°„é˜¶æ®µ
+                jump_timer = xTaskGetTickCount(); // è®°å½•å¼€å§‹æ—¶é—´
             }
-            break;
 
-        case READY:
-            // µÅÍÈÆğÌø½×¶Î£ºÉèÖÃÍÈ³¤ÎªÄ¿±ê×î´óÖµ
-            chassis.chassis_ctrl_info.height_m = 0.32f; // Ê¹ÓÃ×î´óÍÈ³¤
-
-            // ¼ì²éÍÈÊÇ·ñ¿ªÊ¼ÉìÕ¹
-            if(chassis.chassis_ctrl_info.height_m > (MIN_L0 + 0.05f) ||
-               chassis.chassis_ctrl_info.height_m > (MIN_L0 + 0.05f))
-            {
-                jump_state = STRETCHING;
-            }
             break;
 
         case STRETCHING:
-            // ÌÚ¿ÕÊÕÍÈ½×¶Î£º¼ì²âµ½ÍÈÉìÕ¹ÖÁ×î³¤ºóÊÕÍÈ
-            if(chassis.chassis_ctrl_info.height_m > 0.29f ||
-               chassis.chassis_ctrl_info.height_m > 0.29f)
-            {
-                chassis.chassis_ctrl_info.height_m = MIN_L0;
-                jump_state = SHRINKING;
-                air_control_enabled = true; // ÆôÓÃ¿ÕÖĞ¿ØÖÆ
+            // å¼¹å°„é˜¶æ®µï¼Œæ–½åŠ å¼¹å°„åŠ›å¹¶æ§åˆ¶æ—¶é—´
+            // è®¾ç½®ä¼¸å±•ç›®æ ‡é«˜åº¦ï¼ˆä¾‹å¦‚æœ€å¤§ä¼¸å±•é«˜åº¦ï¼‰
+            chassis.chassis_ctrl_info.height_m = 0.38685f;
+
+            if((fabsf(chassis.leg_R.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.03f &&
+                fabsf(chassis.leg_L.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.03f) ){
+                // ||((xTaskGetTickCount() - jump_timer) > 500)
+                // å¼¹å°„åŠ›ç»“æŸåï¼Œè®¾ç½®ç›®æ ‡ä¸ºæœ€å°é•¿åº¦ï¼ˆç©ºä¸­æ”¶ç¼©ï¼‰
+                chassis.chassis_ctrl_info.height_m = 0.09685f;
+                chassis.jump_state = SHRINKING_IN_AIR;
+                jump_timer = xTaskGetTickCount();
             }
             break;
 
-        case SHRINKING:
-            // ÉìÍÈ½µÂä½×¶Î£ºÊÕÍÈÍê³ÉºóÉèÖÃÎª±ê×¼ÍÈ³¤
-            // ÔÚ¿ÕÖĞ±£³ÖÍÈ²¿×ËÌ¬´¹Ö±ÓÚµØÃæ
-            if(air_control_enabled) {
-                // Ê¹ÓÃRoll PID¿ØÖÆ±£³ÖÍÈ²¿×ËÌ¬
-                chassis.roll_error = chassis.imu_reference.roll_rad - 0.0f; // Ä¿±êRoll½Ç¶ÈÎª0
-                chassis.d_roll_error = chassis.imu_reference.roll_gyro - 0.0f; // Ä¿±êRoll½ÇËÙ¶ÈÎª0
+        case SHRINKING_IN_AIR:
+            // ç©ºä¸­æ”¶ç¼©è…¿éƒ¨é˜¶æ®µï¼Œæ–½åŠ åæ¨åŠ›
+            chassis.chassis_ctrl_info.height_m = 0.09685f;
 
-                // ¼ÆËãRoll¿ØÖÆÊä³ö
-                chassis.roll_f = CHASSIS_ROLL_PID_P * (0.0f - chassis.imu_reference.roll_rad)
-                               + CHASSIS_ROLL_PID_D * (0.0f - chassis.imu_reference.roll_gyro);
-
-                // ½«Roll¿ØÖÆÊä³öÓ¦ÓÃµ½ÍÈ²¿Ö§³ÅÁ¦
-                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += chassis.roll_f;
-                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= chassis.roll_f;
-            }
-
-            if(fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.01f &&
-               fabsf(chassis.chassis_ctrl_info.height_m - MIN_L0) < 0.01f)
-            {
-                chassis.chassis_ctrl_info.height_m = 0.22f; // ±ê×¼ÍÈ³¤
-                jump_state = LANDING;
-            }
-            break;
-
-        case LANDING:
-            // ×ÅÂ½Ç°¼ÌĞø¿ÕÖĞ×ËÌ¬¿ØÖÆ
-            if(air_control_enabled) {
-                chassis.roll_error = chassis.imu_reference.roll_rad - 0.0f;
-                chassis.d_roll_error = chassis.imu_reference.roll_gyro - 0.0f;
-
-                chassis.roll_f = CHASSIS_ROLL_PID_P * (0.0f - chassis.imu_reference.roll_rad)
-                               + CHASSIS_ROLL_PID_D * (0.0f - chassis.imu_reference.roll_gyro);
-
-                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point += chassis.roll_f;
-                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point -= chassis.roll_f;
-            }
-
-            // ¼ì²âµ½×ÅÂ½³å»÷Ê±Ôö¼ÓÍÈ²¿Ö§³ÅÁ¦
-            if(chassis.imu_reference.robot_az > 5.0f)
-            {
-                // Ôö¼Ó»º³å×ª¾Ø
-                float landing_boost = 1.5f;
-                chassis.leg_L.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point *= landing_boost;
-                chassis.leg_R.vmc.forward_kinematics.Fxy_set_point.E.Fy_set_point *= landing_boost;
-                air_control_enabled = false; // ×ÅÂ½ºó¹Ø±Õ¿ÕÖĞ¿ØÖÆ
-
-                // µ±ÏòÏÂ¼ÓËÙ¶È¼õĞ¡µ½Ò»¶¨³Ì¶ÈÊ±£¬ÈÏÎª»º³åÍê³É
-                if(fabsf(chassis.imu_reference.robot_az) < 0.5f)
+            // æ£€æŸ¥æ˜¯å¦å·²æ”¶ç¼©åˆ°æœ€å°é•¿åº¦
+            if((fabsf(chassis.leg_R.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.03f &&
+                fabsf(chassis.leg_L.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.03f) )
+            // ||
+                //               ((xTaskGetTickCount() - jump_timer) > 500)
                 {
-                    jump_state = NOT_READY;
-                    chassis.chassis_ctrl_mode = CHASSIS_ENABLE;
-                }
+                chassis.jump_state = RECOVERING;
+                jump_timer = xTaskGetTickCount();
             }
             break;
 
+        case RECOVERING:
+            // æ¢å¤åˆ°è·³è·ƒå‰çš„é«˜åº¦
+            chassis.chassis_ctrl_info.height_m = 0.25f; // è·³è·ƒå‰çš„é«˜åº¦
+
+            // æ£€æŸ¥æ˜¯å¦æ¢å¤åˆ°ç›®æ ‡é«˜åº¦
+            if((fabsf(chassis.leg_R.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.03f &&
+                fabsf(chassis.leg_L.vmc.forward_kinematics.fk_L0.L0 - chassis.chassis_ctrl_info.height_m) < 0.03f))
+            // || ((xTaskGetTickCount() - jump_timer) > 1000)
+            {
+                // å®Œæˆè·³è·ƒ
+                chassis.jump_state = JUMP_OVER;
+            }
+            break;
         default:
-            jump_state = NOT_READY;
-            air_control_enabled = false;
+            chassis.jump_state = NOT_READY;
             break;
     }
+//    chassis.jump_flag = true;
 }
 
 
 
-/** ·¢ËÍÁ¦¾ØÈÎÎñ **/
+/** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 static void send_torque_task(float joint_LF_torque, float joint_LB_torque, float joint_RF_torque, float joint_RB_torque,
                              float wheel_L_torque, float wheel_R_torque,
                              float vel, float Kd)
 {
-    set_dm8009_MIT(&joint[LF],0.0f, vel, 0, Kd,joint_LF_torque);
-    set_dm8009_MIT(&joint[LB],0.0f, vel, 0, Kd,joint_LB_torque);
-    DWT_Delay(0.0002f);
-    set_dm8009_MIT(&joint[RF],0.0f, -vel, 0, Kd,joint_RF_torque);
-    set_dm8009_MIT(&joint[RB],0.0f, -vel, 0, Kd,joint_RB_torque);
+//    // è‡ªæ•‘æ¨¡å¼ä¸‹ä½¿ç”¨ä¸åŒçš„æ§åˆ¶å‚æ•°
+//    if(chassis.chassis_recover_finish == false) {
+//        // è‡ªæ•‘æ¨¡å¼ä¸‹ï¼Œç›´æ¥ä½¿ç”¨è®¡ç®—å‡ºçš„å…³èŠ‚åŠ›çŸ©
+//        // è€Œä¸æ˜¯MITæ§åˆ¶
+//        set_dm8009_MIT(&joint[LF], 0.0f, 0.0f, 0.0f, 0.0f, joint_LF_torque);
+//        set_dm8009_MIT(&joint[LB], 0.0f, 0.0f, 0.0f, 0.0f, joint_LB_torque);
+//        DWT_Delay(0.0002f);
+//        set_dm8009_MIT(&joint[RF], 0.0f, 0.0f, 0.0f, 0.0f, joint_RF_torque);
+//        set_dm8009_MIT(&joint[RB], 0.0f, 0.0f, 0.0f, 0.0f, joint_RB_torque);
+//    } else {
+        // æ­£å¸¸æ¨¡å¼
+        set_dm8009_MIT(&joint[LF], 0.0f, vel, 0, Kd, joint_LF_torque);
+        set_dm8009_MIT(&joint[LB], 0.0f, vel, 0, Kd, joint_LB_torque);
+        DWT_Delay(0.0002f);
+        set_dm8009_MIT(&joint[RF], 0.0f, -vel, 0, Kd, joint_RF_torque);
+        set_dm8009_MIT(&joint[RB], 0.0f, -vel, 0, Kd, joint_RB_torque);
+//    }
 
     lk9025_multi_torque_set(wheel_L_torque, wheel_R_torque);
-
 }
 
 void chassis_task(void)
 {
-    /** »ñÈ¡Ò£¿ØÆ÷ĞÅÏ¢(Ä£Ê½ + Êı¾İ) **/
+    /** ï¿½ï¿½È¡Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢(Ä£Ê½ + ï¿½ï¿½ï¿½ï¿½) **/
     remote_cmd();
 
     switch (chassis.chassis_ctrl_mode)
@@ -675,7 +1027,6 @@ void chassis_task(void)
 
         case CHASSIS_ENABLE:
         case CHASSIS_SPIN:
-
         {
             chassis_enable_task();
             break;
@@ -692,7 +1043,7 @@ void chassis_task(void)
         }
     }
 //testing
-        send_torque_task(-chassis.leg_L.joint_F_torque,
+    send_torque_task(-chassis.leg_L.joint_F_torque,
                      -chassis.leg_L.joint_B_torque,
                      chassis.leg_R.joint_F_torque,
                      chassis.leg_R.joint_B_torque,
@@ -701,13 +1052,22 @@ void chassis_task(void)
                      vel,
                      Kd);
 
-    // send_torque_task(-chassis.leg_L.joint_F_torque,
-    //          -chassis.leg_L.joint_B_torque,
-    //          chassis.leg_R.joint_F_torque,
-    //          chassis.leg_R.joint_B_torque,
-    //          0,0,
-    //          vel,
-    //          Kd);
+//    send_torque_task(-chassis.leg_L.joint_F_torque,
+//                     -chassis.leg_L.joint_B_torque,
+//                     chassis.leg_R.joint_F_torque,
+//                     chassis.leg_R.joint_B_torque,
+//                      100,
+//                     100,
+//                     vel,
+//                     Kd);
+
+//     send_torque_task(5,
+//              -5,
+//              5,
+//              5,
+//              0,0,
+//              vel,
+//              Kd);
 
 
     // send_torque_task(0,
@@ -719,5 +1079,12 @@ void chassis_task(void)
     //                  0,
     //                  0);
 
+//     USART_Vofa_Justfloat_Transmit(-chassis.leg_L.wheel_torque,-chassis.leg_R.wheel_torque,0);
+//    5jump 1off2on 0not
+//    USART_Vofa_Justfloat_Transmit(-chassis.leg_L.wheel_torque ,-chassis.leg_R.wheel_torque,0);
+
+    USART_Vofa_Justfloat_Transmit((float)((int)(joint[RB].torque) * 100 + (int)(joint[RF].torque)),//4 3     4 4    26 39    -4 0       1 30
+                                  (float)((int)(joint[LB].torque) * 100 + (int)(joint[LF].torque)),//2 1    -5 4    0 26     -4/-2 4    0  1
+                                  0); // æ·»åŠ ç¼ºå¤±çš„å‚æ•°
 
 }

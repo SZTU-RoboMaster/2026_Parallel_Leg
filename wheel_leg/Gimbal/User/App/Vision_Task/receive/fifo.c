@@ -38,31 +38,31 @@
 //******************************************************************************************
 fifo_s_t *fifo_s_create(int uint_cnt)
 {
-    fifo_s_t *p_fifo = NULL;  //!< FIFO Pointer
-    char *p_base_addr = NULL; //!< Memory Base Address
+  fifo_s_t *p_fifo = NULL;  //!< FIFO Pointer
+  char *p_base_addr = NULL; //!< Memory Base Address
 
-    //! Check input parameters.
-    ASSERT(uint_cnt);
+  //! Check input parameters.
+  ASSERT(uint_cnt);
 
-    //! Allocate Memory for pointer of new FIFO Control Block
-    p_fifo = (fifo_s_t *)malloc(sizeof(fifo_s_t));
-    if (NULL == p_fifo)
-    {
-        //! Allocate Failure, exit now
-        return (NULL);
-    }
-    //! Allocate Memory for pointer of new FIFO
-    p_base_addr = malloc(uint_cnt);
-    if (NULL == p_base_addr)
-    {
-        //! Allocate Failure, exit now
-        free(p_fifo);
-        return (NULL);
-    }
-    //! Initialize General FIFO Module
-    fifo_s_init(p_fifo, p_base_addr, uint_cnt);
+  //! Allocate Memory for pointer of new FIFO Control Block
+  p_fifo = (fifo_s_t *)malloc(sizeof(fifo_s_t));
+  if (NULL == p_fifo)
+  {
+    //! Allocate Failure, exit now
+    return (NULL);
+  }
+  //! Allocate Memory for pointer of new FIFO
+  p_base_addr = malloc(uint_cnt);
+  if (NULL == p_base_addr)
+  {
+    //! Allocate Failure, exit now
+    free(p_fifo);
+    return (NULL);
+  }
+  //! Initialize General FIFO Module
+  fifo_s_init(p_fifo, p_base_addr, uint_cnt);
 
-    return (p_fifo);
+  return (p_fifo);
 }
 
 //******************************************************************************************
@@ -79,16 +79,16 @@ fifo_s_t *fifo_s_create(int uint_cnt)
 //******************************************************************************************
 void fifo_s_destroy(fifo_s_t *p_fifo)
 {
-    //! Check input parameters.
-    ASSERT(p_fifo);
-    ASSERT(p_fifo->p_start_addr);
+  //! Check input parameters.
+  ASSERT(p_fifo);
+  ASSERT(p_fifo->p_start_addr);
 
-    //! Free FIFO memory
-    free(p_fifo->p_start_addr);
-    //! Free FIFO Control Block memory
-    free(p_fifo);
+  //! Free FIFO memory
+  free(p_fifo->p_start_addr);
+  //! Free FIFO Control Block memory
+  free(p_fifo);
 
-    return; //!< Success
+  return; //!< Success
 }
 
 #endif // USE_DYNAMIC_MEMORY
@@ -663,34 +663,34 @@ int fifo_s_discard(fifo_s_t *p_fifo, int len)
 //******************************************************************************************
 fifo_t *fifo_create(char unit_size, int unit_cnt)
 {
-    fifo_t *p_fifo = NULL;    //!< FIFO Pointer
-    char *p_base_addr = NULL; //!< Memory Base Address
+  fifo_t *p_fifo = NULL;    //!< FIFO Pointer
+  char *p_base_addr = NULL; //!< Memory Base Address
 
-    //! Check input parameters.
-    ASSERT(unit_size);
-    ASSERT(unit_cnt);
+  //! Check input parameters.
+  ASSERT(unit_size);
+  ASSERT(unit_cnt);
 
-    //! Allocate Memory for pointer of new FIFO Control Block.
-    p_fifo = (fifo_t *)malloc(sizeof(fifo_t));
-    if (NULL == p_fifo)
-    {
-        //! Allocate Failure, exit now.
-        return (NULL);
-    }
+  //! Allocate Memory for pointer of new FIFO Control Block.
+  p_fifo = (fifo_t *)malloc(sizeof(fifo_t));
+  if (NULL == p_fifo)
+  {
+    //! Allocate Failure, exit now.
+    return (NULL);
+  }
 
-    //! Allocate memory for FIFO.
-    p_base_addr = malloc(unit_size * unit_cnt);
-    if (NULL == p_base_addr)
-    {
-        //! Allocate Failure, exit now.
-        free(p_fifo);
-        return (NULL);
-    }
+  //! Allocate memory for FIFO.
+  p_base_addr = malloc(unit_size * unit_cnt);
+  if (NULL == p_base_addr)
+  {
+    //! Allocate Failure, exit now.
+    free(p_fifo);
+    return (NULL);
+  }
 
-    //! Initialize General FIFO Module.
-    fifo_init(p_fifo, p_base_addr, unit_size, unit_cnt);
+  //! Initialize General FIFO Module.
+  fifo_init(p_fifo, p_base_addr, unit_size, unit_cnt);
 
-    return (p_fifo);
+  return (p_fifo);
 }
 
 //******************************************************************************************
@@ -707,16 +707,16 @@ fifo_t *fifo_create(char unit_size, int unit_cnt)
 //******************************************************************************************
 void fifo_destory(fifo_t *p_fifo)
 {
-    //! Check input parameters.
-    ASSERT(p_fifo);
-    ASSERT(p_fifo->p_start_addr);
+  //! Check input parameters.
+  ASSERT(p_fifo);
+  ASSERT(p_fifo->p_start_addr);
 
-    //! Free FIFO memory
-    free(p_fifo->p_start_addr);
-    //! Free FIFO Control Block memory.
-    free(p_fifo);
+  //! Free FIFO memory
+  free(p_fifo->p_start_addr);
+  //! Free FIFO Control Block memory.
+  free(p_fifo);
 
-    return; //!< Success
+  return; //!< Success
 }
 
 #endif // USE_DYNAMIC_MEMORY

@@ -854,13 +854,13 @@ void dynamic_color_draw()
         uiColor.fire_color = UI_CYAN_BLUE;//不开启时蓝青色
     }
 
-    if(launcher.trigger_mode == SHOOT_FAIL){
-        uiColor.shoot_color = UI_PINK; //拨盘转动,ui变黄色
-    }
-    else
-    {
-        uiColor.shoot_color = UI_CYAN_BLUE;//不转动时蓝青色
-    }
+//    if(launcher.trigger_mode == SHOOT_FAIL){
+//        uiColor.shoot_color = UI_PINK; //拨盘转动,ui变黄色
+//    }
+//    else
+//    {
+//        uiColor.shoot_color = UI_CYAN_BLUE;//不转动时蓝青色
+//    }
 
 }
 

@@ -9,7 +9,7 @@ static int float_to_uint(float x, float x_min, float x_max, int bits) {
 
 // 前后（2）、腿长（2）、右侧拨杆（1）、gimbal.init_flag（1）、一个相对角度（2）
 
-void Send_Chassis_Data(int16_t vx_channel, int16_t leg_channel, char sr, float yaw_relative_angle)
+void Send_Chassis_Data(int16_t vx_channel, int16_t leg_channel, char sr1, char sr2,float yaw_relative_angle)
 {
     /** 定义发送结构体 **/
     CAN_TxHeaderTypeDef  tx_message;
@@ -37,8 +37,8 @@ void Send_Chassis_Data(int16_t vx_channel, int16_t leg_channel, char sr, float y
     Send_data[2] = ch.data[0];
     Send_data[3] = ch.data[1];
 
-    /** 3.右拨钮 **/
-    Send_data[4] = sr;
+    /** 3.右拨杆 **/
+    Send_data[4] = sr1;
 
     /** 4.云台与底盘正方向相对角度 **/
     uint16_t yaw_relative_angle_temp = (uint16_t)float_to_uint(yaw_relative_angle, -180.0f, 180.0f, 16);
@@ -47,8 +47,8 @@ void Send_Chassis_Data(int16_t vx_channel, int16_t leg_channel, char sr, float y
     Send_data[5] = ch.data[0];
     Send_data[6] = ch.data[1];
 
-    /** 5.无效数据 **/
-    Send_data[7] = 0x00;
+    /** 5.左拨杆 **/
+    Send_data[7] = sr2;
 
     /** 获取邮箱 **/
     uint32_t can_send_mail = get_can_free_mail(&hcan2);

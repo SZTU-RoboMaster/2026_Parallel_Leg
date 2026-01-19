@@ -47,6 +47,7 @@ void lk9025_torque_set(Lk9025 *motor, float motor_torque)
 
 /** 一拖四模式 -- 多电机转矩闭环 **/
 void lk9025_multi_torque_set(float motor1_torque, float motor2_torque) {
+    WheelTxFrame.Header.StdId = 0x280;  // 多电机命令固定ID
 
     float motor1_current, motor2_current;
     motor1_current = motor1_torque / LK_TORQUE_CONSTANT;

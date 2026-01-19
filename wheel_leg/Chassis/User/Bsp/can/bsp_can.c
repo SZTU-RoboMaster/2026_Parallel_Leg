@@ -23,7 +23,6 @@ CAN_TxFrame_TypeDef JointTxFrame = {
 CAN_TxFrame_TypeDef WheelTxFrame = {
 
         .hcan = &hcan2,
-
         .Header.StdId = 0x280,
         .Header.ExtId = 0,
         .Header.IDE = CAN_ID_STD,

@@ -1,14 +1,10 @@
 #include "gimbal_task.h"
 #include "launcher.h"
-#include "protocol_balance.h"
 #include "ins_task.h"
 #include "packet.h"
 #include "cmsis_os.h"
 #include "board_communication_task.h"
 
-
-vision_t vision_data;   // 给视觉传信息
-extern robot_ctrl_info_t robot_ctrl;    // 获取视觉信息
 //todo: 图传的
 extern uint8_t control_flag;        // 通过状态判断是什么链路
 
@@ -63,10 +59,6 @@ static void Gimbal_Init(void) {
     gimbal.yaw.motor_measure.offset_ecd = YAW_OFFSET_ECD;
     gimbal.pitch.motor_measure.offset_ecd = PITCH_OFFSET_ECD;
 
-    /** 将PID状态变量误差置0（期望 = 误差），防止电机疯转 **/
-    gimbal.yaw.absolute_angle_set = gimbal.pitch.absolute_angle_get;
-    gimbal.pitch.absolute_angle_set = gimbal.pitch.absolute_angle_get;
-
     /** 低通滤波初始化 **/
     // 鼠标输入滤波
     first_order_filter_init(&gimbal.mouse_in_x, 1, 40);
@@ -80,6 +72,66 @@ static void Gimbal_Init(void) {
     first_order_filter_init(&gimbal.auto_pitch, 1, 15);
     first_order_filter_init(&gimbal.auto_yaw[0], 1, 15);
     first_order_filter_init(&gimbal.auto_yaw[1], 1, 15);
+
+    /** 发射机构初始化 **/
+    Launcher_Init();
+
+}
+
+/** 云台根据遥控器设置模式 **/
+void Gimbal_Mode_Set(void)
+{
+    // 1 失能模式
+    if (switch_is_down(rc_ctrl.rc.s[RC_s_R]))
+    {
+        gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+        gimbal.gimbal_ctrl_mode = GIMBAL_DISABLE;
+    }
+    // 2 使能模式
+    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R]))
+    {
+        gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+        gimbal.gimbal_ctrl_mode = GIMBAL_ENABLE;
+
+        // 3 自瞄模式（先进使能模式才有机会进入自瞄模式）
+
+        // 遥控器进入自瞄模式的逻辑：只有当上下拨「拨轮」，同时视觉锁到了目标时，才会进入自瞄模式，否则保持正常使能模式
+        bool Auto_Mode_Remote_Logic = ((rc_ctrl.rc.ch[4] > 300) || (rc_ctrl.rc.ch[4] < -300))
+                                      && (robot_ctrl.target_lock == 0x31);
+
+        if (Auto_Mode_Remote_Logic)
+        {
+            gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
+            gimbal.gimbal_ctrl_mode = GIMBAL_AUTO;
+        }
+    }
+}
+
+/** 云台接收遥控器信息 **/
+void Gimbal_Ctrl_Info_Set(void)
+{
+    /** pitch **/
+    //在pit期望值上,按遥控器或者鼠标进行增减
+    gimbal.pitch.absolute_angle_set += (float)rc_ctrl.rc.ch[GIMBAL_PITCH_CHANNEL] * RC_TO_PITCH + (float)gimbal.mouse_in_y.out * MOUSE_Y_RADIO;  // rc_ctrl.mouse.y
+
+    //限幅
+    gimbal.pitch.absolute_angle_set = fp32_constrain(gimbal.pitch.absolute_angle_set,
+                                                     MIN_ABS_ANGLE,
+                                                     MAX_ABS_ANGLE);
+
+    /** yaw **/
+    //在yaw期望值上,按遥控器或者鼠标进行增减
+    gimbal.yaw.absolute_angle_set -= (float)rc_ctrl.rc.ch[GIMBAL_YAW_CHANNEL] * RC_TO_YAW + (float)gimbal.mouse_in_x.out * MOUSE_X_RADIO;    // rc_ctrl.mouse.x
+
+    // 圈数检测
+    if (gimbal.yaw.absolute_angle_set >= 180)
+    {
+        gimbal.yaw.absolute_angle_set -= 360;
+    }
+    else if (gimbal.yaw.absolute_angle_set <= -180)
+    {
+        gimbal.yaw.absolute_angle_set += 360;
+    }
 
 }
 
@@ -112,11 +164,19 @@ static void Gimbal_Send_Chassis_Data(void) {
 
     static int count = 1;
 
+    int16_t chassis_leg_channel = rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL];
+
     if(count % 2 == 1) // 奇数发，偶数不发，实现500Hz
     {
+        // 调试发射机构用，右边拨杆在上时不再变腿长，也不再小陀螺
+        if(switch_is_up(rc_ctrl.rc.s[RC_s_R]))
+        {
+            chassis_leg_channel = 0;
+        }
+
         Send_Chassis_Data(rc_ctrl.rc.ch[CHASSIS_VX_CHANNEL],
-                          rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL],
-                          rc_ctrl.rc.s[RC_s_R],
+                          chassis_leg_channel,
+                          rc_ctrl.rc.s[RC_s_R],rc_ctrl.rc.s[RC_s_L],
                           gimbal.yaw.relative_angle_get);
     }
 
@@ -125,7 +185,7 @@ static void Gimbal_Send_Chassis_Data(void) {
 }
 
 /** 云台控制器计算 **/
-static void Gimbal_Controller_Calc(void)
+static void Gimbal_Control(void)
 {
     float yaw_gyro_set;
     float pitch_gyro_set;
@@ -137,11 +197,11 @@ static void Gimbal_Controller_Calc(void)
                             180,
                             -180);
 
-    // 期望角速度滤波
+    // 反馈角速度滤波
     first_order_filter_cali(&gimbal.yaw_gyro_filter, gimbal.yaw.gyro);
 
     gimbal.yaw.target_current = (int16_t)pid_calc(&gimbal.yaw.speed_pid,
-                                                  gimbal.yaw_gyro_filter.out,//gimbal.yaw.motor_measure->speed_rpm,
+                                                  gimbal.yaw_gyro_filter.out,
                                                   yaw_gyro_set);
 
     /** Pitch **/
@@ -149,12 +209,81 @@ static void Gimbal_Controller_Calc(void)
                         gimbal.pitch.absolute_angle_get,
                         gimbal.pitch.absolute_angle_set);
 
-    // 期望角速度滤波
+    // 反馈角速度滤波
     first_order_filter_cali(&gimbal.pitch_gyro_filter,gimbal.pitch.gyro);
 
-    gimbal.pitch.target_current = -(int16_t)pid_calc(&gimbal.pitch.speed_pid,
-                                                    gimbal.pitch_gyro_filter.out,
-                                                     pitch_gyro_set);
+    gimbal.pitch.target_current = (int16_t)(-pid_calc(&gimbal.pitch.speed_pid,
+                                                      gimbal.pitch_gyro_filter.out,
+                                                      pitch_gyro_set));
+
+}
+
+/*************************************************************************************************
+ *                                          Vision                                               *
+ *************************************************************************************************/
+
+// 单片机向小电脑发送数据
+static void Robot_Send_Vision_Data(void)
+{
+    // 107:蓝 7:红
+    if (Referee.GameRobotStat.robot_id < 10)
+    {
+        vision_data.id = 107;
+    }
+    else
+    {
+        vision_data.id = 7;
+    }
+
+
+    /* 给视觉发开启自瞄 */
+    if (gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
+    {
+        if(rc_ctrl.rc.ch[4] > 300)
+        {
+            vision_data.mode = 0x21; // 单发
+        }
+        else if(rc_ctrl.rc.ch[4] < -300)
+        {
+            vision_data.mode = 0x23; // 连发
+        }
+
+
+    }
+    else
+    {
+        vision_data.mode = 0;
+    }
+
+    vision_data.pitch = gimbal.pitch.absolute_angle_get;
+    vision_data.yaw   = gimbal.yaw.absolute_angle_get;
+
+    // 发送四元数，用于视觉建立坐标系
+    for (int i = 0; i < 4; ++i)
+    {
+        vision_data.quaternion[i] = INS_quat[i];
+    }
+
+    // 当前射速
+    vision_data.shoot_speed = Referee.ShootData.bullet_speed;
+
+    rm_queue_data(VISION_ID, &vision_data, sizeof(vision_t));
+}
+
+// 接收视觉传输的数据
+static void Gimbal_Auto_Handle(void)
+{
+    if(gimbal.gimbal_ctrl_mode == GIMBAL_AUTO)
+    {
+        // 对视觉传来的角度进行滤波
+        first_order_filter_cali(&gimbal.auto_pitch, robot_ctrl.pitch);
+        first_order_filter_cali(&gimbal.auto_yaw[0], sinf(robot_ctrl.yaw / 180.0f * PI)); //yaw数据分解成x
+        first_order_filter_cali(&gimbal.auto_yaw[1], cosf(robot_ctrl.yaw / 180.0f * PI)); //yaw数据分解成y
+
+        gimbal.yaw.absolute_angle_set = atan2f(gimbal.auto_yaw[0].out, gimbal.auto_yaw[1].out) * 180.0f / PI; // 合成
+
+        gimbal.pitch.absolute_angle_set = gimbal.auto_pitch.out;
+    }
 }
 
 /*************************************************************************************************
@@ -163,18 +292,29 @@ static void Gimbal_Controller_Calc(void)
 
 static void Gimbal_Disable_Task(void)
 {
+    /** 云台电流置零 **/
     gimbal.pitch.target_current = 0;
     gimbal.yaw.target_current = 0;
+
+    /** 初始化云台模式 **/
+    gimbal.gimbal_ctrl_mode = gimbal.gimbal_last_ctrl_mode = GIMBAL_DISABLE;
 
     /** 避免PID误差过大，电机疯转 **/
     gimbal.pitch.absolute_angle_set = gimbal.pitch.absolute_angle_get;
     gimbal.yaw.absolute_angle_set = gimbal.yaw.absolute_angle_get;
 
+    /** 发射机构失能子任务 **/
+    Launcher_Disable();
+
 }
 
 static void Gimbal_Enable_Task(void)
 {
-    Gimbal_Controller_Calc();
+    /** Pitch、Yaw控制 **/
+    Gimbal_Control();
+
+    /** 发射机构控制 **/
+    Launcher_Control();
 }
 
 void Gimbal_task(void const*pvParameters) {
@@ -187,7 +327,7 @@ void Gimbal_task(void const*pvParameters) {
 
     while(1) {
 
-        // 根据遥控器设置模式、控制信息
+        // 根据遥控器设置云台、发射机构的模式、控制信息
         Gimbal_Remote_Cmd();
 
         // 更新云台角度
@@ -196,16 +336,27 @@ void Gimbal_task(void const*pvParameters) {
         // 板间通信
         Gimbal_Send_Chassis_Data();
 
+        // 单片机向视觉发送数据
+        Robot_Send_Vision_Data();
+
         switch(gimbal.gimbal_ctrl_mode)
         {
             case GIMBAL_DISABLE:
             {
                 Gimbal_Disable_Task();
+
                 break;
             }
 
             case GIMBAL_ENABLE:
             {
+                Gimbal_Enable_Task();
+                break;
+            }
+
+            case GIMBAL_AUTO:
+            {
+                Gimbal_Auto_Handle();
                 Gimbal_Enable_Task();
                 break;
             }
@@ -219,9 +370,9 @@ void Gimbal_task(void const*pvParameters) {
         // 发射机构
         DJI_Send_Motor_Mapping(CAN_1,
                                CAN_DJI_MOTOR_0x200_ID,
-                               0,    //201 左摩擦轮
-                               0,    //202 右摩擦轮
-                               0,    //203 拨盘
+                               launcher.fire_l.target_current,    //201 左摩擦轮
+                               launcher.fire_r.target_current,    //202 右摩擦轮
+                               launcher.trigger.target_current,    //203 拨盘
                                0     // 204 无
         );
 
@@ -233,6 +384,25 @@ void Gimbal_task(void const*pvParameters) {
                                0,     //207 无
                                0      //208 无
         );
+
+//        // 发射机构
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x200_ID,
+//                               0,    //201 左摩擦轮
+//                               0,    //202 右摩擦轮
+//                               0,    //203 拨盘
+//                               0     // 204 无
+//        );
+//
+//        // 云台
+//        DJI_Send_Motor_Mapping(CAN_1,
+//                               CAN_DJI_MOTOR_0x1FF_ID,
+//                               0,     //205 无
+//                               0,     //206 pitch
+//                               0,     //207 无
+//                               0      //208 无
+//        );
+
 
 
 

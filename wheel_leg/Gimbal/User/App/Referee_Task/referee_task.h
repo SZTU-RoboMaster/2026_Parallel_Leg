@@ -1,7 +1,3 @@
-//
-// Created by xhuanc on 2021/10/23.
-//
-
 #ifndef DEMO1_REFEREE_H
 #define DEMO1_REFEREE_H
 

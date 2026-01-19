@@ -18,9 +18,10 @@
 #include "remote.h"
 #include "key_board.h"
 #include "robot_def.h"
+#include "launcher.h"
+#include "gimbal_task.h"
 
 #define RC_CHANNAL_ERROR_VALUE 700
-
 
 extern UART_HandleTypeDef huart3;
 extern DMA_HandleTypeDef hdma_usart3_rx;
@@ -225,65 +226,21 @@ void USART3_IRQHandler(void)
             {
                 //处理遥控器数据
                 sbus_to_rc(sbus_rx_buf[1], &rc_ctrl);
-                //记录数据接收时间
-//                detect_hook(DBUS_TOE);
-//                sbus_to_usart1(sbus_rx_buf[1]);
             }
         }
     }
 }
 
-
 /****************************************************************************************
  *                                         remote                                       *
  ****************************************************************************************/
-
-/** 云台根据遥控器设置模式 **/
-static void Gimbal_Mode_Set(void)
-{
-    if (switch_is_down(rc_ctrl.rc.s[RC_s_R])) { // 失能
-            gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
-            gimbal.gimbal_ctrl_mode = GIMBAL_DISABLE;
-    }
-    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R])) { // 使能
-        gimbal.gimbal_last_ctrl_mode = gimbal.gimbal_ctrl_mode;
-        gimbal.gimbal_ctrl_mode = GIMBAL_ENABLE;
-    }
-
-}
-
-/** 云台接收遥控器信息 **/
-static void Gimbal_Ctrl_Info_Set(void)
-{
-    /** pitch **/
-    //在pit期望值上,按遥控器或者鼠标进行增减
-    gimbal.pitch.absolute_angle_set += (float)rc_ctrl.rc.ch[GIMBAL_PITCH_CHANNEL] * RC_TO_PITCH + (float)gimbal.mouse_in_y.out * MOUSE_Y_RADIO;  // rc_ctrl.mouse.y
-
-    //限幅
-    gimbal.pitch.absolute_angle_set = fp32_constrain(gimbal.pitch.absolute_angle_set,
-                                                     MIN_ABS_ANGLE,
-                                                     MAX_ABS_ANGLE);
-
-    /** yaw **/
-    //在yaw期望值上,按遥控器或者鼠标进行增减
-    gimbal.yaw.absolute_angle_set -= (float)rc_ctrl.rc.ch[GIMBAL_YAW_CHANNEL] * RC_TO_YAW + (float)gimbal.mouse_in_x.out * MOUSE_X_RADIO;    // rc_ctrl.mouse.x
-
-    // 圈数检测
-    if (gimbal.yaw.absolute_angle_set >= 180)
-    {
-        gimbal.yaw.absolute_angle_set -= 360;
-    }
-    else if (gimbal.yaw.absolute_angle_set <= -180)
-    {
-        gimbal.yaw.absolute_angle_set += 360;
-    }
-
-}
-
 void Gimbal_Remote_Cmd(void)
 {
     /** 云台根据遥控器设置模式 **/
     Gimbal_Mode_Set();
+
+    /** 发射机构根据遥控器设置模式 **/
+    Launcher_Mode_Set();
 
     /** 云台接收遥控器信息 **/
     Gimbal_Ctrl_Info_Set();

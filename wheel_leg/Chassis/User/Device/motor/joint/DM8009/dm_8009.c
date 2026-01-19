@@ -122,9 +122,18 @@ void set_dm8009_MIT(Dm8009* motor,
 /** 关节电机反馈解析 **/
 void dm8009_info_update(Dm8009* motor, uint8_t data[])
 {
-    int pos_int = (data[1] << 8) | data[2];
-    int speed_int = (data[3] << 4) | (data[4] >> 4);
-    int torque_int = (data[4] & 0xF) << 8 | data[5];
+    uint8_t motor_id = data[0] & 0x0F;     // 低4位是ID
+    uint8_t err_code = (data[0] >> 4) & 0x0F;  // 高4位是ERR
+
+    motor->error_code = err_code;
+    motor->id = motor_id;
+
+    // 位置解析：16位有符号
+    int16_t pos_int = (data[1] << 8) | data[2];
+    // 速度解析：12位有符号
+    int16_t speed_int = (data[3] << 4) | ((data[4] >> 4) & 0x0F);
+    // 扭矩解析：12位有符号
+    int16_t torque_int = ((data[4] & 0x0F) << 8) | data[5];
 
     motor->pos_r = uint_to_float(pos_int, DM8009_P_MIN, DM8009_P_MAX, 16);
     motor->angular_vel = uint_to_float(speed_int, DM8009_V_MIN, DM8009_V_MAX, 12);

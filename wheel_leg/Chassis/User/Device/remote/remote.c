@@ -130,6 +130,7 @@ uint8_t RC_data_is_error(void)
     rc_ctrl.rc.ch[4] = 0;
     rc_ctrl.rc.s[0] = RC_SW_DOWN;
     rc_ctrl.rc.s[1] = RC_SW_DOWN;
+    rc_ctrl.rc.s[2] = RC_SW_DOWN;
     rc_ctrl.mouse.x = 0;
     rc_ctrl.mouse.y = 0;
     rc_ctrl.mouse.z = 0;
@@ -297,30 +298,31 @@ static void set_chassis_ctrl_info() {
     rc_ctrl.rc.ch[CHASSIS_VX_CHANNEL] = gimbal_unpack_data.vx_channel.value;
 
     float vel_temp = (float) (rc_ctrl.rc.ch[CHASSIS_VX_CHANNEL]) * RC_TO_VX;
-    slope_following(&vel_temp,&chassis.chassis_ctrl_info.v_m_per_s,0.02f);
+    slope_following(&vel_temp,&chassis.chassis_ctrl_info.v_m_per_s,0.015f);//0.02
 
 
     /** 期望腿长 **/
     rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] = gimbal_unpack_data.leg_channel.value;
 
-//     if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == -660)
-//     {
-//         chassis.chassis_ctrl_info.height_m = 0.12f;
-//     }
-//     else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == 660)
-//     {
-//         chassis.chassis_ctrl_info.height_m = 0.32f;
-//     }
-//     else
-//     {
-//         chassis.chassis_ctrl_info.height_m = 0.18f;
-//
-//         if(!chassis.chassis_recover_finish)
-//         {
-//             chassis.chassis_ctrl_info.height_m = MIN_L0;
-//         }
-//     }
-//
+     if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == -660)
+     {
+         chassis.chassis_ctrl_info.height_m = 0.09685f;
+     }
+     else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] == 660)
+     {
+//         chassis.chassis_ctrl_info.height_m = 0.38685f;
+         chassis.chassis_ctrl_info.height_m = 0.28685f;
+     }
+     else
+     {
+         chassis.chassis_ctrl_info.height_m = 0.1f;
+
+         if(!chassis.chassis_recover_finish)
+         {
+             chassis.chassis_ctrl_info.height_m = MIN_L0;
+         }
+     }
+
 //     chassis.chassis_ctrl_info.height_m = 0.165f / 660 * rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] +0.22f;
 //         if(!chassis.chassis_recover_finish)
 //         {
@@ -330,71 +332,81 @@ static void set_chassis_ctrl_info() {
     // USART_Vofa_Justfloat_Transmit(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL],chassis.chassis_ctrl_info.height_m,0);
 
 //testing
-
-    if(!chassis.chassis_recover_finish)
-    {
-        chassis.chassis_ctrl_info.height_m = MIN_L0;
-    }
-
-    if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] >= -660 && rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] <= -300)
-    {
-        chassis.chassis_ctrl_info.height_m -= 0.005f;
-    }
-    else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] <= 660 && rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] >= 300)
-    {
-        chassis.chassis_ctrl_info.height_m += 0.005f;
-    }
-
-    //limit
-    if(chassis.chassis_ctrl_info.height_m <= 0.1f)
-    {
-        chassis.chassis_ctrl_info.height_m = 0.1f;
-    }
-    if(chassis.chassis_ctrl_info.height_m >= 0.32f)
-     {
-        chassis.chassis_ctrl_info.height_m = 0.32f;
-    }
-
-
-     USART_Vofa_Justfloat_Transmit(chassis.chassis_ctrl_info.height_m,0,0);
+//    if(!chassis.chassis_recover_finish)
+//    {
+//        chassis.chassis_ctrl_info.height_m = MIN_L0;
+//    }
+//
+//
+//    if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] >= -660 && rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] <= -300)
+//    {
+//        chassis.chassis_ctrl_info.height_m -= 0.003f;
+//    }
+//    else if(rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] <= 660 && rc_ctrl.rc.ch[CHASSIS_LEG_CHANNEL] >= 300)
+//    {
+//        chassis.chassis_ctrl_info.height_m += 0.003f;
+//    }
+//
+//
+//    //limit
+//    if(chassis.chassis_ctrl_info.height_m <= 0.09685f)
+//    {
+//        chassis.chassis_ctrl_info.height_m = 0.09685f;
+//    }
+//    if(chassis.chassis_ctrl_info.height_m >= 0.38685f)
+//     {
+//        chassis.chassis_ctrl_info.height_m = 0.38685f;
+//    }
 }
 
 /** 底盘根据遥控器设置模式 **/
 static void set_chassis_mode() {
 
     /** 从板间通信获取 **/
-    rc_ctrl.rc.s[RC_s_R] = gimbal_unpack_data.sr;
+    rc_ctrl.rc.s[RC_s_R] = gimbal_unpack_data.sr1;
+    rc_ctrl.rc.s[RC_s_L] = gimbal_unpack_data.sr2;
 
     if (switch_is_down(rc_ctrl.rc.s[RC_s_R])) { // 失能
         chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
         chassis.chassis_ctrl_mode = CHASSIS_DISABLE;
     }
-    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R]) && (chassis.init_flag == false)) { // 初始化模式
-        chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
-        chassis.chassis_ctrl_mode = CHASSIS_INIT;
-    }
-    else if (switch_is_mid(rc_ctrl.rc.s[RC_s_R]) && (chassis.init_flag == true)) { // 使能
-        chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
-        chassis.chassis_ctrl_mode = CHASSIS_ENABLE;
-    }
-    // else if(switch_is_up(rc_ctrl.rc.s[RC_s_R]))
-    // {
-    //     chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
-    //     chassis.chassis_ctrl_mode = CHASSIS_SPIN;
-    // }
-    else if(switch_is_up(rc_ctrl.rc.s[RC_s_R]))
+    else if(switch_is_mid(rc_ctrl.rc.s[RC_s_R]) )
     {
-        chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
-        chassis.chassis_ctrl_mode = CHASSIS_SPIN;
+        if (chassis.init_flag == false)// 初始化模式
+        {
+            chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
+            chassis.chassis_ctrl_mode = CHASSIS_INIT;//5
+        }
+        else if(chassis.init_flag == true)// 使能
+        {
+            chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
+            chassis.chassis_ctrl_mode = CHASSIS_ENABLE;//3
+        }
     }
-
+    else if(switch_is_mid(rc_ctrl.rc.s[RC_s_L])&&switch_is_up(rc_ctrl.rc.s[RC_s_R]))
+     {
+         chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
+         chassis.chassis_ctrl_mode = CHASSIS_SPIN;
+     }
+    else if(switch_is_up(rc_ctrl.rc.s[RC_s_R]) &&
+            switch_is_down(rc_ctrl.rc.s[RC_s_L])) {
+//        if (chassis.jump_flag == false)
+//        {
+            chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
+            chassis.chassis_ctrl_mode = CHASSIS_JUMP;//5
+//        }
+//        else if(chassis.jump_flag == true)// 使能
+//        {
+//            chassis.chassis_last_ctrl_mode = chassis.chassis_ctrl_mode;
+//            chassis.chassis_ctrl_mode = CHASSIS_ENABLE;//3
+//        }
+    }
+//    USART_Vofa_Justfloat_Transmit(chassis.chassis_ctrl_mode,0,0);
 }
 
 
 void remote_cmd(void)
 {
     set_chassis_mode();
-
     set_chassis_ctrl_info();
-
 }

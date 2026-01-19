@@ -209,7 +209,7 @@ void vmc_forward_dynamics(VMC *vmc, const ChassisPhysicalConfig *physical_config
 static void vmc_inverse_kinematics(VMC *vmc,
                                    float w1,
                                    float w4,
-                                   ChassisPhysicalConfig *chassis_physical_config) {
+                                   const ChassisPhysicalConfig *chassis_physical_config) {
     if (vmc == NULL) {
         return;
     }
@@ -245,7 +245,7 @@ static void vmc_inverse_kinematics(VMC *vmc,
 static void vmc_inverse_dynamics(VMC *vmc,
                                  float T1, // phi1
                                  float T4, // phi4
-                                 ChassisPhysicalConfig *chassis_physical_config) {
+                                 const ChassisPhysicalConfig *chassis_physical_config) {
     if (vmc == NULL) {
         return;
     }
@@ -275,7 +275,7 @@ static void vmc_inverse_dynamics(VMC *vmc,
 }
 
 // 计算竖直方向支持力
-static void fn_cal(Leg *leg, float body_az, ChassisPhysicalConfig *chassis_physical_config) {
+static void fn_cal(Leg *leg, float body_az, const ChassisPhysicalConfig *chassis_physical_config) {
 
     if (leg == NULL) {
         return;
@@ -297,7 +297,27 @@ static void fn_cal(Leg *leg, float body_az, ChassisPhysicalConfig *chassis_physi
     leg->Fn = P + chassis_physical_config->wheel_weight * (GRAVITY + wheel_az);
 
 }
+/** 逆解算计算腿部支撑力 **/
+void calculate_f(void)
+{
+    // 计算左腿支撑力
+    vmc_inverse_kinematics(&chassis.leg_L.vmc,joint[LF].angular_vel,joint[LB].angular_vel,&chassis_physical_config);
+    vmc_inverse_dynamics(&chassis.leg_L.vmc,
+                         chassis.leg_L.vmc.forward_kinematics.fk_phi.phi1,
+                         chassis.leg_L.vmc.forward_kinematics.fk_phi.phi4,
+                         &chassis_physical_config);
 
+    fn_cal(&chassis.leg_L, chassis.imu_reference.robot_az, &chassis_physical_config);
+
+    // 计算右腿支撑力
+    vmc_inverse_kinematics(&chassis.leg_R.vmc,joint[RF].angular_vel,joint[RB].angular_vel,&chassis_physical_config);
+    vmc_inverse_dynamics(&chassis.leg_R.vmc,
+                         chassis.leg_R.vmc.forward_kinematics.fk_phi.phi1,
+                         chassis.leg_R.vmc.forward_kinematics.fk_phi.phi4,
+                         &chassis_physical_config);
+
+    fn_cal(&chassis.leg_R, chassis.imu_reference.robot_az, &chassis_physical_config);
+}
 /*******************************************************************************
  *                                     VMC                                     *
  *******************************************************************************/

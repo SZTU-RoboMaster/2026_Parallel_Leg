@@ -39,14 +39,14 @@ void Gimbal_Data_Unpack(const uint8_t *rx_data) {
     gimbal_unpack_data.leg_channel.data[0] = rx_data[2];
     gimbal_unpack_data.leg_channel.data[1] = rx_data[3];
 
-    /** 解析右拨钮 **/
-    gimbal_unpack_data.sr = rx_data[4];
+    /** 解析右左拨钮 **/
+    gimbal_unpack_data.sr1 = rx_data[4];
+    gimbal_unpack_data.sr2 = rx_data[7];
 
     /** 解析yaw与底盘正方向相对角度 **/
     int16_t yaw_relative_angle_int = (int16_t)((rx_data[6] << 8) | rx_data[5]);
     uint16_t yaw_relative_angle_uint = (uint16_t)yaw_relative_angle_int;
     gimbal_unpack_data.yaw_relative_angle = uint_to_float(yaw_relative_angle_uint, -180.0f, 180.0f, 16);
-
 
 }
 

@@ -14,7 +14,7 @@ typedef struct
     union I16 vx_channel; // 前后
     union I16 leg_channel; // 腿长
 
-    char sr;
+    char sr1,sr2;//右 左
 
     float yaw_relative_angle; // yaw与底盘正方向的相对角度
 

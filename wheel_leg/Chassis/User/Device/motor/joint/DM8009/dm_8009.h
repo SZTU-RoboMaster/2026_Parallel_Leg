@@ -34,7 +34,7 @@
 #define DM8009_T_MAX 50.0f
 
 typedef struct{
-    uint32_t id;
+
     /** 绝对位置 **/
     float pos_r;
 
@@ -43,6 +43,10 @@ typedef struct{
 
     /** 关节电机反馈力矩 **/
     float torque;
+
+    uint8_t error_code;
+    uint32_t id;
+
 } Dm8009;
 
 /** 初始化电机ID **/

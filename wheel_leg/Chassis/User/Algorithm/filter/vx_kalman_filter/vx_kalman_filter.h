@@ -3,10 +3,10 @@
 
 #include "kalman_filter.h"
 
-#define VEL_PROCESS_NOISE 20.0f   // 速度过程噪声 20
-#define ACC_PROCESS_NOISE 100.0f  // 加速度过程噪声 100
+#define VEL_PROCESS_NOISE 10.0f   // 速度过程噪声 20
+#define ACC_PROCESS_NOISE 50.0f  // 加速度过程噪声 100
 
-#define VEL_MEASURE_NOISE 100.0f  // 速度测量噪声 100
+#define VEL_MEASURE_NOISE 210.0f  // 速度测量噪声 100
 #define ACC_MEASURE_NOISE 0.01f  // 加速度测量噪声 0.01
 
 void xvEstimateKF_Init(KalmanFilter_t *EstimateKF);

@@ -14,6 +14,7 @@
 #include "controller.h"
 #include "QuaternionEKF.h"
 #include "bsp_PWM.h"
+#include "vofa.h"
 
 INS_t INS;
 IMU_Param_t IMU_Param;
@@ -38,6 +39,7 @@ void INS_Init(void)
     IMU_Param.Yaw = 0;
     IMU_Param.Pitch = 0;
     IMU_Param.Roll = 0;
+
     IMU_Param.flag = 1;
 
     IMU_QuaternionEKF_Init(10, 0.001, 10000000, 1, 0);
@@ -46,6 +48,7 @@ void INS_Init(void)
     HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
 
     INS.AccelLPF = 0.0085;
+
 }
 
 void INS_Task(void)
@@ -67,33 +70,26 @@ void INS_Task(void)
         INS.Gyro[Y] = BMI088.Gyro[Y];
         INS.Gyro[Z] = BMI088.Gyro[Z];
 
-        // demo function,用于修正安装误差,可以不管,本demo暂时没用
-        IMU_Param_Correction(&IMU_Param, INS.Gyro, INS.Accel);
-
-        // 计算重力加速度矢量和b系的XY两轴的夹角,可用作功能扩展,本demo暂时没用
-        INS.atanxz = -atan2f(INS.Accel[X], INS.Accel[Z]) * 180 / PI;
-        INS.atanyz = atan2f(INS.Accel[Y], INS.Accel[Z]) * 180 / PI;
-
-        // 核心函数,EKF更新四元数
+        // 锟斤拷锟侥猴拷锟斤拷,EKF锟斤拷锟斤拷锟斤拷元锟斤拷
         IMU_QuaternionEKF_Update(INS.Gyro[X], INS.Gyro[Y], INS.Gyro[Z], INS.Accel[X], INS.Accel[Y], INS.Accel[Z], dt);
 
         memcpy(INS.q, QEKF_INS.q, sizeof(QEKF_INS.q));
 
-        // 机体系基向量转换到导航坐标系，本例选取惯性系为导航系
+        // 锟斤拷锟斤拷系锟斤拷锟斤拷锟斤拷转锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷系锟斤拷锟斤拷锟斤拷选取锟斤拷锟斤拷系为锟斤拷锟斤拷系
         BodyFrameToEarthFrame(xb, INS.xn, INS.q);
         BodyFrameToEarthFrame(yb, INS.yn, INS.q);
         BodyFrameToEarthFrame(zb, INS.zn, INS.q);
 
-        // 将重力从导航坐标系n转换到机体系b,随后根据加速度计数据计算运动加速度
+        // 锟斤拷锟斤拷锟斤拷锟接碉拷锟斤拷锟斤拷锟斤拷系n转锟斤拷锟斤拷锟斤拷锟斤拷系b,锟斤拷锟斤拷锟捷硷拷锟劫度硷拷锟斤拷锟捷硷拷锟斤拷锟剿讹拷锟斤拷锟劫讹拷
         float gravity_b[3];
         EarthFrameToBodyFrame(gravity, gravity_b, INS.q);
-        for (uint8_t i = 0; i < 3; i++) // 同样过一个低通滤波
+        for (uint8_t i = 0; i < 3; i++) // 同锟斤拷锟斤拷一锟斤拷锟斤拷通锟剿诧拷
         {
             INS.MotionAccel_b[i] = (INS.Accel[i] - gravity_b[i]) * dt / (INS.AccelLPF + dt) + INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + dt);
         }
-        BodyFrameToEarthFrame(INS.MotionAccel_b, INS.MotionAccel_n, INS.q); // 转换回导航系n
+        BodyFrameToEarthFrame(INS.MotionAccel_b, INS.MotionAccel_n, INS.q); // 转锟斤拷锟截碉拷锟斤拷系n
 
-        // 获取最终数据
+        // 锟斤拷取锟斤拷锟斤拷锟斤拷锟斤拷
         INS.Yaw = QEKF_INS.Yaw;
         INS.Pitch = QEKF_INS.Pitch;
         INS.Roll = QEKF_INS.Roll;
@@ -113,6 +109,7 @@ void INS_Task(void)
     }
 
     count++;
+//    USART_Vofa_Justfloat_Transmit(INS.Yaw,INS.Pitch,INS.Roll);
 }
 
 
@@ -159,12 +156,12 @@ void EarthFrameToBodyFrame(const float *vecEF, float *vecBF, float *q)
 }
 
 /**
- * @brief reserved.用于修正IMU安装误差与标度因数误差,即陀螺仪轴和云台轴的安装偏移
+ * @brief reserved.锟斤拷锟斤拷锟斤拷锟斤拷IMU锟斤拷装锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷,锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟教拷锟侥帮拷装偏锟斤拷
  *
  *
- * @param param IMU参数
- * @param gyro  角速度
- * @param accel 加速度
+ * @param param IMU锟斤拷锟斤拷
+ * @param gyro  锟斤拷锟劫讹拷
+ * @param accel 锟斤拷锟劫讹拷
  */
 static void IMU_Param_Correction(IMU_Param_t *param, float gyro[3], float accel[3])
 {
@@ -229,7 +226,7 @@ static void IMU_Param_Correction(IMU_Param_t *param, float gyro[3], float accel[
 }
 
 /**
- * @brief 温度控制
+ * @brief 锟铰度匡拷锟斤拷
  *
  */
 void IMU_Temperature_Ctrl(void)

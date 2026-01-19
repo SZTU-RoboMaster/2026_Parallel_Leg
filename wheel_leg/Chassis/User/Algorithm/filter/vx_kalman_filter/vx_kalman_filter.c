@@ -2,6 +2,7 @@
 #include "wheel.h"
 #include "ins_task.h"
 #include "robot_def.h"
+#include "vofa.h"
 
 /** 速度融合 **/
 KalmanFilter_t vaEstimateKF;	   // 卡尔曼滤波器结构体
@@ -75,8 +76,10 @@ void speed_calc(void)
 
     aver_v = (v_rb + v_lb) / 2.0f;//取平均
 
-    vel_acc[0] = aver_v;
+//    vel_acc[0] = aver_v;
 
-//    // 不融合
-//    xvEstimateKF_Update(&vaEstimateKF,INS.MotionAccel_n[X],aver_v);//不断更新卡尔曼滤波中的各项参数
+    // 不融合
+    xvEstimateKF_Update(&vaEstimateKF,INS.MotionAccel_n[X],aver_v);//不断更新卡尔曼滤波中的各项参数
+//
+//    USART_Vofa_Justfloat_Transmit(INS.MotionAccel_n[X],aver_v,0);
 }
